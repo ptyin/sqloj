@@ -4,7 +4,7 @@ An open judge platform for SQL
 ## run
     cd app
     npm install && npm run build
-    docker-compose ../docker-compose.yml up -d
+    docker compose -f ../docker-compose.yml up -d
     
 ## stop
-    docker-compose down
+    docker compose down
