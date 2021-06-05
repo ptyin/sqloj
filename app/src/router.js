@@ -4,10 +4,10 @@ import App from './homepage/app'
 import Login from './homepage/login'
 import Assignments from './student/assignments'
 import Questions from './student/questions'
+import Submit from './student/submit'
 // import Records from './homepage/records'
 // import Users from './homepage/user'
 // import Change_pwd from './homepage/change_pwd'
-// import Submit from './homepage/submit'
 // import Forget from './homepage/forget'
 import './common/font.css'
 // import Teacher_assignment from './teacher_pages/teacher_assignment'
@@ -36,9 +36,9 @@ export default function IRouter()
             {/*<Route path="/records" component={Records}/>*/}
             <Route path="/assignments" component={Assignments}/>
             <Route path="/questions" component={Questions}/>}
+            <Route path="/submit" component={Submit}/>}
             {/*<Route path="/users" component={Users}/>*/}
             {/*<Route path="/change_pwd" component={Change_pwd}/>}*/}
-            {/*<Route path="/submit" component={Submit}/>}*/}
             {/*<Route path="/forget" component={Forget}/>}*/}
             {/*<Route path="/teacher_assignment" component={Teacher_assignment}/>}*/}
             {/*<Route path="/change_pwd_teacher" component={Change_pwd_teacher}/>}*/}

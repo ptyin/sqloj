@@ -1,6 +1,6 @@
 import React from 'react'
 import 'antd/dist/antd.css'
-import '../common/app.css'
+import './app.css'
 import Anime from './anime'
 import {useHistory} from "react-router-dom";
 

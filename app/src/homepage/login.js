@@ -3,7 +3,7 @@ import {Form, Input, Button, message, Checkbox} from "antd";
 import {useHistory} from "react-router-dom";
 import axios from 'axios';
 import QueueAnim from 'rc-queue-anim';
-import '../common/login.css'
+import './login.css'
 import './anime.css'
 import '../common/font.css'
 import {QuestionCircleTwoTone} from '@ant-design/icons';
@@ -31,11 +31,11 @@ export default function Login()
     const history = useHistory();
     const error = () =>
     {
-        message.error('Invalid authentication information');
+        message.error('Invalid authentication information.');
     };
     const   success = () =>
     {
-        message.success('Log in successfully');
+        message.success('Log in successfully.');
     };
     // const options = [
     //         { label: 'Student', value: 'Student' },
@@ -114,7 +114,7 @@ export default function Login()
 function login(id, password)
 {
     // window.localStorage.id = id;
-    // window.localStorage.current = 'assignments'
+    window.sessionStorage.current = 'assignments'
     const params = new URLSearchParams();
     params.append('username', id);
     params.append('password', password);

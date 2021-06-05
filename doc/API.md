@@ -23,12 +23,14 @@
                 proxy_pass      http://nodejs;
             }
 
-## User Module
+## User Management
+
+-------------
 
 ### 1. 登录
 
 #### 1.1 URL
-[http://localhost:3000/api/login](http://localhost:3000/api/login)
+[http://localhost:3000/api/login]()
 
 #### 1.2 Request
 ##### 1.2.1 Method
@@ -62,6 +64,8 @@ post
 
 ##### 1.3.2 Content
 
+返回一个json对象
+
 | 参数名  | 必选 | 类型   | 说明                                        |
 | ------- | ---- | ------ | ------------------------------------------- |
 | success | true | bool   | 登录是否成功                                |
@@ -75,13 +79,17 @@ post
 {"success": true, "data": "student"}
 ```
 
+-------------
+
 ## Student
+
+---------
 
 ### 1. 请求作业列表
 
 #### 1.1 URL
 
-[http://localhost:3000/api/student/queryAssignmentList](http://localhost:3000/api/student/queryAssignmentList)
+[http://localhost:3000/api/student/queryAssignmentList]()
 
 #### 1.2 Request
 
@@ -130,15 +138,17 @@ No parameters
      	"assignment_start_time": "June 20, 2021 12:47:00",
      	"assignment_end_time": "June 27, 2021 23:59:59"
     },
-    ...
+
 ]
 ```
+
+-----------
 
 ### 2. 请求问题列表
 
 #### 2.1 URL
 
-[http://localhost:3000/api/student/selectQuestionsByAssignment](http://localhost:3000/api/student/selectQuestionsByAssignment)
+[http://localhost:3000/api/student/selectQuestionsByAssignment]()
 
 #### 2.2 Request
 
@@ -152,7 +162,7 @@ get
 
 | 参数名        | 必选 | 类型   | 说明 |
 | ------------- | ---- | ------ | ---- |
-| assignmetn_id | True | string |      |
+| assignmetn_id | true | string |      |
 
 #### 2.3 Response
 
@@ -186,7 +196,94 @@ get
         "question_name": "7-3 delete删除",
      	"is_finished": false
     },
-    ...
+
 ]
 ```
+
+-----------
+
+### 3. 获取问题详细信息
+
+#### 3.1 URL
+
+[http://localhost:3000/api/student/selectQuestionsById]()
+
+#### 3.2 Request
+
+##### 3.2.1 Method
+
+get
+
+##### 3.2.2 Parameters
+
+| 参数名      | 必选 | 类型   | 说明 |
+| ----------- | ---- | ------ | ---- |
+| question_id | true | string |      |
+
+#### 3.3 Response
+
+##### 3.3.1 Header
+
+```json
+{"Content-Type": "application/json"}
+```
+
+##### 3.3.2 Content
+
+返回一个json对象
+
+| 参数名               | 必选 | 类型   | 说明         |
+| -------------------- | ---- | ------ | ------------ |
+| question_name        | true | string | 问题名称     |
+| question_description | true | string | 问题描述     |
+| question_output      | true | bool   | 问题输出格式 |
+
+--------
+
+### 4. 提交答案
+
+#### 4.1 URL
+
+[http://localhost:3000/api/student/submit]()
+
+#### 3.2 Request
+
+##### 3.2.1 Method
+
+post
+
+##### 3.2.2 Header
+
+```json
+{"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"}
+```
+
+##### 3.2.3 Content
+
+发送一个json对象
+
+| 参数名      | 必选 | 类型   | 说明          |
+| ----------- | ---- | ------ | ------------- |
+| question_id | true | string |               |
+| code        | true | string | 提交的sql语句 |
+
+#### 3.3 Response
+
+##### 3.3.1 Header
+
+```json
+{"Content-Type": "application/json"}
+```
+
+##### 3.3.2 Content
+
+返回一个json对象
+
+| 参数名  | 必选 | 类型 | 说明         |
+| ------- | ---- | ---- | ------------ |
+| success | true | bool | 是否上传成功 |
+
+在这里只返回是否上传成功即可，具体判题情况下一个接口描述
+
+--------
 
