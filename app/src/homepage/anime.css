@@ -52,6 +52,7 @@
     right: 0;
 }
 .combined .title {
+    text-align: center;
     font-size: 58px;
     letter-spacing: 8px;
     position: absolute;
@@ -69,6 +70,6 @@
 .combined .content {
     font-size: 20px;
     text-align: center;
-    position: absolute;
+    position: relative;
     top: 95px;
 }

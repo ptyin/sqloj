@@ -27,7 +27,7 @@ export default function Assignments() {
             key: 'start',
         },
         {
-            title: 'deadline',
+            title: 'DDL',
             dataIndex: 'assignment_end_time',
             key: 'deadline',
         },
@@ -46,14 +46,18 @@ export default function Assignments() {
     ];
 
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         const now = Date.now()
-        if (timer===0||now-timer>3000) {
+        if (timer===0||now-timer>3000)
+        {
             axios.defaults.withCredentials = true;
-            axios.get('/api/user/queryAssigmentList').then((response) => {
+            axios.get('/api/student/queryAssignmentList').then((response) =>
+            {
                 const temp = response.data
-                for (var i = 0; i < temp.length; i++) {
-                    var newTime = new Date(temp[i].assignment_start_time);
+                for (let i = 0; i < temp.length; i++)
+                {
+                    let newTime = new Date(temp[i].assignment_start_time);
                     temp[i].assignment_start_time = newTime.getFullYear() + '/' + newTime.getMonth() + '/' + newTime.getDate() + ' ' + newTime.getHours() + ':' + newTime.getMinutes()
                     newTime = new Date(temp[i].assignment_end_time);
                     temp[i].assignment_end_time = newTime.getFullYear() + '/' + newTime.getMonth() + '/' + newTime.getDate() + ' ' + newTime.getHours() + ':' + newTime.getMinutes()
@@ -70,7 +74,7 @@ export default function Assignments() {
         <Layout>
             <Sider style={{width: '200px'}} className="site-layout-content"><Guide/></Sider>
             <Layout style={{padding: '0 24px 24px'}}>
-                <Content className="defult_font" style={{height: '680px', margin: '24px 0'}}>
+                <Content className="default_font" style={{height: '680px', margin: '24px 0'}}>
                     <QueueAnim
                         key="demo"
                         type={['top', 'bottom']}

@@ -148,13 +148,13 @@ export default class Anime extends React.Component
                                 delay={2200}
                                 interval={30}
                             >
-                                Based on 2020 fall Database Principles.
+                                An open judge platform for SDU Database System.
                             </Texty>
 
                         </div>
                     )}
                 </div>
-                <Button className="jump" type="primary" icon="登录" onClick={this.onClick2}/>
+                <Button className="jump" type="primary" icon="Login" onClick={this.onClick2}/>
             </div>
         );
     }

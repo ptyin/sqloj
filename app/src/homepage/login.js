@@ -13,12 +13,17 @@ axios.defaults.withCredentials = true
 export default function Login()
 {
     // const [value4,setValue4] = useState('Student')
-    const layout = {
+    const doubleLayout = {
         labelCol: {span: 8},
         wrapperCol: {span: 16},
     };
+    const singleLayout = {
+        // wrapperCol: {offset: 8, span: 16},
+        wrapperCol: {span: 24},
+    };
     const tailLayout = {
         wrapperCol: {offset: 8, span: 16},
+        // wrapperCol: {span: 24},
     };
     const [show] = useState(true)
     const [id, setId] = useState('');
@@ -38,8 +43,9 @@ export default function Login()
     //         { label: 'Admin', value: 'Admin' },
     // ];
     return <div className="combined-wrapper">
-        <div style={{height: 200}}/>
+        {/*<div style={{height: 200}}/>*/}
         <QueueAnim
+            className="anime"
             key="demo"
             type={['top', 'bottom']}
             duration="1400"
@@ -49,22 +55,10 @@ export default function Login()
                     <Form className='login-form'
                           name="basic"
                           initialValues={{remember: true}}>
-                        {/*<FormItem><Tag style={{ height:"100%" }} color="purple">登录</Tag></FormItem>*/}
-                        <FormItem {...tailLayout} style={{textAlign: "left", marginLeft: "75px"}}>
+                        <FormItem {...singleLayout} style={{textAlign: "center"}}>
                             <p className="form_title">login</p>
                         </FormItem>
-                        {/*<FormItem style={{marginLeft:"75px"}}>*/}
-                        {/*        <Radio.Group*/}
-                        {/*            options={options}*/}
-                        {/*            onChange={(e)=>{*/}
-                        {/*                    setValue4(e.target.value);*/}
-                        {/*            }}*/}
-                        {/*            value={value4}*/}
-                        {/*            optionType="button"*/}
-                        {/*            buttonStyle="solid"*/}
-                        {/*        />*/}
-                        {/*</FormItem>*/}
-                        <FormItem {...layout} label="account">
+                        <FormItem {...doubleLayout} label="username">
                             <Input placeholder="Please enter the user name"
                                    maxLength={10}
                                    onChange={(event) =>
@@ -72,7 +66,7 @@ export default function Login()
                                        setId(event.target.value)
                                    }}/>
                         </FormItem>
-                        <FormItem  {...layout} label="password">
+                        <FormItem  {...doubleLayout} label="password">
                             <Input placeholder="Please enter your password." maxLength={10} type={"password"}
                                    onChange={(event) =>
                                    {
@@ -81,8 +75,8 @@ export default function Login()
                         </FormItem>
                         <FormItem  {...tailLayout} style={{textAlign: "left"}}><Checkbox>Remember me</Checkbox>
                         </FormItem>
-                        <FormItem  {...tailLayout} style={{textAlign: "left"}}>
-                            <Button type="primary" style={{width: "30%"}} onClick={() =>
+                        <FormItem  {...singleLayout} style={{textAlign: "center"}}>
+                            <Button type="primary" style={{width: "40%"}} onClick={() =>
                             {
                                 login(id, password).then((response) =>
                                 {
@@ -104,11 +98,11 @@ export default function Login()
                                     }
                                 })
                             }}>login</Button>
-                            <Button style={{left: "20%"}} title={'Forgot password'} type="dashed" shape="circle"
-                                    icon={<QuestionCircleTwoTone/>} onClick={() =>
-                            {
-                                history.push('forget')
-                            }}/>
+                            {/*<Button style={{left: "20%"}} title={'Forgot password'} type="dashed" shape="circle"*/}
+                            {/*        icon={<QuestionCircleTwoTone/>} onClick={() =>*/}
+                            {/*{*/}
+                            {/*    history.push('forget')*/}
+                            {/*}}/>*/}
                         </FormItem>
                     </Form>
                 </div>

@@ -8,7 +8,7 @@ import { UserOutlined,SnippetsOutlined,CalendarOutlined,ToolOutlined,LogoutOutli
 export default function Guide() {
         const { SubMenu } = Menu;
     const history = useHistory();
-    return (<div className="defult_font">
+    return (<div className="default_font">
             <Menu selectedKeys={[window.localStorage.current]}
                   mode="inline"
                   style={{ height: '100%', borderRight: 0 }}>
