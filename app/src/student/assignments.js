@@ -19,7 +19,7 @@ export default function Assignments() {
             title: 'Name',
             dataIndex: 'assignment_name',
             key: 'name',
-            render: text => <a>{text}</a>,
+            // render: text => <a>{text}</a>,
         },
         {
             title: 'Start',
@@ -37,7 +37,7 @@ export default function Assignments() {
             render: (record) => (
                 <Space size="middle">
                     <Button className='button' onClick={() => {
-                        window.localStorage.assignment_ID = record.assignment_id;
+                        window.sessionStorage.assignment_ID = record.assignment_id;
                         // window.localStorage.assignment_ID = record.assignment_name;
                         history.push('questions');
                     }}>details</Button>
@@ -58,7 +58,7 @@ export default function Assignments() {
                 const temp = response.data
                 for (let i = 0; i < temp.length; i++)
                 {
-                    temp[i].key = i;
+                    temp[i].key = temp[i].assignment_id;
                     let newTime = new Date(temp[i].assignment_start_time);
                     temp[i].assignment_start_time = newTime.getFullYear() + '/' + newTime.getMonth() + '/' + newTime.getDate() + ' ' + newTime.getHours() + ':' + newTime.getMinutes()
                     newTime = new Date(temp[i].assignment_end_time);

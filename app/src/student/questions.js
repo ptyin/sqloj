@@ -14,16 +14,16 @@ export default function Questions() {
     const [data,setData] = useState([])
     const history = useHistory();
     const columns = [
-        {
-            title: 'Index',
-            dataIndex: 'question_index',
-            key: 'index'
-        },
+        // {
+        //     title: 'Index',
+        //     dataIndex: 'question_index',
+        //     key: 'index'
+        // },
         {
             title: 'Name',
             dataIndex: 'question_name',
             key: 'question_name',
-            render: text => <a>{text}</a>
+            // render: text => <a>{text}</a>
         },
         {
             title: 'Finished',
@@ -47,8 +47,9 @@ export default function Questions() {
             key: 'action',
             render: (record) => (
                 <Space size="middle">
-                    <Button className='button' onClick={()=>{
-                        window.localStorage.question_ID = record.question_id;
+                    <Button className='button' onClick={()=>
+                    {
+                        window.sessionStorage.question_ID = record.question_id;
                         history.push('submit');
                     }}>details</Button>
                 </Space>
@@ -57,7 +58,7 @@ export default function Questions() {
     ];
 
 
-    const assignment_id = window.localStorage.assignment_ID;
+    const assignment_id = window.sessionStorage.assignment_ID;
     useEffect(()=>
     {
         const now = Date.now()
@@ -75,10 +76,12 @@ export default function Questions() {
                 const temp = response.data
                 for (let i = 0; i < temp.length; i++)
                 {
+                    temp[i].key = temp[i].question_id
                     if (temp[i].is_finished === true)
                     {
                         temp[i].is_finished = 'T'
-                    } else {
+                    } else
+                    {
                         temp[i].is_finished = 'F'
                     }
                 }

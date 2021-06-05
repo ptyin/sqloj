@@ -119,16 +119,72 @@ No parameters
 ```json
 [
     {
-        "assignment_id": "1",
+        "assignment_id": "a-066ab87a062b",
         "assignment_name": "第一次作业",
      	"assignment_start_time": "June 13, 2021 11:13:00",
      	"assignment_end_time": "June 20, 2021 23:59:59"
     },
     {
-        "assignment_id": "2",
+        "assignment_id": "a-204urhiugr9r",
         "assignment_name": "第二次作业",
      	"assignment_start_time": "June 20, 2021 12:47:00",
      	"assignment_end_time": "June 27, 2021 23:59:59"
+    },
+    ...
+]
+```
+
+### 2. 请求问题列表
+
+#### 2.1 URL
+
+[http://localhost:3000/api/student/selectQuestionsByAssignment](http://localhost:3000/api/student/selectQuestionsByAssignment)
+
+#### 2.2 Request
+
+轮询请求
+
+##### 2.2.1 Method
+
+get
+
+##### 2.2.2 Parameters
+
+| 参数名        | 必选 | 类型   | 说明 |
+| ------------- | ---- | ------ | ---- |
+| assignmetn_id | True | string |      |
+
+#### 2.3 Response
+
+##### 2.3.1 Header
+
+```json
+{"Content-Type": "application/json"}
+```
+
+##### 2.3.2 Content
+
+返回一个json array，其中每个元素是一个json对象字段如下：
+
+| 参数名        | 必选 | 类型   | 说明             |
+| ------------- | ---- | ------ | ---------------- |
+| question_id   | true | string | 问题唯一标识     |
+| question_name | true | string | 问题名称         |
+| is_finished   | true | bool   | 问题是否已经完成 |
+
+##### 2.3.3 Example
+
+```json
+[
+    {
+        "question_id": "q-21ru2933hui4",
+        "question_name": "7-1 select查询",
+     	"is_finished": true,
+    },
+    {
+        "question_id": "q-r9imvrvnq40s",
+        "question_name": "7-3 delete删除",
+     	"is_finished": false
     },
     ...
 ]

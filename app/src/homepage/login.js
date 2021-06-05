@@ -113,8 +113,8 @@ export default function Login()
 
 function login(id, password)
 {
-    window.localStorage.id = id;
-    window.localStorage.current = 'assignments'
+    // window.localStorage.id = id;
+    // window.localStorage.current = 'assignments'
     const params = new URLSearchParams();
     params.append('username', id);
     params.append('password', password);
