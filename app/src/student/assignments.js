@@ -38,6 +38,7 @@ export default function Assignments() {
                 <Space size="middle">
                     <Button className='button' onClick={() => {
                         window.localStorage.assignment_ID = record.assignment_id;
+                        // window.localStorage.assignment_ID = record.assignment_name;
                         history.push('questions');
                     }}>details</Button>
                 </Space>
@@ -57,6 +58,7 @@ export default function Assignments() {
                 const temp = response.data
                 for (let i = 0; i < temp.length; i++)
                 {
+                    temp[i].key = i;
                     let newTime = new Date(temp[i].assignment_start_time);
                     temp[i].assignment_start_time = newTime.getFullYear() + '/' + newTime.getMonth() + '/' + newTime.getDate() + ' ' + newTime.getHours() + ':' + newTime.getMinutes()
                     newTime = new Date(temp[i].assignment_end_time);

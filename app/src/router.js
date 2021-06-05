@@ -3,10 +3,10 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import App from './homepage/app'
 import Login from './homepage/login'
 import Assignments from './student/assignments'
+import Questions from './student/questions'
 // import Records from './homepage/records'
 // import Users from './homepage/user'
 // import Change_pwd from './homepage/change_pwd'
-// import Questions from './homepage/questions'
 // import Submit from './homepage/submit'
 // import Forget from './homepage/forget'
 import './common/font.css'
@@ -35,9 +35,9 @@ export default function IRouter()
             <Route path="/login" component={Login}/>
             {/*<Route path="/records" component={Records}/>*/}
             <Route path="/assignments" component={Assignments}/>
+            <Route path="/questions" component={Questions}/>}
             {/*<Route path="/users" component={Users}/>*/}
             {/*<Route path="/change_pwd" component={Change_pwd}/>}*/}
-            {/*<Route path="/questions" component={Questions}/>}*/}
             {/*<Route path="/submit" component={Submit}/>}*/}
             {/*<Route path="/forget" component={Forget}/>}*/}
             {/*<Route path="/teacher_assignment" component={Teacher_assignment}/>}*/}

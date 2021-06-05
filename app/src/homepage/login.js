@@ -33,7 +33,7 @@ export default function Login()
     {
         message.error('Invalid authentication information');
     };
-    const success = () =>
+    const   success = () =>
     {
         message.success('Log in successfully');
     };
@@ -90,14 +90,14 @@ export default function Login()
                                         } else if (response.data.data === 'admin')
                                         {
                                             history.push('/admin_chet')
-                                        } else
+                                        } else if (response.data.data === 'student')
                                             history.push('/assignments');
                                     } else
                                     {
                                         error()
                                     }
                                 })
-                            }}>login</Button>
+                            }}>OK</Button>
                             {/*<Button style={{left: "20%"}} title={'Forgot password'} type="dashed" shape="circle"*/}
                             {/*        icon={<QuestionCircleTwoTone/>} onClick={() =>*/}
                             {/*{*/}
