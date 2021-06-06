@@ -77,14 +77,14 @@ export default function Records()
             }
         },
         {
-            title: 'Detail',
+            title: 'Action',
             key: 'detail',
             render: (record) => (
                 <Space size="middle">
                     <Button className='button' onClick={() =>
                     {
-                        // window.localStorage.recordQuestionId = record.record_question_id;
                         window.sessionStorage.recordId = record.record_id
+                        window.sessionStorage.recordQuestionId = record.question_id;
                         history.push('record_detail');
                     }}>detail</Button>
                 </Space>
@@ -141,7 +141,7 @@ export default function Records()
             <img src={logo} style={{height: '45px'}} alt=""/>
         </Header>
         <Layout>
-            <Sider width={200} className="site-layout-content"><Guide/></Sider>
+            <Sider width={200} className="site-layout-content"><Guide item="records"/></Sider>
             <Layout style={{padding: '0 24px 24px'}}>
                 <Content className="default_font" style={{height: '600px', margin: '24px 0'}}>
                     <QueueAnim

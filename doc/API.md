@@ -302,10 +302,47 @@ No parameter. 直接通过cookie来获取
 | --------------- | ----- | ------ | ------------------------------------------------------------ |
 | record_id       | true  | string | 标识提交记录的id                                             |
 | record_time     | true  | string | 提交的时间，以datestring呈现                                 |
+| assignment_id   | true  | string | 提交记录对应的作业id                                         |
 | assignment_name | true  | string | 提交记录对应的作业名称                                       |
+| question_id     | true  | string | 提交记录对应的问题id                                         |
 | question_name   | true  | string | 提交记录对应的问题名称                                       |
 | record_status   | true  | string | 提交状态 ('RUNNING', 'AC', 'WA', 'TTL')                      |
 | running_time    | false | int    | 样例产生结果运行时间，ms为单位（如果还没运行完则不需要返回） |
 
+注意如果学生提交AC了，注意将该学生与问题表中的finished字段改为true
+
 --------
 
+### 6. 获取记录详细信息
+
+#### 6.1 URL
+
+[http://localhost:3000/api/student/selectRecordById]()
+
+#### 6.2 Request
+
+##### 6.2.1 Method
+
+get
+
+##### 6.2.2 Parameters
+
+| 参数名    | 必选 | 类型   | 说明 |
+| --------- | ---- | ------ | ---- |
+| record_id | true | string |      |
+
+#### 6.3 Response
+
+##### 6.3.1 Header
+
+```json
+{"Content-Type": "application/json"}
+```
+
+##### 6.3.2 Content
+
+返回一个json对象
+
+| 参数名      | 必选 | 类型   | 说明              |
+| ----------- | ---- | ------ | ----------------- |
+| record_code | true | string | 用户提交的sql语句 |

@@ -5,11 +5,12 @@ import '../common/font.css'
 import { UserOutlined,SnippetsOutlined,CalendarOutlined,ToolOutlined,LogoutOutlined } from '@ant-design/icons';
 
 
-export default function Guide() {
+export default function Guide(props) {
         const { SubMenu } = Menu;
     const history = useHistory();
     return (<div className="default_font">
-            <Menu selectedKeys={[window.sessionStorage.current]}
+            {/*<Menu selectedKeys={[window.sessionStorage.current]}*/}
+            <Menu selectedKeys={[props.item]}
                   mode="inline"
                   style={{ height: '100%', borderRight: 0 }}>
                 <Menu.Item key="assignments" icon={<CalendarOutlined />} onClick={(event)=>{
@@ -18,11 +19,11 @@ export default function Guide() {
                 }}>
                     Assignments
                 </Menu.Item>
-                <Menu.Item key="record" icon={<SnippetsOutlined />} onClick={(event)=>{
+                <Menu.Item key="records" icon={<SnippetsOutlined />} onClick={(event)=>{
                     // window.sessionStorage.current = event.key
                     history.push('/records')
                 }}>
-                    Record
+                    Records
                 </Menu.Item>
                 <SubMenu key="user" icon={<UserOutlined />} title="user">
                     <Menu.ItemGroup title={'The current user'+window.sessionStorage.id}>

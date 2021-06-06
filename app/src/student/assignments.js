@@ -10,7 +10,7 @@ import '../common/layout.css';
 
 export default function Assignments()
 {
-    window.sessionStorage.current = 'assignments'
+    // window.sessionStorage.current = 'assignments'
     const [timer, setTimer] = useState(0)
     const [show] = useState(true)
     const {Header, Content, Sider} = Layout;
@@ -77,7 +77,7 @@ export default function Assignments()
             <img src={logo} style={{height: '45px'}} alt=""/>
         </Header>
         <Layout>
-            <Sider style={{width: '200px'}} className="site-layout-content"><Guide/></Sider>
+            <Sider style={{width: '200px'}} className="site-layout-content"><Guide item="assignments"/></Sider>
             <Layout style={{padding: '0 24px 24px'}}>
                 <Content className="default_font" style={{height: '680px', margin: '24px 0'}}>
                     <QueueAnim

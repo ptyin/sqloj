@@ -9,7 +9,7 @@ import QueueAnim from "rc-queue-anim";
 
 export default function Questions()
 {
-    window.sessionStorage.current = 'assignments'
+    // window.sessionStorage.current = 'assignments'
     const [timer, setTimer] = useState(0)
     const [show] = useState(true)
     const {Header, Content, Sider} = Layout;
@@ -97,7 +97,7 @@ export default function Questions()
             <img src={logo} style={{height: '45px'}} alt=""/>
         </Header>
         <Layout>
-            <Sider width={200} className="site-layout-content"><Guide/></Sider>
+            <Sider width={200} className="site-layout-content"><Guide item="assignments"/></Sider>
             <Layout style={{padding: '0 24px 24px'}}>
                 <Content className="default_font" style={{height: '600px', margin: '24px 0'}}>
                     <QueueAnim

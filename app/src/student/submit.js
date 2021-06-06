@@ -20,7 +20,7 @@ import 'codemirror/theme/solarized.css';
 
 const Submit = forwardRef((props, refSelf) =>
 {
-    window.sessionStorage.current = 'assignments'
+    // window.sessionStorage.current = 'assignments'
     // const [leader,setLeader] = useState([])
     // const [timer,setTimer] = useState(0)
     // const [show] = useState(true)
@@ -62,7 +62,7 @@ const Submit = forwardRef((props, refSelf) =>
             <img src={logo} style={{height: '45px'}} alt=""/>
         </Header>
         <Layout>
-            <Sider width={200} className="site-layout-content"><Guide/></Sider>
+            <Sider width={200} className="site-layout-content"><Guide item="records"/></Sider>
             <Layout style={{padding: '0 24px 24px'}}>
                 <Content className="default_font" style={{height: '700px', margin: '24px 0'}}>
 
@@ -160,8 +160,7 @@ const Submit = forwardRef((props, refSelf) =>
                                         if (response.data.success)
                                         {
                                             message.success('Submit successfully.');
-                                            window.sessionStorage.current = 'record'
-                                            console.log(window.localStorage.submitCode)
+                                            // console.log(window.localStorage.submitCode)
                                             history.push('/records');
                                         } else
                                         {

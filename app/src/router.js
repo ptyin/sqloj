@@ -6,6 +6,7 @@ import Assignments from './student/assignments'
 import Questions from './student/questions'
 import Submit from './student/submit'
 import Records from './student/records'
+import Record_detail from "./student/record_detail";
 // import Users from './homepage/user'
 // import Change_pwd from './homepage/change_pwd'
 // import Forget from './homepage/forget'
@@ -18,7 +19,6 @@ import './common/font.css'
 // import Detail from "./teacher_pages/detail";
 // import Database from "./teacher_pages/database";
 // import AddDatabase from "./teacher_pages/AddDatabase";
-// import Record_detail from "./homepage/record_detail";
 // import Admin_users from "./admin_pages/admin_users";
 // import Admin_chet from "./admin_pages/admin_chet";
 // import RenewQuestion from "./teacher_pages/renewQuestion";
@@ -38,6 +38,7 @@ export default function IRouter()
             <Route path="/questions" component={Questions}/>}
             <Route path="/submit" component={Submit}/>}
             <Route path="/records" component={Records}/>
+            <Route path="/record_detail" component={Record_detail}/>
             {/*<Route path="/users" component={Users}/>*/}
             {/*<Route path="/change_pwd" component={Change_pwd}/>}*/}
             {/*<Route path="/forget" component={Forget}/>}*/}
@@ -49,7 +50,6 @@ export default function IRouter()
             {/*<Route path="/detail" component={Detail}/>*/}
             {/*<Route path="/database" component={Database}/>*/}
             {/*<Route path="/AddDatabase" component={AddDatabase}/>*/}
-            {/*<Route path="/record_detail" component={Record_detail}/>*/}
             {/*<Route path="/admin_users" component={Admin_users}/>*/}
             {/*<Route path="/admin_chet" component={Admin_chet}/>*/}
             {/*<Route path="/renewQuestion" component={RenewQuestion}/>*/}
