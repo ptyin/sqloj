@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import Guide from "../components/guide";
 import axios from 'axios';
 import {useHistory} from "react-router-dom";
@@ -7,11 +7,13 @@ import logo from '../common/images/logo.png';
 import '../common/layout.css';
 import QueueAnim from "rc-queue-anim";
 
-export default function Questions() {
-    const [timer,setTimer] = useState(0)
+export default function Questions()
+{
+    window.sessionStorage.current = 'assignments'
+    const [timer, setTimer] = useState(0)
     const [show] = useState(true)
-    const { Header,Content,Sider }= Layout;
-    const [data,setData] = useState([])
+    const {Header, Content, Sider} = Layout;
+    const [data, setData] = useState([])
     const history = useHistory();
     const columns = [
         // {
@@ -47,7 +49,7 @@ export default function Questions() {
             key: 'action',
             render: (record) => (
                 <Space size="middle">
-                    <Button className='button' onClick={()=>
+                    <Button className='button' onClick={() =>
                     {
                         window.sessionStorage.question_ID = record.question_id;
                         history.push('submit');
@@ -59,11 +61,11 @@ export default function Questions() {
 
 
     const assignment_id = window.sessionStorage.assignment_ID;
-    useEffect(()=>
+    useEffect(() =>
     {
         const now = Date.now()
         console.log(now, timer)
-        if (timer===0||now-timer>3000)
+        if (timer === 0 || now - timer > 3000)
         {
             axios.defaults.withCredentials = true;
             axios.get('/api/student/selectQuestionsByAssignment', {
@@ -90,22 +92,22 @@ export default function Questions() {
             })
         }
     })
-    return<Layout>
-        <Header className="header" >
-            <img src={logo} style={{height:'45px'}} alt= "" />
+    return <Layout>
+        <Header className="header">
+            <img src={logo} style={{height: '45px'}} alt=""/>
         </Header>
         <Layout>
             <Sider width={200} className="site-layout-content"><Guide/></Sider>
-            <Layout style={{padding:'0 24px 24px'}}>
-                <Content className="default_font" style={{ height:'600px', margin: '24px 0' }}>
+            <Layout style={{padding: '0 24px 24px'}}>
+                <Content className="default_font" style={{height: '600px', margin: '24px 0'}}>
                     <QueueAnim
                         key="demo"
                         type={['top', 'bottom']}
-                        duration = "1400"
+                        duration="1400"
                         ease={['easeOutQuart', 'easeInOutQuart']}>
                         {show ? [
-                            <Table columns={columns} key="demo1" dataSource={data} />,
-                            <div style={{height:'20px'}} />,
+                            <Table columns={columns} key="demo1" dataSource={data}/>,
+                            <div style={{height: '20px'}}/>,
                         ] : null}
                     </QueueAnim>
                 </Content>

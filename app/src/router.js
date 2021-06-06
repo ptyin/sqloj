@@ -5,7 +5,7 @@ import Login from './homepage/login'
 import Assignments from './student/assignments'
 import Questions from './student/questions'
 import Submit from './student/submit'
-// import Records from './homepage/records'
+import Records from './student/records'
 // import Users from './homepage/user'
 // import Change_pwd from './homepage/change_pwd'
 // import Forget from './homepage/forget'
@@ -33,10 +33,11 @@ export default function IRouter()
     return <Router>
         <Switch>
             <Route path="/login" component={Login}/>
-            {/*<Route path="/records" component={Records}/>*/}
+
             <Route path="/assignments" component={Assignments}/>
             <Route path="/questions" component={Questions}/>}
             <Route path="/submit" component={Submit}/>}
+            <Route path="/records" component={Records}/>
             {/*<Route path="/users" component={Users}/>*/}
             {/*<Route path="/change_pwd" component={Change_pwd}/>}*/}
             {/*<Route path="/forget" component={Forget}/>}*/}

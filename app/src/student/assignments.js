@@ -8,8 +8,10 @@ import QueueAnim from 'rc-queue-anim';
 import '../common/layout.css';
 
 
-export default function Assignments() {
-    const [timer,setTimer] = useState(0)
+export default function Assignments()
+{
+    window.sessionStorage.current = 'assignments'
+    const [timer, setTimer] = useState(0)
     const [show] = useState(true)
     const {Header, Content, Sider} = Layout;
     const [data, setData] = useState([])
@@ -36,7 +38,8 @@ export default function Assignments() {
             key: 'action',
             render: (record) => (
                 <Space size="middle">
-                    <Button className='button' onClick={() => {
+                    <Button className='button' onClick={() =>
+                    {
                         window.sessionStorage.assignment_ID = record.assignment_id;
                         // window.localStorage.assignment_ID = record.assignment_name;
                         history.push('questions');
@@ -50,7 +53,7 @@ export default function Assignments() {
     useEffect(() =>
     {
         const now = Date.now()
-        if (timer===0||now-timer>3000)
+        if (timer === 0 || now - timer > 3000)
         {
             axios.defaults.withCredentials = true;
             axios.get('/api/student/queryAssignmentList').then((response) =>

@@ -4,25 +4,6 @@
 
 前端react+axios，后端可以使用node/python实现逻辑，用nginx做负载均衡然后用nginx反向代理node，这样不必写路由只需实现本文档定义的接口即可。
 
-示例nginx反向代理配置：
-
-    upstream nodejs{
-            server 127.0.0.1:3000;
-            keepalive 64;
-        }
-    
-        server {
-            listen       80;
-            server_name  localhost;
-            location / {
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_set_header Host  $http_host;
-                proxy_set_header X-Nginx-Proxy true;
-                proxy_set_header Connection "";
-                proxy_pass      http://nodejs;
-            }
-
 ## User Management
 
 -------------
@@ -93,7 +74,7 @@ post
 
 #### 1.2 Request
 
-轮询请求
+轮询请求，轮询请求的间隔时间为3s
 
 ##### 1.2.1 Method
 
@@ -152,7 +133,7 @@ No parameters
 
 #### 2.2 Request
 
-轮询请求
+轮询请求，轮询请求的间隔时间为3s
 
 ##### 2.2.1 Method
 
@@ -206,7 +187,7 @@ get
 
 #### 3.1 URL
 
-[http://localhost:3000/api/student/selectQuestionsById]()
+[http://localhost:3000/api/student/selectQuestionById]() *(modified)* 
 
 #### 3.2 Request
 
@@ -236,7 +217,7 @@ get
 | -------------------- | ---- | ------ | ------------ |
 | question_name        | true | string | 问题名称     |
 | question_description | true | string | 问题描述     |
-| question_output      | true | bool   | 问题输出格式 |
+| question_output      | true | string | 问题输出格式 |
 
 --------
 
@@ -246,19 +227,19 @@ get
 
 [http://localhost:3000/api/student/submit]()
 
-#### 3.2 Request
+#### 4.2 Request
 
-##### 3.2.1 Method
+##### 4.2.1 Method
 
 post
 
-##### 3.2.2 Header
+##### 4.2.2 Header
 
 ```json
 {"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"}
 ```
 
-##### 3.2.3 Content
+##### 4.2.3 Content
 
 发送一个json对象
 
@@ -267,15 +248,15 @@ post
 | question_id | true | string |               |
 | code        | true | string | 提交的sql语句 |
 
-#### 3.3 Response
+#### 4.3 Response
 
-##### 3.3.1 Header
+##### 4.3.1 Header
 
 ```json
 {"Content-Type": "application/json"}
 ```
 
-##### 3.3.2 Content
+##### 4.3.2 Content
 
 返回一个json对象
 
@@ -284,6 +265,47 @@ post
 | success | true | bool | 是否上传成功 |
 
 在这里只返回是否上传成功即可，具体判题情况下一个接口描述
+
+--------
+
+### 5. 查询提交记录
+
+#### 5.1 URL
+
+[http://localhost:3000/api/student/queryRecordList]()
+
+#### 5.2 Request
+
+轮询请求，轮询请求的间隔时间为500ms
+
+##### 5.2.1 Method
+
+get
+
+##### 5.2.2 Parameters
+
+No parameter. 直接通过cookie来获取
+
+#### 5.3 Response
+
+##### 5.3.1 Header
+
+```json
+{"Content-Type": "application/json"}
+```
+
+##### 5.3.2 Content
+
+返回一个json数组，不必按照record_time进行排序（前端来排序即可），数组中每个元素是一个json对象如下：
+
+| 参数名          | 必选  | 类型   | 说明                                                         |
+| --------------- | ----- | ------ | ------------------------------------------------------------ |
+| record_id       | true  | string | 标识提交记录的id                                             |
+| record_time     | true  | string | 提交的时间，以datestring呈现                                 |
+| assignment_name | true  | string | 提交记录对应的作业名称                                       |
+| question_name   | true  | string | 提交记录对应的问题名称                                       |
+| record_status   | true  | string | 提交状态 ('RUNNING', 'AC', 'WA', 'TTL')                      |
+| running_time    | false | int    | 样例产生结果运行时间，ms为单位（如果还没运行完则不需要返回） |
 
 --------
 
