@@ -85,7 +85,7 @@ export default function Records()
                     {
                         window.sessionStorage.recordId = record.record_id
                         window.sessionStorage.recordQuestionId = record.question_id;
-                        history.push('record_detail');
+                        history.push('recordDetail');
                     }}>detail</Button>
                 </Space>
             ),
@@ -141,7 +141,9 @@ export default function Records()
             <img src={logo} style={{height: '45px'}} alt=""/>
         </Header>
         <Layout>
-            <Sider width={200} className="site-layout-content"><Guide item="records"/></Sider>
+            <Sider width={200} className="site-layout-content">
+                <Guide item="records"/>
+            </Sider>
             <Layout style={{padding: '0 24px 24px'}}>
                 <Content className="default_font" style={{height: '600px', margin: '24px 0'}}>
                     <QueueAnim

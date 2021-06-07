@@ -86,7 +86,7 @@ export default function Login()
                                         success()
                                         if (response.data.data === 'teacher')
                                         {
-                                            history.push('/Teacher_assignment')
+                                            history.push('/teacherAssignments')
                                         } else if (response.data.data === 'admin')
                                         {
                                             history.push('/admin_chet')
@@ -114,7 +114,7 @@ export default function Login()
 function login(id, password)
 {
     // window.localStorage.id = id;
-    window.sessionStorage.current = 'assignments'
+    // window.sessionStorage.current = 'assignments'
     const params = new URLSearchParams();
     params.append('username', id);
     params.append('password', password);

@@ -6,12 +6,12 @@ import Assignments from './student/assignments'
 import Questions from './student/questions'
 import Submit from './student/submit'
 import Records from './student/records'
-import Record_detail from "./student/record_detail";
+import RecordDetail from "./student/recordDetail";
 // import Users from './homepage/user'
 // import Change_pwd from './homepage/change_pwd'
 // import Forget from './homepage/forget'
 import './common/font.css'
-// import Teacher_assignment from './teacher_pages/teacher_assignment'
+import TeacherAssignments from './teacher/teacherAssignment'
 // import Change_pwd_teacher from './teacher_pages/change_pwd_teacher'
 // import AddAssignment from "./teacher_pages/AddAssignment";
 // import Teacher_question from "./teacher_pages/teacher_question"
@@ -38,11 +38,11 @@ export default function IRouter()
             <Route path="/questions" component={Questions}/>}
             <Route path="/submit" component={Submit}/>}
             <Route path="/records" component={Records}/>
-            <Route path="/record_detail" component={Record_detail}/>
+            <Route path="/recordDetail" component={RecordDetail}/>
             {/*<Route path="/users" component={Users}/>*/}
             {/*<Route path="/change_pwd" component={Change_pwd}/>}*/}
             {/*<Route path="/forget" component={Forget}/>}*/}
-            {/*<Route path="/teacher_assignment" component={Teacher_assignment}/>}*/}
+            <Route path="/teacherAssignments" component={TeacherAssignments}/>}
             {/*<Route path="/change_pwd_teacher" component={Change_pwd_teacher}/>}*/}
             {/*<Route path="/AddAssignment" component={AddAssignment}/>*/}
             {/*<Route path="/AddQuestion" component={AddQuestion}/>*/}
