@@ -4,12 +4,10 @@ import bcrypt
 from flask_login import login_required, login_user, logout_user
 from .extension import mongo, login_manager, User
 
+from .model import *
 api = Namespace('login', description='User login request')
 
-login_res = api.model('Login', {
-    'success': fields.Boolean(required=True, description="Login status"),
-    'data': fields.String(required=True, description="User's role: student or teacher")
-})
+login_res = api.model('Login', login_res_model)
 
 parser = api.parser()
 parser.add_argument(

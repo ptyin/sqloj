@@ -60,14 +60,16 @@ def create_app():
                 "question_name": "7-1 select查询",
                 "assignment_id": "a-066ab87a062b",
                 "question_description": "2",
-                "question_output": "3333333333"
+                "question_output": "3333333333",
+                'db_id': "db-21ru2933hui4"
             },
             {
                 "question_id": "q-r9imvrvnq40s",
                 "question_name": "7-3 delete删除",
                 "assignment_id": "a-066ab87a062b",
                 "question_description": "234",
-                "question_output": "3333333333"
+                "question_output": "3333333333",
+                'db_id': "db-r9imvrvnq40s"
             }
         ]
         mongo.db.questions.insert_many(new_questions)
@@ -81,7 +83,21 @@ def create_app():
                 "submit_time": datetime.fromisoformat('2021-05-04 00:05:23.283'),
                 "record_code": "code1",
                 "record_status": "AC",
-                "running_time": 100
+                "running_time": 100,
+                "latest": True,
+                "output": [123, 123]
+            },
+            {
+                "record_id": "r-21ru2933hui4",
+                "question_id": "q-21ru2933hui4",
+                "assignment_id": "a-066ab87a062b",
+                "username": "admin",
+                "submit_time": datetime.fromisoformat('2021-05-04 00:05:23.283'),
+                "record_code": "code1",
+                "record_status": "AC",
+                "running_time": 100,
+                "latest": False,
+                "output": []
             },
             {
                 "record_id": "r-21ru2933hui4",
@@ -101,10 +117,28 @@ def create_app():
                 "submit_time": datetime.fromisoformat('2021-05-06 00:05:23.283'),
                 "record_code": "code2",
                 "record_status": "RUNNING",
-                "running_time": None
+                "running_time": 0
             }
         ]
-        mongo.db.records.insert_many(new_records)
+        mongo.db.dbs.insert_many(new_records)
+    if mongo.db.dbs.count() == 0:
+        new_dbs = [
+            {
+                "db_id": "db-21ru2933hui4",
+                "db_name": "q1",
+                "db_description":"123",
+                "db_filename": "21ru2933hui4",
+                "upload_time": datetime.fromisoformat('2021-05-06 00:05:23.283'),
+            },
+            {
+                "db_id": "db-r9imvrvnq40s",
+                "db_name": "q2",
+                "db_description": "123",
+                "db_filename": "r9imvrvnq40s",
+                "upload_time": datetime.fromisoformat('2021-05-06 00:05:23.283'),
+            },
+        ]
+        mongo.db.dbs.insert_many(new_dbs)
     login_manager.init_app(app)
 
     # initialize modules
