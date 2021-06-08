@@ -53,7 +53,7 @@ export default function Assignments(props)
     {
         const now = Date.now()
         // if (timer === 0 || now - timer > 3000)
-        const timer = setInterval(() =>
+        function query_assignment_list()
         {
             axios.defaults.withCredentials = true;
             axios.get('/api/student/queryAssignmentList').then((response) =>
@@ -69,7 +69,9 @@ export default function Assignments(props)
                 }
                 setData(temp)
             })
-        }, 3000)
+        }
+        query_assignment_list()
+        const timer = setInterval(query_assignment_list, 3000)
 
         return () =>
         {

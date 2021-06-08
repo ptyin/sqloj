@@ -82,3 +82,43 @@
 2021/06/07 21:04:11 [error] 14964#18916: *17 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/static/js/main.62972074.chunk.js" failed (3: The system cannot find the path specified), client: 127.0.0.1, server: localhost, request: "GET /static/js/main.62972074.chunk.js HTTP/1.1", host: "localhost", referrer: "http://localhost/"
 2021/06/07 21:09:21 [notice] 568#30468: signal process started
 2021/06/07 21:10:32 [notice] 10108#8652: signal process started
+2021/06/07 21:24:19 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/assignments" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /assignments HTTP/1.1", host: "localhost"
+2021/06/07 21:24:21 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/assignments" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /assignments HTTP/1.1", host: "localhost"
+2021/06/07 21:24:22 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/assignments" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /assignments HTTP/1.1", host: "localhost"
+2021/06/07 21:24:33 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/assignments" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /assignments HTTP/1.1", host: "localhost"
+2021/06/07 21:24:40 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/assignments" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /assignments HTTP/1.1", host: "localhost"
+2021/06/07 21:24:53 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/assignments" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /assignments HTTP/1.1", host: "localhost"
+2021/06/07 21:24:53 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/assignments" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /assignments HTTP/1.1", host: "localhost"
+2021/06/07 21:25:12 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/assignments" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /assignments HTTP/1.1", host: "localhost"
+2021/06/07 21:25:13 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/assignments" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /assignments HTTP/1.1", host: "localhost"
+2021/06/07 21:25:14 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/assignments" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /assignments HTTP/1.1", host: "localhost"
+2021/06/07 21:25:14 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/assignments" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /assignments HTTP/1.1", host: "localhost"
+2021/06/07 21:25:15 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/login" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /login HTTP/1.1", host: "localhost"
+2021/06/07 21:25:16 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/login" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /login HTTP/1.1", host: "localhost"
+2021/06/07 21:25:16 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/login" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /login HTTP/1.1", host: "localhost"
+2021/06/07 21:25:16 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/login" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /login HTTP/1.1", host: "localhost"
+2021/06/07 21:25:16 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/login" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /login HTTP/1.1", host: "localhost"
+2021/06/07 21:25:17 [error] 14964#18916: *313 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/login" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /login HTTP/1.1", host: "localhost"
+2021/06/07 21:25:22 [error] 14964#18916: *337 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/login" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /login HTTP/1.1", host: "localhost"
+2021/06/07 21:26:09 [notice] 30412#11384: signal process started
+2021/06/07 21:26:12 [error] 14964#18916: *337 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/login" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /login HTTP/1.1", host: "localhost"
+2021/06/07 21:31:52 [error] 14964#18916: *349 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/login" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /login HTTP/1.1", host: "localhost"
+2021/06/07 21:31:56 [error] 14964#18916: *349 CreateFile() "E:\Projects\web\SQLOJ\nginx/html/login" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /login HTTP/1.1", host: "localhost"
+2021/06/07 21:38:22 [notice] 5084#27284: signal process started
+2021/06/07 21:38:34 [notice] 13080#18900: signal process started
+2021/06/07 21:38:34 [error] 13080#18900: CreateFile() "E:\Projects\web\SQLOJ\nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2021/06/07 21:38:40 [notice] 27164#30020: signal process started
+2021/06/07 21:38:40 [error] 27164#30020: CreateFile() "E:\Projects\web\SQLOJ\nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2021/06/07 21:38:41 [notice] 31304#16208: signal process started
+2021/06/07 21:38:41 [error] 31304#16208: CreateFile() "E:\Projects\web\SQLOJ\nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2021/06/07 21:38:42 [notice] 11644#15732: signal process started
+2021/06/07 21:38:42 [error] 11644#15732: CreateFile() "E:\Projects\web\SQLOJ\nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2021/06/07 21:38:43 [notice] 12728#4784: signal process started
+2021/06/07 21:38:43 [error] 12728#4784: CreateFile() "E:\Projects\web\SQLOJ\nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2021/06/07 21:52:12 [error] 4688#23568: *2 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /api/student/queryAssignmentList HTTP/1.1", upstream: "http://127.0.0.1:5366/api/student/queryAssignmentList", host: "localhost", referrer: "http://localhost/assignments"
+2021/06/07 21:52:15 [error] 4688#23568: *2 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /api/student/queryAssignmentList HTTP/1.1", upstream: "http://127.0.0.1:5366/api/student/queryAssignmentList", host: "localhost", referrer: "http://localhost/assignments"
+2021/06/07 21:52:18 [error] 4688#23568: *2 connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream, client: 127.0.0.1, server: localhost, request: "GET /api/student/queryAssignmentList HTTP/1.1", upstream: "http://127.0.0.1:5366/api/student/queryAssignmentList", host: "localhost", referrer: "http://localhost/assignments"
+2021/06/07 21:52:18 [notice] 10480#7296: signal process started
+2021/06/08 15:12:55 [notice] 10696#13928: signal process started
+2021/06/08 15:12:55 [error] 10696#13928: CreateFile() "E:\Projects\web\SQLOJ\nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2021/06/08 15:23:40 [notice] 21844#11796: signal process started

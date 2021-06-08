@@ -10,7 +10,7 @@ import QueueAnim from "rc-queue-anim";
 export default function Questions()
 {
     // window.sessionStorage.current = 'assignments'
-    const [timer, setTimer] = useState(0)
+    // const [timer, setTimer] = useState(0)
     const [show] = useState(true)
     const {Header, Content, Sider} = Layout;
     const [data, setData] = useState([])
@@ -63,10 +63,9 @@ export default function Questions()
     const assignment_id = window.sessionStorage.assignment_ID;
     useEffect(() =>
     {
-        const now = Date.now()
-        console.log(now, timer)
-        if (timer === 0 || now - timer > 3000)
+        function select_questions_by_assignment()
         {
+
             axios.defaults.withCredentials = true;
             axios.get('/api/student/selectQuestionsByAssignment', {
                 params:
@@ -88,10 +87,16 @@ export default function Questions()
                     }
                 }
                 setData(response.data)
-                setTimer(now)
             })
         }
-    })
+        select_questions_by_assignment()
+        const timer = setInterval(select_questions_by_assignment, 3000)
+
+        return () =>
+        {
+            clearInterval(timer)
+        }
+    }, [])
     return <Layout>
         <Header className="header">
             <img src={logo} style={{height: '45px'}} alt=""/>
@@ -99,7 +104,7 @@ export default function Questions()
         <Layout>
             <Sider width={200} className="site-layout-content"><Guide item="assignments"/></Sider>
             <Layout style={{padding: '0 24px 24px'}}>
-                <Content className="default_font" style={{height: '600px', margin: '24px 0'}}>
+                <Content className="default_font" style={{margin: '24px 0'}}>
                     <QueueAnim
                         key="demo"
                         type={['top', 'bottom']}

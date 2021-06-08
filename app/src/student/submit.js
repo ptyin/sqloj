@@ -64,7 +64,7 @@ const Submit = forwardRef((props, refSelf) =>
         <Layout>
             <Sider width={200} className="site-layout-content"><Guide item="records"/></Sider>
             <Layout style={{padding: '0 24px 24px'}}>
-                <Content className="default_font" style={{height: '700px', margin: '24px 0'}}>
+                <Content className="default_font" style={{margin: '24px 0'}}>
 
                     <QueueAnim
                         key="demo"

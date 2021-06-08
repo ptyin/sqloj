@@ -1,4 +1,4 @@
-from flask_restx import Namespace, Resource, fields
+from flask_restx import Namespace, Resource
 from flask_login import login_required, current_user
 
 from bson.objectid import ObjectId
@@ -6,30 +6,29 @@ from bson.objectid import ObjectId
 from datetime import datetime
 
 from .extension import mongo, login_manager
+from .model import *
+from .util import insert_one_document
 
 api = Namespace('student', description="Students' manipulations")
 
-assignment_detail = api.model('Assignment detail', {
-    'assignment_id': fields.String(required=True, description="Assignment unique id"),
-    'assignment_name': fields.String(required=True, description="Assignment name"),
-    'assignment_start_time	': fields.String(required=True, description="Assignment start time"),
-    'assignment_end_time': fields.String(required=True, description="Assignment deadline")
-})
+assignment_list_res = api.model('Assignment list', assignment_detail)
 
-question_status = api.model('Question status', {
-    'question_id': fields.String(required=True, description="Question unique id"),
-    'question_name': fields.String(required=True, description="Question name for displaying"),
-    'is_finished	': fields.Boolean(required=True, description="Question finish status"),
-})
+assignment_detail_req = api.model("Assignment's question request", assignment_detail_req_model)
 
-question_detail = api.model('Question detail', {
-    'question_name': fields.String(required=True, description="Question name"),
-    'question_description': fields.String(required=True, description="Question description"),
-    'question_output	': fields.String(required=True, description="Required question output"),
-})
+question_status_res = api.model('Question status', question_status)
 
-submit_status = api.model('Answer submit status', {
+question_detail_req = api.model("Question detail request", question_detail_req_model)
+
+question_detail_res = api.model('Question detail', question_detail)
+
+submit_status_res = api.model('Answer submit status', {
     'success': fields.Boolean(required=True, description="whether the code uploads successfully"),
+})
+
+records_list_res = api.model('Records list with details', records_list)
+
+record_detail_res = api.model('Record detail', {
+    'record_code': fields.String(required=True, description="User submitted code"),
 })
 
 
@@ -37,10 +36,10 @@ submit_status = api.model('Answer submit status', {
 @api.route("/queryAssignmentList")
 @api.doc(description="Get assignment list and their time span")
 class AssignmentListQuery(Resource):
-    @api.marshal_with(assignment_detail, as_list=True)
+    @api.marshal_with(assignment_list_res, as_list=True)
     def get(self):
         assignments = list(mongo.db.assignments.find({}))
-        print(assignments, "in")
+        # print(assignments, "in")
         return [{
             "assignment_id": str(i["assignment_id"]),
             "assignment_name": str(i["assignment_name"]),
@@ -60,7 +59,8 @@ assignId_parser.add_argument(
 @api.doc(description="Get question list of the requested assignment")
 class QuestionListQuery(Resource):
     @api.doc(parser=assignId_parser)
-    @api.marshal_with(question_status, as_list=True)
+    @api.expect(assignment_detail_req)
+    @api.marshal_with(question_status_res, as_list=True)
     def get(self):
         args = assignId_parser.parse_args()
         # print(args["assignment_id"])
@@ -92,16 +92,17 @@ quesId_parser.add_argument(
 
 
 @login_required
-@api.route("/selectQuestionsById")
+@api.route("/selectQuestionById")
 @api.doc(description="Get question detail of the requested question id")
-class QuestionListQuery(Resource):
+class QuestionDetailQuery(Resource):
     @api.doc(parser=quesId_parser)
-    @api.marshal_with(question_detail)
+    @api.expect(question_detail_req)
+    @api.marshal_with(question_detail_res)
     def get(self):
         args = quesId_parser.parse_args()
-        print("question_id " + str(args["question_id"]))
+        # print("question_id " + str(args["question_id"]))
         q = mongo.db.questions.find_one({"question_id": args["question_id"]})
-        print(q)
+        # print(q)
         return {
             "question_name": str(q["question_name"]),
             "question_description": str(q["question_description"]),
@@ -121,9 +122,9 @@ answer_parser.add_argument(
 @login_required
 @api.route("/submit")
 @api.doc(description="Upload submitted code of the question to the judger")
-class QuestionListQuery(Resource):
+class QuestionSubmit(Resource):
     @api.doc(parser=answer_parser)
-    @api.marshal_with(submit_status)
+    @api.marshal_with(submit_status_res)
     def post(self):
         args = answer_parser.parse_args()
         # print(args["question_id"])
@@ -139,11 +140,67 @@ class QuestionListQuery(Resource):
             "submit_time": datetime.now(),
             "record_code": str(args["code"]),
             "record_status": "RUNNING",
-            "running_time": None
+            "running_time": 0
         }
-        mongo.db.records.insert_one(new_record)
-        # todo call judge function
-        return {"success": True}
+        insert_status = insert_one_document(mongo.db.records, new_record)
+        # todo call judger function
+        return {"success": insert_status}
+
+
+@login_required
+@api.route("/queryRecordList")
+@api.doc(description="Get record list")
+class RecordListQuery(Resource):
+    @api.marshal_with(records_list_res, as_list=True)
+    def get(self):
+        records = list(mongo.db.records.find({"username": current_user.id}))
+        # print(records)
+        return [{
+                    'record_id': str(r["record_id"]),
+                    'record_time': r["submit_time"].strftime('%B %d, %Y %H:%M:%S'),
+                    'assignment_id': str(r["assignment_id"]),
+                    'assignment_name': str(mongo.db.assignments.find_one({"assignment_id": str(r["assignment_id"])})[
+                                               "assignment_name"]),
+                    'question_id': str(r["question_id"]),
+                    'question_name': str(mongo.db.questions.find_one({"question_id": str(r["question_id"])})[
+                                             "question_name"]),
+                    'record_status': str(r["record_status"]),
+
+                } if r["record_status"] != "RUNNING" else {
+            'record_id': str(r["record_id"]),
+            'record_time': r["submit_time"].strftime('%B %d, %Y %H:%M:%S'),
+            'assignment_id': str(r["assignment_id"]),
+            'assignment_name': str(mongo.db.assignments.find_one({"assignment_id": str(r["assignment_id"])})[
+                                       "assignment_name"]),
+            'question_id': str(r["question_id"]),
+            'question_name': str(mongo.db.questions.find_one({"question_id": str(r["question_id"])})[
+                                     "question_name"]),
+            'record_status': str(r["record_status"]),
+            'running_time': str(r["running_time"])
+        }
+                for r in records]
+
+
+recId_parser = api.parser()
+recId_parser.add_argument(
+    "record_id", type=str, required=True, help="Requested record id"
+)
+
+
+@login_required
+@api.route("/selectRecordById")
+@api.doc(description="Get submitted code for a specific record")
+class RecordDetailQuery(Resource):
+    @api.doc(parser=recId_parser)
+    @api.marshal_with(record_detail_res)
+    def get(self):
+        args = quesId_parser.parse_args()
+        # print("question_id " + str(args["question_id"]))
+        r = mongo.db.record.find_one({"record_id": args["record_id"]})
+        # print(q)
+        return {
+            "record_code": str(r["record_code"]),
+        }
 
 
 # todo

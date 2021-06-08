@@ -118,7 +118,7 @@ No parameters
         "assignment_name": "第二次作业",
      	"assignment_start_time": "June 20, 2021 12:47:00",
      	"assignment_end_time": "June 27, 2021 23:59:59"
-    },
+    }
 
 ]
 ```
@@ -170,13 +170,13 @@ get
     {
         "question_id": "q-21ru2933hui4",
         "question_name": "7-1 select查询",
-     	"is_finished": true,
+     	"is_finished": true
     },
     {
         "question_id": "q-r9imvrvnq40s",
         "question_name": "7-3 delete删除",
      	"is_finished": false
-    },
+    }
 
 ]
 ```
@@ -306,7 +306,7 @@ No parameter. 直接通过cookie来获取
 | assignment_name | true  | string | 提交记录对应的作业名称                                       |
 | question_id     | true  | string | 提交记录对应的问题id                                         |
 | question_name   | true  | string | 提交记录对应的问题名称                                       |
-| record_status   | true  | string | 提交状态 ('RUNNING', 'AC', 'WA', 'TTL')                      |
+| record_status   | true  | string | 提交状态 ('RUNNING', 'AC', 'WA', 'TLE')                      |
 | running_time    | false | int    | 样例产生结果运行时间，ms为单位（如果还没运行完则不需要返回） |
 
 注意如果学生提交AC了，注意将该学生与问题表中的finished字段改为true
@@ -353,4 +353,61 @@ get
 
 ---------
 
-### 1. 请求作业列表
+### 1. 添加数据库
+
+#### 1.1 URL
+
+[http://localhost:3000/api/teacher/deleteDatabaseById]()
+
+#### 1.2 Request
+
+轮询请求，轮询请求的间隔时间为3s
+
+##### 1.2.1 Method
+
+get
+
+##### 1.2.2 Parameters
+
+No parameters
+
+#### 1.3 Response
+
+##### 1.3.1 Header
+
+```json
+{"Content-Type": "application/json"}
+```
+
+##### 1.3.2 Content
+
+返回一个json array，其中每个元素是一个json对象字段如下：
+
+| 参数名                | 必选 | 类型   | 说明                               |
+| --------------------- | ---- | ------ | ---------------------------------- |
+| assignment_id         | true | string | 作业唯一标识                       |
+| assignment_name       | true | string | 作业名称                           |
+| assignment_start_time | true | string | 作业起始时间，表示成一个datestring |
+| assignment_end_time   | true | string | 作业起始时间，表示成一个datestring |
+
+##### 1.3.3 Example
+
+```json
+[
+    {
+        "assignment_id": "a-066ab87a062b",
+        "assignment_name": "第一次作业",
+     	"assignment_start_time": "June 13, 2021 11:13:00",
+     	"assignment_end_time": "June 20, 2021 23:59:59"
+    },
+    {
+        "assignment_id": "a-204urhiugr9r",
+        "assignment_name": "第二次作业",
+     	"assignment_start_time": "June 20, 2021 12:47:00",
+     	"assignment_end_time": "June 27, 2021 23:59:59"
+    }
+
+]
+```
+
+--------

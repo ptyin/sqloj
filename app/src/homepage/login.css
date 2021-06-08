@@ -1,7 +1,7 @@
 .ant-form.login-form{
     font-family: "Times New Roman", Times, serif;
     margin:0 auto;
-    padding: 20px 40px;
+    padding: 10% 20%;
     text-align:center;
     width: 100%;
     position: relative;
@@ -11,10 +11,11 @@
 /*    text-align: center;*/
 /*}*/
 .frame{
-    left: 38%;
-    width: 24%;
-    top: 30%;
-    height: 40%;
+    left: 35%;
+    width: 30%;
+    top: 200px;
+    height: 400px;
+    vertical-align: middle;
     background: white;
     position: absolute;
     box-shadow: 10px 10px 5px #224379;

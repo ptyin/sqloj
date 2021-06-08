@@ -1,4 +1,9 @@
+.ant-layout
+{
+    /*height: 100%;*/
+    background-color: #fff;
+}
 .site-layout-content
 {
-    background: #fff;
+    background-color: #fff;
 }
