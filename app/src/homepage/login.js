@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {Form, Input, Button, message, Checkbox} from "antd";
 import {useHistory} from "react-router-dom";
 import axios from 'axios';
@@ -25,18 +25,27 @@ export default function Login()
         wrapperCol: {offset: 8, span: 16},
         // wrapperCol: {span: 24},
     };
-    const [show] = useState(true)
-    const [id, setId] = useState('');
+    // const [show] = useState(true)
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [remember, setRemember] = useState(false);
     const history = useHistory();
-    const error = () =>
+
+    useEffect(() =>
     {
-        message.error('Invalid authentication information.');
-    };
-    const   success = () =>
-    {
-        message.success('Log in successfully.');
-    };
+        setRemember(window.localStorage.remember === 'true')
+        if (window.localStorage.remember === 'true')
+        {
+            setUsername(window.localStorage.username)
+            setPassword(window.localStorage.password)
+            // refCheckBox.current.state.checked = true
+        }
+        else
+        {
+            window.localStorage.removeItem("username")
+            window.localStorage.removeItem("password")
+        }
+    }, [])
     // const options = [
     //         { label: 'Student', value: 'Student' },
     //         { label: 'Teacher', value: 'Teacher' },
@@ -50,63 +59,81 @@ export default function Login()
             type={['top', 'bottom']}
             duration="1400"
             ease={['easeOutQuart', 'easeInOutQuart']}>
-            {show ? [
-                <div className="frame" key="demo1">
-                    <Form className='login-form'
-                          name="basic"
-                          initialValues={{remember: true}}>
-                        <FormItem {...singleLayout} style={{textAlign: "center"}}>
-                            <p className="form_title">login</p>
-                        </FormItem>
-                        <FormItem {...doubleLayout} label="username">
-                            <Input placeholder="Please enter the user name"
-                                   maxLength={10}
-                                   onChange={(event) =>
-                                   {
-                                       setId(event.target.value)
-                                   }}/>
-                        </FormItem>
-                        <FormItem  {...doubleLayout} label="password">
-                            <Input placeholder="Please enter your password." maxLength={10} type={"password"}
-                                   onChange={(event) =>
-                                   {
-                                       setPassword(event.target.value)
-                                   }}/>
-                        </FormItem>
-                        <FormItem  {...tailLayout} style={{textAlign: "left"}}><Checkbox>Remember me</Checkbox>
-                        </FormItem>
-                        <FormItem  {...singleLayout} style={{textAlign: "center"}}>
-                            <Button type="primary" style={{width: "40%"}} onClick={() =>
+            <div className="frame" key="demo1">
+                <Form className='login-form'
+                      name="basic"
+                      initialValues={{remember: true}}>
+                    <FormItem {...singleLayout} style={{textAlign: "center"}}>
+                        <p className="form_title">login</p>
+                    </FormItem>
+                    <FormItem {...doubleLayout} label="username">
+                        <Input placeholder="Please enter the user name"
+                               maxLength={10}
+                               defaultValue={username}
+                               onChange={(event) =>
+                               {
+                                   setUsername(event.target.value)
+                               }}/>
+                    </FormItem>
+                    <FormItem  {...doubleLayout} label="password">
+                        <Input placeholder="Please enter your password."
+                               defaultValue={password}
+                               maxLength={10} type={"password"}
+                               onChange={(event) =>
+                               {
+                                   setPassword(event.target.value)
+                               }}/>
+                    </FormItem>
+                    <FormItem  {...tailLayout} style={{textAlign: "left"}}>
+                        <Checkbox defaultChecked={remember} onChange={(e) =>
+                        {
+                            // console.log(e.target.checked)
+                            setRemember(e.target.checked)
+                        }}>Remember me</Checkbox>
+                    </FormItem>
+                    <FormItem  {...singleLayout} style={{textAlign: "center"}}>
+                        <Button type="primary" style={{width: "40%"}} onClick={() =>
+                        {
+                            login(username, password).then((response) =>
                             {
-                                login(id, password).then((response) =>
+                                console.log(response.data)
+                                if (response.data.success)
                                 {
-                                    console.log(response.data)
-                                    if (response.data.success)
+                                    message.success('Log in successfully.');
+                                    window.localStorage.remember = remember
+                                    console.log(remember)
+                                    if (remember)
                                     {
-                                        success()
-                                        if (response.data.data === 'teacher')
-                                        {
-                                            history.push('/teacherAssignments')
-                                        } else if (response.data.data === 'admin')
-                                        {
-                                            history.push('/admin_chet')
-                                        } else if (response.data.data === 'student')
-                                            history.push('/assignments');
-                                    } else
-                                    {
-                                        error()
+                                        window.localStorage.username = username
+                                        window.localStorage.password = password
                                     }
-                                })
-                            }}>OK</Button>
-                            {/*<Button style={{left: "20%"}} title={'Forgot password'} type="dashed" shape="circle"*/}
-                            {/*        icon={<QuestionCircleTwoTone/>} onClick={() =>*/}
-                            {/*{*/}
-                            {/*    history.push('forget')*/}
-                            {/*}}/>*/}
-                        </FormItem>
-                    </Form>
-                </div>
-            ] : null}
+                                    else
+                                    {
+                                        window.localStorage.removeItem("username")
+                                        window.localStorage.removeItem("password")
+                                    }
+                                    if (response.data.data === 'teacher')
+                                    {
+                                        history.push('/teacherAssignments')
+                                    }
+                                    else if (response.data.data === 'student')
+                                    {
+                                        history.push('/assignments');
+                                    }
+                                } else
+                                {
+                                    message.error('Invalid authentication information.');
+                                }
+                            })
+                        }}>OK</Button>
+                        {/*<Button style={{left: "20%"}} title={'Forgot password'} type="dashed" shape="circle"*/}
+                        {/*        icon={<QuestionCircleTwoTone/>} onClick={() =>*/}
+                        {/*{*/}
+                        {/*    history.push('forget')*/}
+                        {/*}}/>*/}
+                    </FormItem>
+                </Form>
+            </div>
         </QueueAnim>
     </div>
 }
@@ -119,5 +146,5 @@ function login(id, password)
     params.append('username', id);
     params.append('password', password);
     axios.defaults.withCredentials = true;
-    return axios.post('/api/login', params);
+    return axios.post('/api/login/', params);
 }

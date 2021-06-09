@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import GuideTeacher from "../components/guideTeacher";
 import axios from 'axios';
 import {useHistory} from "react-router-dom";
-import {Table, Space, Button, Layout, Card} from 'antd';
+import {Table, Space, Button, Layout, Card, message} from 'antd';
 import logo from '../common/images/logo.png';
 import '../common/layout.css';
 import QueueAnim from "rc-queue-anim";
@@ -14,6 +14,7 @@ export default function Questions()
     const {Header, Content, Sider} = Layout;
     const [data, setData] = useState([])
     const history = useHistory();
+    const assignment_id = window.sessionStorage.assignment_id;
     const columns = [
         // {
         //     title: 'Index',
@@ -33,7 +34,7 @@ export default function Questions()
                 <Space size="middle">
                     <Button className='button' onClick={() =>
                     {
-                        window.localStorage.question_ID = record.question_id;
+                        window.sessionStorage.post_question_id = record.question_id;
                         history.push('/detail');
                     }}>details</Button>
                 </Space>
@@ -46,7 +47,7 @@ export default function Questions()
                 <Space size="middle">
                     <Button className='button' onClick={() =>
                     {
-                        window.localStorage.updateQuestionId = record.question_id;
+                        window.sessionStorage.update_question_id = record.question_id;
                         history.push('/renewQuestion');
                     }}>update</Button>
                 </Space>
@@ -59,12 +60,21 @@ export default function Questions()
                 <Space size="middle">
                     <Button className='button' onClick={() =>
                     {
-                        axios.get('api/admin/deleteQuestion', {
+                        axios.delete('api/teacher/QuestionsDetail', {
                             params: {
                                 question_id: record.question_id,
                             }
+                        }).then((response) =>
+                        {
+                            if (response.data.success)
+                            {
+                                message.success('Delete successfully.');
+                                select_questions_by_assignment()
+                            } else
+                            {
+                                message.error('Fail to delete, please retry.');
+                            }
                         })
-                        history.push('/teacherQuestion');
                     }}>delete</Button>
                 </Space>
             ),
@@ -83,36 +93,36 @@ export default function Questions()
         //     ),
         // }
     ];
-    const assignment_id = window.sessionStorage.assignment_id;
+
+    function select_questions_by_assignment()
+    {
+
+        axios.defaults.withCredentials = true;
+        axios.get('/api/student/selectQuestionsByAssignment', {
+            params:
+                {
+                    assignment_id: assignment_id
+                }
+        }).then((response) =>
+        {
+            const temp = response.data
+            for (let i = 0; i < temp.length; i++)
+            {
+                temp[i].key = temp[i].question_id
+                if (temp[i].is_finished === true)
+                {
+                    temp[i].is_finished = 'T'
+                } else
+                {
+                    temp[i].is_finished = 'F'
+                }
+            }
+            setData(response.data)
+        })
+    }
+
     useEffect(() =>
     {
-        function select_questions_by_assignment()
-        {
-
-            axios.defaults.withCredentials = true;
-            axios.get('/api/student/selectQuestionsByAssignment', {
-                params:
-                    {
-                        assignment_id: assignment_id
-                    }
-            }).then((response) =>
-            {
-                const temp = response.data
-                for (let i = 0; i < temp.length; i++)
-                {
-                    temp[i].key = temp[i].question_id
-                    if (temp[i].is_finished === true)
-                    {
-                        temp[i].is_finished = 'T'
-                    } else
-                    {
-                        temp[i].is_finished = 'F'
-                    }
-                }
-                setData(response.data)
-            })
-        }
-
         select_questions_by_assignment()
         const timer = setInterval(select_questions_by_assignment, 3000)
 
