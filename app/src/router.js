@@ -15,8 +15,8 @@ import TeacherAssignments from './teacher/teacherAssignments'
 import UpdateAssignment from "./teacher/updateAssignment";
 import Databases from "./teacher/databases";
 import AddAssignment from "./teacher/addAssignment";
+import TeacherQuestions from "./teacher/teacherQuestions"
 // import Change_pwd_teacher from './teacher_pages/change_pwd_teacher'
-// import Teacher_question from "./teacher_pages/teacher_question"
 // import AddQuestion from "./teacher_pages/AddQuestion";
 // import Detail from "./teacher_pages/detail";
 // import AddDatabase from "./teacher_pages/AddDatabase";
@@ -45,9 +45,9 @@ export default function IRouter()
             <Route path="/teacherAssignments" component={TeacherAssignments}/>}
             <Route path="/updateAssignment" component={UpdateAssignment}/>
             <Route path="/addAssignment" component={AddAssignment}/>
+            <Route path="/teacherQuestions" component={TeacherQuestions}/>
             {/*<Route path="/change_pwd_teacher" component={Change_pwd_teacher}/>}*/}
             {/*<Route path="/AddQuestion" component={AddQuestion}/>*/}
-            {/*<Route path="/teacherQuestion" component={Teacher_question}/>*/}
             {/*<Route path="/detail" component={Detail}/>*/}
             <Route path="/databases" component={Databases}/>
             {/*<Route path="/AddDatabase" component={AddDatabase}/>*/}

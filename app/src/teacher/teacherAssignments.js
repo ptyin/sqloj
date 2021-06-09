@@ -19,7 +19,7 @@ export default function Assignments()
     const history = useHistory();
     const columns = [
         {
-            title: 'Name',
+            title: 'Assignment Name',
             dataIndex: 'assignment_name',
             key: 'name',
             // render: text => <a>{text}</a>,
@@ -34,20 +34,20 @@ export default function Assignments()
             dataIndex: 'assignment_end_time',
             key: 'deadline',
         },
-        // {
-        //     title: 'Detail',
-        //     key: 'detail',
-        //     render: (record) => (
-        //         <Space size="middle">
-        //             <Button className='button' onClick={() =>
-        //             {
-        //                 window.sessionStorage.assignment_ID = record.assignment_id;
-        //                 // window.localStorage.assignment_ID = record.assignment_name;
-        //                 history.push("/teacherQuestion");
-        //             }}>detail</Button>
-        //         </Space>
-        //     ),
-        // },
+        {
+            title: 'Detail',
+            key: 'detail',
+            render: (record) => (
+                <Space size="middle">
+                    <Button className='button' onClick={() =>
+                    {
+                        window.sessionStorage.assignment_id = record.assignment_id;
+                        // window.localStorage.assignment_ID = record.assignment_name;
+                        history.push("/teacherQuestions");
+                    }}>detail</Button>
+                </Space>
+            ),
+        },
         {
             title: 'Update',
             key: 'update',
@@ -79,7 +79,7 @@ export default function Assignments()
                             if (response.data.success)
                             {
                                 message.success('Delete successfully.');
-                                history.push('/teacherAssignments')
+                                query_assignment_list()
                             }
                             else
                             {
@@ -92,28 +92,39 @@ export default function Assignments()
         }
     ];
 
+    function query_assignment_list()
+    {
+        axios.defaults.withCredentials = true;
+        axios.get('/api/teacher/AssignmentListQuery').then((response) =>
+        {
+            const temp = response.data
+            for (let i = 0; i < temp.length; i++)
+            {
+                temp[i].key = temp[i].assignment_id;
+                // let newTime = new Date(temp[i].assignment_start_time);
+                // temp[i].assignment_start_time = strftime("%y/%m/%d %H:%M:%S", newTime)
+                // newTime = new Date(temp[i].assignment_end_time);
+                // temp[i].assignment_end_time = strftime("%y/%m/%d %H:%M:%S", newTime)
+            }
+
+            for (let k = 0; k < temp.length; k++)
+            {
+                for (let j = k; j < temp.length; j++)
+                {
+                    if (Date.parse(temp[k].assignment_end_time) > Date.parse(temp[j].assignment_end_time))
+                    {
+                        const op = temp[k];
+                        temp[k] = temp[j];
+                        temp[j] = op;
+                    }
+                }
+            }
+            setData(temp)
+        })
+    }
 
     useEffect(() =>
     {
-        const now = Date.now()
-        // if (timer === 0 || now - timer > 3000)
-        function query_assignment_list()
-        {
-            axios.defaults.withCredentials = true;
-            axios.get('/api/teacher/AssignmentListQuery').then((response) =>
-            {
-                const temp = response.data
-                for (let i = 0; i < temp.length; i++)
-                {
-                    temp[i].key = temp[i].assignment_id;
-                    // let newTime = new Date(temp[i].assignment_start_time);
-                    // temp[i].assignment_start_time = strftime("%y/%m/%d %H:%M:%S", newTime)
-                    // newTime = new Date(temp[i].assignment_end_time);
-                    // temp[i].assignment_end_time = strftime("%y/%m/%d %H:%M:%S", newTime)
-                }
-                setData(temp)
-            })
-        }
         query_assignment_list()
         const timer = setInterval(query_assignment_list, 3000)
 

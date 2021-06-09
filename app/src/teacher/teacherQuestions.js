@@ -1,17 +1,16 @@
 import React, {useState, useEffect} from "react";
-import Guide from "../components/guide";
+import GuideTeacher from "../components/guideTeacher";
 import axios from 'axios';
 import {useHistory} from "react-router-dom";
-import {Table, Space, Button, Layout, Tag} from 'antd';
+import {Table, Space, Button, Layout, Card} from 'antd';
 import logo from '../common/images/logo.png';
 import '../common/layout.css';
 import QueueAnim from "rc-queue-anim";
 
 export default function Questions()
 {
-    // window.sessionStorage.current = 'assignments'
-    // const [timer, setTimer] = useState(0)
-    const [show] = useState(true)
+    // const [timer,setTimer] = useState(0)
+    // const [show] = useState(true)
     const {Header, Content, Sider} = Layout;
     const [data, setData] = useState([])
     const history = useHistory();
@@ -28,39 +27,63 @@ export default function Questions()
             // render: text => <a>{text}</a>
         },
         {
-            title: 'Finished',
-            dataIndex: 'is_finished',
-            key: 'is_finished',
-            render: tag =>
-            {
-                let color = 'green';
-                if (tag === 'F')
-                {
-                    color = 'volcano';
-                }
-                return (
-                    <Tag color={color} key={tag}>
-                        {tag.toUpperCase()}
-                    </Tag>);
-            }
-        },
-        {
-            title: 'Action',
-            key: 'action',
+            title: 'Detail',
+            key: 'detail',
             render: (record) => (
                 <Space size="middle">
                     <Button className='button' onClick={() =>
                     {
-                        window.sessionStorage.question_ID = record.question_id;
-                        history.push('submit');
+                        window.localStorage.question_ID = record.question_id;
+                        history.push('/detail');
                     }}>details</Button>
                 </Space>
             ),
+        },
+        {
+            title: 'Update',
+            key: 'update',
+            render: (record) => (
+                <Space size="middle">
+                    <Button className='button' onClick={() =>
+                    {
+                        window.localStorage.updateQuestionId = record.question_id;
+                        history.push('/renewQuestion');
+                    }}>update</Button>
+                </Space>
+            ),
+        },
+        {
+            title: 'Delete',
+            key: 'delete',
+            render: (record) => (
+                <Space size="middle">
+                    <Button className='button' onClick={() =>
+                    {
+                        axios.get('api/admin/deleteQuestion', {
+                            params: {
+                                question_id: record.question_id,
+                            }
+                        })
+                        history.push('/teacherQuestion');
+                    }}>delete</Button>
+                </Space>
+            ),
         }
+        ,
+        // {
+        //     title: 'copycat',
+        //     key: 'copycat',
+        //     render: (record) => (
+        //         <Space size="middle">
+        //             <Button className='button' onClick={()=>{
+        //                 window.localStorage.question_id = record.question_id
+        //                 history.push('/copycat');
+        //             }}>copycat</Button>
+        //         </Space>
+        //     ),
+        // }
     ];
-
-
-    const assignment_id = window.sessionStorage.assignment_ID;
+    const assignment_id = window.sessionStorage.assignment_id;
     useEffect(() =>
     {
         function select_questions_by_assignment()
@@ -89,6 +112,7 @@ export default function Questions()
                 setData(response.data)
             })
         }
+
         select_questions_by_assignment()
         const timer = setInterval(select_questions_by_assignment, 3000)
 
@@ -102,7 +126,7 @@ export default function Questions()
             <img src={logo} style={{height: '45px'}} alt=""/>
         </Header>
         <Layout>
-            <Sider width={200} className="site-layout-content"><Guide item="assignments"/></Sider>
+            <Sider width={200} className="site-layout-content"><GuideTeacher/></Sider>
             <Layout style={{padding: '0 24px 24px'}}>
                 <Content className="default_font" style={{margin: '24px 0'}}>
                     <QueueAnim
@@ -110,10 +134,14 @@ export default function Questions()
                         type={['top', 'bottom']}
                         duration="1400"
                         ease={['easeOutQuart', 'easeInOutQuart']}>
-                        {show ? [
-                            <Table columns={columns} key="demo1" dataSource={data}/>,
-                            <div style={{height: '20px'}}/>,
-                        ] : null}
+                        <div key="questions">
+                            <Button type="primary" style={{width: "90px", margin: "0 10px"}} onClick={() =>
+                            {
+                                history.push('/AddQuestion')
+                            }}>Add</Button>
+                            <div style={{height: '20px'}}/>
+                            <Table columns={columns} key="demo1" dataSource={data}/>
+                        </div>
                     </QueueAnim>
                 </Content>
             </Layout>

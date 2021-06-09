@@ -20,7 +20,7 @@ export default function Assignments()
     const history = useHistory();
     const columns = [
         {
-            title: 'Name',
+            title: 'Assignment Name',
             dataIndex: 'assignment_name',
             key: 'name',
             // render: text => <a>{text}</a>,

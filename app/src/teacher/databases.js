@@ -124,14 +124,14 @@ export default function Databases()
                         type={['top', 'bottom']}
                         duration="1400"
                         ease={['easeOutQuart', 'easeInOutQuart']}>
-                        {[
+                        <div key="databases">
                             <Button style={{width: "90px"}} type="primary" onClick={() =>
                             {
                                 history.push('/AddDatabase')
-                            }}>Add</Button>,
-                            <div style={{height: '20px'}}/>,
+                            }}>Add</Button>
+                            <div style={{height: '20px'}}/>
                             <Table columns={columns} key="demo1" dataSource={data}/>
-                        ]}
+                        </div>
                     </QueueAnim>
                 </Content>
             </Layout>

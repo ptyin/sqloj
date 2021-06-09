@@ -26,17 +26,17 @@ export default function UpdateAssignment()
     // const {TextArea} = Input;
     const history = useHistory();
 
+    setID(window.sessionStorage.assignment_id)
+    setName(window.sessionStorage.assignment_name)
+    setStart(window.sessionStorage.assignment_start_time)
+    setEnd(window.sessionStorage.assignment_end_time)
+    // window.sessionStorage.removeItem('assignment_id')
+    // window.sessionStorage.removeItem('assignment_name')
+    // window.sessionStorage.removeItem('assignment_start_time')
+    // window.sessionStorage.removeItem('assignment_end_time')
+    // setDescription(props.assignment_description)
     useEffect(() =>
     {
-        setID(window.sessionStorage.assignment_id)
-        setName(window.sessionStorage.assignment_name)
-        setStart(window.sessionStorage.assignment_start_time)
-        setEnd(window.sessionStorage.assignment_end_time)
-        // window.sessionStorage.removeItem('assignment_id')
-        // window.sessionStorage.removeItem('assignment_name')
-        // window.sessionStorage.removeItem('assignment_start_time')
-        // window.sessionStorage.removeItem('assignment_end_time')
-        // setDescription(props.assignment_description)
 
     }, [])
 
@@ -58,13 +58,13 @@ export default function UpdateAssignment()
                         ease={['easeOutQuart', 'easeInOutQuart']}>
                         {show ? [
                             <Card key="demo1" title="Update Assignment">
-                                <div><Badge status="processing" text="Assignment name"/></div>
+                                <div><Badge status="processing" text="Assignment Name"/></div>
                                 <Input style={{width: "200px"}} placeholder={name} onChange={value =>
                                 {
                                     setName(value.target.value)
                                 }}/>
-                                <div style={{height: "20px"}}/>
-                                <div><Badge status="processing" text="assignment continue time"/></div>
+                                {/*<div style={{height: "20px"}}/>*/}
+                                <div><Badge status="processing" text="Assignment Duration"/></div>
                                 <RangePicker
                                     ranges={{
                                         Today: [moment(), moment()],
@@ -96,7 +96,7 @@ export default function UpdateAssignment()
                                 {/*    } else*/}
                                 {/*        setIsvisible(0)*/}
                                 {/*}}>Are students visible</Checkbox>*/}
-                                {/*<div style={{height: "20px"}}/>*/}
+                                <div style={{height: "20px"}}/>
                                 <Button style={{width: "90px", margin: "0 10px"}} type="primary" onClick={() =>
                                 {
                                     axios.patch('api/teacher/AssignmentDetail', {
