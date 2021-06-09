@@ -132,19 +132,23 @@ class AssignmentDetail(Resource):
     @api.expect(modify_assignment_req)
     @api.marshal_with(modify_assignment_res)
     def patch(self):
-        args = modify_assignment_parser.parse_args()
-        assignment_id = str(args["assignment_id"])
-        assignment_filter = {"assignment_id": assignment_id}
-        update_assignment = {'$set': {
-            "assignment_name": str(args["assignment_name"]),
-            "assignment_start_time": datetime.strptime(str(args["assignment_start_time"]), '%B %d, %Y %H:%M:%S'),
-            "assignment_end_time": datetime.strptime(str(args["assignment_end_time"]), '%B %d, %Y %H:%M:%S'),
-        }}
-        update_status = update_one_document(mongo.db.assignments, assignment_filter, update_assignment)
-        return {
-            "success": update_status,
-            "assignment_id": assignment_id,
-        } if update_status else {"success": update_status}
+        try:
+            args = modify_assignment_parser.parse_args()
+            assignment_id = str(args["assignment_id"])
+            assignment_filter = {"assignment_id": assignment_id}
+            update_assignment = {'$set': {
+                "assignment_name": str(args["assignment_name"]),
+                "assignment_start_time": datetime.strptime(str(args["assignment_start_time"]), '%B %d, %Y %H:%M:%S'),
+                "assignment_end_time": datetime.strptime(str(args["assignment_end_time"]), '%B %d, %Y %H:%M:%S'),
+            }}
+            update_status = update_one_document(mongo.db.assignments, assignment_filter, update_assignment)
+            return {
+                "success": update_status,
+                "assignment_id": assignment_id,
+            } if update_status else {"success": update_status}
+        except Exception as e:
+            print("An exception occurred ::", e)
+        return {"success": False}
 
     @api.doc(parser=delete_assignment_parser)
     @api.expect(delete_assignment_req)
@@ -330,8 +334,8 @@ delete_db_parser.add_argument(
 
 
 @login_required
-@api.route("/QuestionDetail")
-class QuestionDetail(Resource):
+@api.route("/DatabaseDetail")
+class DatabaseDetail(Resource):
     @api.doc(parser=delete_db_parser)
     @api.expect(delete_db_req)
     @api.marshal_with(db_detail_full_res)
