@@ -478,6 +478,7 @@ class DatabaseListQuery(Resource):
         return [{
             "db_id": str(i["db_id"]),
             "db_name": str(i["db_name"]),
+            "db_description": str(i["db_description"]),
             "upload_time": i["upload_time"].strftime('%B %d, %Y %H:%M:%S'),
         } for i in dbs]
 
