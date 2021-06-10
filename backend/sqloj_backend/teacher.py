@@ -440,7 +440,7 @@ class QuestionDetail(Resource):
         assignment_filter = {"question_id": question_id}
         update_question = {'$set': {
             "question_type": qtype,
-            "question_name": str(args["assignment_name"]),
+            "question_name": str(args["question_name"]),
             "question_description": str(args["question_description"]),
             "question_answer": str(args["question_answer"]) if qtype == "sql" else None,
             "question_output": str(args["question_output"]),
