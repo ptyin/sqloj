@@ -126,7 +126,7 @@ const Submit = forwardRef((props, refSelf) =>
                             // <div style={{padding:'3px'}}/>,
                             <CodeMirror
                                 key='editor'
-                                value='# press Ctrl to autocomplete.'
+                                // value='# press Ctrl to autocomplete.'
                                 onChange={(value) => setCode(value)}
                                 options={{
                                     lineNumbers: true,

@@ -135,7 +135,8 @@ export default class Anime extends React.Component
                                     ],
                                 }}
                             >
-                                SQL OnlineJudge
+                                {/*SQL OnlineJudge*/}
+                                DBS EXPERT
                             </Texty>
                             <TweenOne
                                 className="combined-bar"
@@ -148,7 +149,8 @@ export default class Anime extends React.Component
                                 delay={2200}
                                 interval={30}
                             >
-                                An open judge platform for SDU Database System.
+                                an online DataBase System EXPERimenTal platform
+                                {/*An open judge platform for SDU Database System.*/}
                             </Texty>
 
                         </div>

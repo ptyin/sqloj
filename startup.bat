@@ -3,4 +3,4 @@ cd nginx
 nginx -s quit
 start nginx
 cd ..\backend
-.\venv\Scripts\python.exe wsgi.py
+:: .\venv\Scripts\python.exe wsgi.py

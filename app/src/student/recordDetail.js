@@ -46,10 +46,15 @@ export default function Submit()
             }
         }).then((response) =>
         {
-
+            console.log(response.data.record_code)
+            setCode(response.data.record_code)
             if (response.data.record_status.toUpperCase() === 'RUNNING')
             {
                 message.info('Executing...')
+            }
+            else if (response.data.record_status.toUpperCase() === 'RE')
+            {
+                message.error('Please retry! The execution of your commands caused runtime error.');
             }
             else
             {
@@ -88,7 +93,6 @@ export default function Submit()
                 setOutput(temp_output)
                 console.log(temp_output)
             }
-            setCode(response.data.record_code)
         })
     }, [])
     return <Layout>
