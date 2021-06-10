@@ -3,11 +3,13 @@ from flask_login import login_required, current_user
 
 from bson.objectid import ObjectId
 
+from threading import Thread
 from datetime import datetime
 
 from .extension import mongo, login_manager
 from .model import *
-from .util import insert_one_document
+from .util import insert_one_document, update_one_document
+from .task import get_user_answer_output
 
 api = Namespace('student', description="Students' manipulations")
 
@@ -27,9 +29,7 @@ submit_status_res = api.model('Answer submit status', {
 
 records_list_res = api.model('Records list with details', records_list)
 
-record_detail_res = api.model('Record detail', {
-    'record_code': fields.String(required=True, description="User submitted code"),
-})
+record_detail_res = api.model('Record detail', record_output_res_model)
 
 
 @login_required
@@ -131,19 +131,22 @@ class QuestionSubmit(Resource):
         q = mongo.db.questions.find_one({"question_id": args["question_id"]})
         if q is None:
             return {"success": False}
-
+        record_id = "r-" + str(ObjectId())
+        submit_time = datetime.now()
         new_record = {
-            "record_id": "r-" + str(ObjectId()),
+            "record_id": record_id,
             "question_id": str(args["question_id"]),
             "assignment_id": str(q["assignment_id"]),
             "username": str(current_user.id),
-            "submit_time": datetime.now(),
+            "submit_time": submit_time,
             "record_code": str(args["code"]),
             "record_status": "RUNNING",
             "running_time": 0
         }
         insert_status = insert_one_document(mongo.db.records, new_record)
-        # todo call judger function
+        # call judger function, update record
+        Thread(target=get_user_answer_output,
+               args=(record_id, str(args["code"]), str(args["question_id"]), submit_time, str(current_user.id))).start()
         return {"success": insert_status}
 
 
@@ -156,17 +159,6 @@ class RecordListQuery(Resource):
         records = list(mongo.db.records.find({"username": current_user.id}))
         # print(records)
         return [{
-                    'record_id': str(r["record_id"]),
-                    'record_time': r["submit_time"].strftime('%B %d, %Y %H:%M:%S'),
-                    'assignment_id': str(r["assignment_id"]),
-                    'assignment_name': str(mongo.db.assignments.find_one({"assignment_id": str(r["assignment_id"])})[
-                                               "assignment_name"]),
-                    'question_id': str(r["question_id"]),
-                    'question_name': str(mongo.db.questions.find_one({"question_id": str(r["question_id"])})[
-                                             "question_name"]),
-                    'record_status': str(r["record_status"]),
-
-                } if r["record_status"] != "RUNNING" else {
             'record_id': str(r["record_id"]),
             'record_time': r["submit_time"].strftime('%B %d, %Y %H:%M:%S'),
             'assignment_id': str(r["assignment_id"]),
@@ -176,9 +168,9 @@ class RecordListQuery(Resource):
             'question_name': str(mongo.db.questions.find_one({"question_id": str(r["question_id"])})[
                                      "question_name"]),
             'record_status': str(r["record_status"]),
-            'running_time': str(r["running_time"])
+            'running_time': str(r["running_time"]) if r["record_status"] != "RUNNING" else None
         }
-                for r in records]
+            for r in records]
 
 
 recId_parser = api.parser()
@@ -196,10 +188,18 @@ class RecordDetailQuery(Resource):
     def get(self):
         args = quesId_parser.parse_args()
         # print("question_id " + str(args["question_id"]))
-        r = mongo.db.record.find_one({"record_id": args["record_id"]})
-        # print(q)
+        record = mongo.db.records.find_one({"record_id": args["record_id"]})
+        output = mongo.db.record_outputs.find_one({"record_id": args["record_id"]})
         return {
-            "record_code": str(r["record_code"]),
+            "username": str(record["username"]),
+            "submit_time": record["submit_time"].strftime('%B %d, %Y %H:%M:%S'),
+            "finished_time": record["finished_time"].strftime('%B %d, %Y %H:%M:%S') if record[
+                                                                                           "record_status"] != "RUNNING" else None,
+            "record_code": str(record["record_code"]),
+            "record_status": str(record["record_status"]),
+            "output": str(output["output"]) if output else None,
+            "record_lack": str(record["record_lack"]),
+            "record_err": str(record["record_err"]),
         }
 
 

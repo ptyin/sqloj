@@ -4,11 +4,17 @@ from flask_login import login_required, current_user
 from bson.objectid import ObjectId
 from werkzeug.datastructures import FileStorage
 
+import os
+import pathlib
+from threading import Thread
 from datetime import datetime
 
 from .model import *
 from .extension import mongo, login_manager
 from .util import insert_one_document, update_one_document, delete_many_document
+from .task import update_question_standard_output
+
+folder = pathlib.Path(__file__).parent
 
 api = Namespace('teacher', description="Students' manipulations")
 
@@ -22,16 +28,28 @@ delete_assignment_req = api.model("Delete assignment request", assignment_detail
 
 modify_assignment_res = api.model('Assignment adding status', add_assignment_res_model)
 
-question_list_res = api.model('Model', question_list)
+record_finished_req = api.model("Find finished student by question id",
+                                record_by_qid_req_model)
+
+question_student_status_res = api.model("Finished records of requested question",
+                                        question_student_status_res_model)
+
+record_output_req = api.model("Request record output by id", record_output_req_model)
+
+record_output_res = api.model("Record output", record_output_res_model)
+
+question_list_res = api.model('All questions', question_list)
 
 add_question_req = api.model('Added question detail',
                              {**question_detail,
-                              **{'assignment_id':
-                                     fields.String(required=True,
-                                                   description="Assignment id where the question lies"),
-                                 'db_id': fields.String(required=True,
-                                                        description="Database id the question uses"),
-                                 }})
+                              **{'question_answer': fields.String(required=True,
+                                                                  description="Standard question answer"),
+                                 'assignment_id': fields.String(
+                                     required=True,
+                                     description="Assignment id where the question lies"),
+                                 'db_id': fields.String(
+                                     required=True,
+                                     description="Database id the question uses")}})
 
 get_question_res = api.model('Question detail', question_detail_all_model)
 
@@ -41,7 +59,7 @@ modify_question_res = api.model('Question adding status', add_question_res_model
 
 db_list_res = api.model('DB list', db_list_res_model)
 
-db_detail_full_res=api.model('DB detail', db_detail_full_model)
+db_detail_full_res = api.model('DB detail', db_detail_full_model)
 
 add_db_req = api.model('Added DB detail', db_add_req_model)
 
@@ -51,11 +69,8 @@ delete_db_req = api.model("Delete assignment request", db_delete_req_model)
 
 modify_db_res = api.model('Assignment adding status', add_db_res_model)
 
-# todo judge user role
 
-upload_parser = api.parser()
-upload_parser.add_argument('file', location='files',
-                           type=FileStorage, required=True)
+# todo judge user role
 
 
 @login_required
@@ -166,9 +181,101 @@ class AssignmentDetail(Resource):
         } if delete_status else {"success": delete_status}
 
 
+question_id_parser = api.parser()
+question_id_parser.add_argument("question_id", type=str, required=True)
+
+
 @login_required
-@api.route("/QuestionListQuery")
+@api.route("/RecordListQuery")
+class RecordListQuery(Resource):
+    @api.doc(parser=question_id_parser)
+    @api.expect(record_finished_req)
+    @api.marshal_with(question_student_status_res, as_list=True)
+    def get(self):
+        try:
+            args = question_id_parser.parse_args()
+            finishes_filter = {
+                "question_id": args["question_id"],
+                "record_status": "AC"
+            }
+            print(finishes_filter)
+            group_pipeline = {
+                "_id": "$username",
+                "submit_time": {"$last": "$submit_time"},
+                "record_id": {"$last": "$record_id"},
+            }
+            finishes = list(mongo.db.records.aggregate([
+                {"$match": finishes_filter},
+                {"$group": group_pipeline}
+            ]))
+            print(finishes)
+        except Exception as e:
+            print("An exception occurred ::", e)
+            return [{
+                "record_id": None,
+                "username": None,
+                "submit_time": None
+            }]
+        return [{
+            "record_id": str(finished["record_id"]),
+            "username": str(finished["_id"]),
+            "submit_time": finished["submit_time"].strftime('%B %d, %Y %H:%M:%S'),
+        } for finished in finishes]
+
+
+record_id_parser = api.parser()
+record_id_parser.add_argument("record_id", type=str, required=True)
+
+
+@login_required
+@api.route("/RecordOutput")
+class RecordOutput(Resource):
+    @api.doc(parser=record_id_parser)
+    @api.expect(record_output_req)
+    @api.marshal_with(record_output_res)
+    def get(self):
+        args = record_id_parser.parse_args()
+        record = mongo.db.records.find_one({"record_id": args["record_id"]})
+        output = mongo.db.record_outputs.find_one({"record_id": args["record_id"]})
+        return {
+            "username": str(record["username"]),
+            "submit_time": record["submit_time"].strftime('%B %d, %Y %H:%M:%S'),
+            "finished_time": record["finished_time"].strftime('%B %d, %Y %H:%M:%S') if record[
+                                                                                           "record_status"] != "RUNNING" else None,
+            "record_code": str(record["record_code"]),
+            "record_status": str(record["record_status"]),
+            "output": str(output["output"]) if output else None,
+            "record_lack": str(record["record_lack"]),
+            "record_err": str(record["record_err"]),
+        }
+
+
+assignId_parser = api.parser()
+assignId_parser.add_argument(
+    "assignment_id", type=str, required=True, help="Requested assignment id"
+)
+
+
+@login_required
+@api.route("/QuestionList")
+@api.doc(description="Get question list of the requested assignment")
 class QuestionListQuery(Resource):
+    @api.doc(parser=assignId_parser)
+    @api.expect(assignId_parser)
+    @api.marshal_with(question_list_res, as_list=True)
+    def get(self):
+        args = assignId_parser.parse_args()
+        questions = list(mongo.db.questions.find({"assignment_id": args["assignment_id"]}))
+        return [{
+            "question_id": str(i["question_id"]),
+            "question_name": str(i["question_name"]),
+        } for i in questions]
+
+
+@login_required
+@api.route("/QuestionListFull")
+@api.doc(description="Get full question list")
+class QuestionListFullQuery(Resource):
     @api.marshal_with(question_list_res)
     def get(self):
         questions = list(mongo.db.questions.find({}))
@@ -183,12 +290,17 @@ post_question_parser.add_argument(
     "question_name", type=str, required=True,
 )
 post_question_parser.add_argument(
-    "question_description", type=str, required=True,
+    "question_description", type=str, required=False,
 )
 
 post_question_parser.add_argument(
     "question_output", type=str, required=True,
 )
+post_question_parser.add_argument(
+    "question_answer", type=str, required=True,
+)
+
+
 post_question_parser.add_argument(
     "assignment_id", type=str, required=True,
 )
@@ -204,9 +316,11 @@ modify_question_parser.add_argument(
     "question_name", type=str, required=True,
 )
 modify_question_parser.add_argument(
-    "question_description", type=str, required=True,
+    "question_description", type=str, required=False,
 )
-
+post_question_parser.add_argument(
+    "question_answer", type=str, required=True,
+)
 modify_question_parser.add_argument(
     "question_output", type=str, required=True,
 )
@@ -248,15 +362,22 @@ class QuestionDetail(Resource):
     def post(self):
         args = post_question_parser.parse_args()
         question_id = "q-" + str(ObjectId())
+        assignment = mongo.db.assignments.find_one({"assignment_id": str(args["assignment_id"])})
+        db = mongo.db.dbs.find_one({"db_id": str(args["db_id"])})
+        if db is None or assignment is None:
+            return {"success": False}
         new_question = {
             "question_id": question_id,
             "question_name": str(args["question_name"]),
             "assignment_id": str(args["assignment_id"]),
+            "question_answer": str(args["question_answer"]),
             "question_output": str(args["question_output"]),
             "question_description": str(args["question_description"]),
             "db_id": str(args["db_id"]),
         }
         insert_status = insert_one_document(mongo.db.questions, new_question)
+        Thread(target=update_question_standard_output,
+               args=[[question_id]]).start()
         return {
             "success": insert_status,
             "question_id": question_id,
@@ -266,17 +387,24 @@ class QuestionDetail(Resource):
     @api.expect(modify_question_req)
     @api.marshal_with(modify_question_res)
     def patch(self):
-        args = modify_question_req.parse_args()
+        args = modify_question_parser.parse_args()
         question_id = str(args["question_id"])
+        assignment = mongo.db.assignments.find_one({"assignment_id": str(args["assignment_id"])})
+        db = mongo.db.dbs.find_one({"db_id": str(args["db_id"])})
+        if db is None or assignment is None:
+            return {"success": False}
         assignment_filter = {"question_id": question_id}
         update_question = {'$set': {
             "question_name": str(args["assignment_name"]),
             "question_description": str(args["question_description"]),
+            "question_answer": str(args["question_answer"]),
             "question_output": str(args["question_output"]),
             "assignment_id": str(args["assignment_id"]),
             "db_id": str(args["db_id"]),
         }}
         update_status = update_one_document(mongo.db.questions, assignment_filter, update_question)
+        Thread(target=update_question_standard_output,
+               args=[[question_id]]).start()
         return {
             "success": update_status,
             "question_id": question_id,
@@ -315,6 +443,8 @@ post_db_parser.add_argument(
 post_db_parser.add_argument(
     "db_description", type=str, required=False,
 )
+post_db_parser.add_argument('file', location='files',
+                            type=FileStorage, required=True)
 
 modify_db_parser = api.parser()
 modify_db_parser.add_argument(
@@ -323,9 +453,12 @@ modify_db_parser.add_argument(
 modify_db_parser.add_argument(
     "db_name", type=str, required=True,
 )
-post_db_parser.add_argument(
+modify_db_parser.add_argument(
     "db_description", type=str, required=False,
 )
+modify_db_parser.add_argument('file', location='files',
+                              type=FileStorage, required=False,
+                              help="Send the file only if it is updated")
 
 delete_db_parser = api.parser()
 delete_db_parser.add_argument(
@@ -356,8 +489,6 @@ class DatabaseDetail(Resource):
     @api.marshal_with(modify_db_res)
     def post(self):
         args = post_db_parser.parse_args()
-        # todo handle file
-        file = upload_parser.parse_args()['file']
         filename = str(ObjectId())
         db_id = "db-" + filename
         new_db = {
@@ -367,20 +498,28 @@ class DatabaseDetail(Resource):
             "db_filename": filename,
             "upload_time": datetime.now(),
         }
-        insert_status = insert_one_document(mongo.db.db, new_db)
-        # todo check file creation
-        return {
-            "success": insert_status,
-            "db_id": db_id,
-        } if insert_status else {"success": insert_status}
+        insert_status = insert_one_document(mongo.db.dbs, new_db)
+        # check file creation
+        file = args['file']
+        if insert_status:
+            try:
+                file.save(folder / "database" / filename)
+            except OSError as e:
+                print("An exception occurred when saving file ::", e)
+                delete_many_document(mongo.db.dbs, {"db_id": db_id})
+                return {"success": False}
+            return {
+                "success": True,
+                "db_id": db_id,
+            }
+        else:
+            return {"success": False}
 
     @api.doc(parser=modify_db_parser)
     @api.expect(modify_db_req)
     @api.marshal_with(modify_db_res)
     def patch(self):
         args = modify_db_parser.parse_args()
-        # todo handle file
-        file = upload_parser.parse_args()['file']
         db_id = str(args["db_id"])
         db_filter = {"db_id": db_id}
         update_db = {'$set': {
@@ -389,10 +528,27 @@ class DatabaseDetail(Resource):
             "upload_time": datetime.now(),
         }}
         update_status = update_one_document(mongo.db.dbs, db_filter, update_db)
-        return {
-            "success": update_status,
-            "db_id": db_id,
-        } if update_status else {"success": update_status}
+        # check file overwrite
+        filename = db_id[3:]
+        file = args['file']
+        if update_status:
+            # the file may not be updated
+            if file is not None:
+                try:
+                    file.save(folder / "database" / filename)
+                except OSError as e:
+                    print("An exception occurred when saving file ::", e)
+                    return {"success": False}
+            # update corresponding question answers
+            qids = mongo.db.questions.distinct("question_id", {"db_id": db_id})
+            Thread(target=update_question_standard_output,
+                   args=[qids]).start()
+            return {
+                "success": True,
+                "db_id": db_id,
+            }
+        else:
+            return {"success": False}
 
     @api.doc(parser=delete_db_parser)
     @api.expect(delete_db_req)
@@ -400,11 +556,24 @@ class DatabaseDetail(Resource):
     def delete(self):
         args = delete_db_parser.parse_args()
         db_id = str(args["db_id"])
-        if mongo.db.dbs.find_one({"db_id": db_id}) is not None:
-            delete_status = False
-        else:
-            delete_status = delete_many_document(mongo.db.dbs, {"db_id": db_id})
+        delete_status = False
+        file_delete_status = False
+        if mongo.db.questions.find_one({"db_id": db_id}) is None:
+            db = mongo.db.dbs.find_one({"db_id": db_id})
+            file_delete_status = True
+            if db is not None:
+                delete_status = delete_many_document(mongo.db.dbs, {"db_id": db_id})
+                file_delete_status = False
+                # keep trying deleting
+                while delete_status:
+                    try:
+                        os.remove('/database/' + str(db["db_filename"]))
+                    except Exception as e:
+                        print("An exception occurred ::", e)
+                        continue
+                    file_delete_status = True
+                    break
         return {
-            "success": delete_status,
+            "success": True,
             "db_id": db_id,
-        } if delete_status else {"success": delete_status}
+        } if delete_status and file_delete_status else {"success": False}

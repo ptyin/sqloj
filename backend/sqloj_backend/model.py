@@ -47,15 +47,16 @@ question_status = {
 
 question_detail = {
     'question_name': fields.String(required=True, description="Question name"),
-    'question_description': fields.String(required=True, description="Question description"),
+    'question_description': fields.String(required=False, description="Question description"),
     'question_output': fields.String(required=True, description="Required question output"),
 }
 
 question_detail_all_model = {
     'question_id': fields.String(required=True, description="Question unique id"),
     'question_name': fields.String(required=True, description="Question name"),
-    'question_description': fields.String(required=True, description="Question description"),
+    'question_description': fields.String(required=False, description="Question description"),
     'question_output': fields.String(required=True, description="Required question output"),
+    'question_answer':fields.String(required=True, description="Standard question answer"),
     'assignment_id': fields.String(required=True, description="Assignment id the question belongs to"),
     'db_id': fields.String(required=True, description="Database id the question uses"),
 }
@@ -95,6 +96,13 @@ add_db_res_model = {
     'db_id': fields.String(required=False, description="DB unique id"),
 }
 
+record_by_qid_req_model = {'question_id': fields.String(required=True, description="Requested question id")}
+
+question_student_status_res_model = {
+    "record_id": fields.String(required=True),
+    "username": fields.String(required=True, description="Student name"),
+    "submit_time": fields.String(required=True, description="Submitted time")
+}
 
 
 class RecordStatus(enum.Enum):
@@ -103,6 +111,22 @@ class RecordStatus(enum.Enum):
     TLE = "TLE"
     WA = "WA"
 
+
+record_output_req_model = {
+    "record_id": fields.String(required=True),
+}
+
+record_output_res_model = {
+    "username": fields.String(required=True),
+    "submit_time": fields.String(required=True, description="Code submitted time"),
+    "finished_time": fields.String(required=False, description="Execution finished time"),
+    "record_code": fields.String(required=True, description="User submitted code"),
+    'record_status': fields.String(required=True, enum=[x.name for x in RecordStatus],
+                                   description="Record status: RUNNING, AC, TLE, WA"),
+    "output": fields.String(required=False, description="Sql command output if latest"),
+    "record_lack": fields.String(required=False, description="Missing line number"),
+    "record_err": fields.String(required=False, description="Error line number"),
+}
 
 records_list = {
     'record_id': fields.String(required=True),
