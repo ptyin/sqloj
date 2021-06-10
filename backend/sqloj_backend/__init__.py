@@ -62,7 +62,8 @@ def create_app():
                 "question_description": "2",
                 "question_output": "3333333333",
                 "question_answer": "select * from albums;",
-                "question_standard_output":[],
+                "question_standard_output": [],
+                "question_type":"sql",
                 'db_id': "db-21ru2933hui4"
             },
             {
@@ -73,6 +74,7 @@ def create_app():
                 "question_output": "3333333333",
                 "question_answer": "select * from albums;",
                 "question_standard_output": [],
+                "question_type": "sql",
                 'db_id': "db-r9imvrvnq40s"
             }
         ]
@@ -82,6 +84,7 @@ def create_app():
             {
                 "record_id": "r-21ru2933hui4",
                 "question_id": "q-21ru2933hui4",
+                "question_type": "sql",
                 "assignment_id": "a-066ab87a062b",
                 "username": "admin",
                 "submit_time": datetime.fromisoformat('2021-05-04 00:05:23.283'),
@@ -95,6 +98,7 @@ def create_app():
             {
                 "record_id": "r-21ru2923hui4",
                 "question_id": "q-21ru2933hui4",
+                "question_type": "sql",
                 "assignment_id": "a-066ab87a062b",
                 "username": "admin",
                 "submit_time": datetime.fromisoformat('2021-05-04 00:05:23.283'),
@@ -108,6 +112,7 @@ def create_app():
             {
                 "record_id": "r-21ru2943hui4",
                 "question_id": "q-21ru2933hui4",
+                "question_type": "sql",
                 "assignment_id": "a-066ab87a062b",
                 "username": "123",
                 "submit_time": datetime.fromisoformat('2021-05-04 00:05:23.283'),
@@ -121,6 +126,7 @@ def create_app():
             {
                 "record_id": "r-r9imvrvnq40s",
                 "question_id": "q-r9imvrvnq40s",
+                "question_type": "sql",
                 "assignment_id": "a-066ab87a062b",
                 "username": "123",
                 "submit_time": datetime.fromisoformat('2021-05-06 00:05:23.283'),
@@ -177,7 +183,7 @@ def create_app():
     api_blueprint = Blueprint('api', __name__, url_prefix='/api')
     api = Api(api_blueprint)
     app.register_blueprint(api_blueprint)
-    api.add_namespace(login_api, path='/login')
+    api.add_namespace(login_api, path='/')
     api.add_namespace(student_api, path='/student')
     api.add_namespace(teacher_api, path='/teacher')
 

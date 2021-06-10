@@ -104,6 +104,7 @@ class QuestionDetailQuery(Resource):
         q = mongo.db.questions.find_one({"question_id": args["question_id"]})
         # print(q)
         return {
+            "question_type": str(q["question_type"]),
             "question_name": str(q["question_name"]),
             "question_description": str(q["question_description"]),
             "question_output": str(q["question_output"])
@@ -136,17 +137,20 @@ class QuestionSubmit(Resource):
         new_record = {
             "record_id": record_id,
             "question_id": str(args["question_id"]),
+            "question_type": str(q["question_type"]),
             "assignment_id": str(q["assignment_id"]),
             "username": str(current_user.id),
             "submit_time": submit_time,
             "record_code": str(args["code"]),
-            "record_status": "RUNNING",
+            "record_status": "RUNNING" if str(q["question_type"]) == "sql" else None,
             "running_time": 0
         }
         insert_status = insert_one_document(mongo.db.records, new_record)
-        # call judger function, update record
-        Thread(target=get_user_answer_output,
-               args=(record_id, str(args["code"]), str(args["question_id"]), submit_time, str(current_user.id))).start()
+        if str(q["question_type"]) == "sql":
+            # call judger function, update record
+            Thread(target=get_user_answer_output,
+                   args=(
+                   record_id, str(args["code"]), str(args["question_id"]), submit_time, str(current_user.id))).start()
         return {"success": insert_status}
 
 
@@ -162,15 +166,16 @@ class RecordListQuery(Resource):
             'record_id': str(r["record_id"]),
             'record_time': r["submit_time"].strftime('%B %d, %Y %H:%M:%S'),
             'assignment_id': str(r["assignment_id"]),
-            'assignment_name': str(mongo.db.assignments.find_one({"assignment_id": str(r["assignment_id"])})[
-                                       "assignment_name"]),
+            'assignment_name': str(mongo.db.assignments.find_one(
+                {"assignment_id": str(r["assignment_id"])})["assignment_name"]),
             'question_id': str(r["question_id"]),
+            'question_type': str(r["question_type"]),
             'question_name': str(mongo.db.questions.find_one({"question_id": str(r["question_id"])})[
                                      "question_name"]),
             'record_status': str(r["record_status"]),
-            'running_time': str(r["running_time"]) if r["record_status"] != "RUNNING" else None
-        }
-            for r in records]
+            'running_time': str(r["running_time"]) if r["question_type"] == "sql" and r[
+                "record_status"] != "RUNNING" else None
+        } for r in records]
 
 
 recId_parser = api.parser()
@@ -193,13 +198,14 @@ class RecordDetailQuery(Resource):
         return {
             "username": str(record["username"]),
             "submit_time": record["submit_time"].strftime('%B %d, %Y %H:%M:%S'),
-            "finished_time": record["finished_time"].strftime('%B %d, %Y %H:%M:%S') if record[
-                                                                                           "record_status"] != "RUNNING" else None,
+            "finished_time": record["finished_time"].strftime('%B %d, %Y %H:%M:%S')
+            if record["question_type"] == "sql" and record["record_status"] != "RUNNING" else None,
+            'question_type': str(record["question_type"]),
             "record_code": str(record["record_code"]),
-            "record_status": str(record["record_status"]),
-            "output": str(output["output"]) if output else None,
-            "record_lack": str(record["record_lack"]),
-            "record_err": str(record["record_err"]),
+            "record_status": str(record["record_status"]) if record["question_type"] == "sql" else None,
+            "output": str(output["output"]) if record["question_type"] == "sql" and output else None,
+            "record_lack": str(record["record_lack"]) if record["question_type"] == "sql" else None,
+            "record_err": str(record["record_err"]) if record["question_type"] == "sql" else None,
         }
 
 
