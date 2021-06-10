@@ -56,7 +56,7 @@ export default function Databases()
                         console.log(record.database_id)
                         axios.delete('/api/teacher/DatabaseDetail', {
                             params: {
-                                database_id: record.db_id,
+                                db_id: record.db_id,
                             }
                         }).then((response) =>
                         {
@@ -67,7 +67,7 @@ export default function Databases()
                             }
                             else
                             {
-                                message.error('Fail to delete, please retry.');
+                                message.error('Fail to delete, there are some questions dependent on this database.');
                             }
                         })
                     }}>delete</Button>
