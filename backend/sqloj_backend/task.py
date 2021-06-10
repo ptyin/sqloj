@@ -1,7 +1,7 @@
 import pathlib
 from datetime import datetime
 
-from .module.judge import standard_sql_output, judge
+from .module.judge import get_answer, judge
 from .util import update_one_document, insert_one_document
 
 from .extension import mongo
@@ -14,22 +14,27 @@ def update_question_standard_output(qids):
     for qid in qids:
         question = mongo.db.questions.find_one({"question_id": qid})
         # print(question, qid)
-        output = standard_sql_output(str(question["question_answer"]), folder / "database" / question["db_id"][3:], qid)
+        header, output, _ = get_answer(folder / "database" / question["db_id"][3:], str(question["question_answer"]), )
         update_one_document(mongo.db.questions, {"question_id": qid}, {
             "$set":
                 {
-                    "question_standard_output": [output]
+                    "question_standard_header": header,
+                    "question_standard_output": output
                 }
         })
-    print(qids + " standard update finished")
+    print(str(qids) + " standard update finished")
 
 
 def get_user_answer_output(rec_id, sql, qid, submit_time, username):
     question = mongo.db.questions.find_one({"question_id": qid})
     standard_output = question["question_standard_output"]
+    standard_header = question["question_standard_header"]
+    # print((standard_header, standard_output))
+    # print("")
     # after getting output
-    status, running_time, lack_num, err_num, output = judge(sql, standard_output,
-                                                            folder / "database" / question["db_id"][3:], rec_id)
+    status, (lack_num, err_num), (header, output), running_time = judge(folder / "database" / question["db_id"][3:],
+                                                                        sql, standard_header, standard_output)
+    # print(status, (lack_num, err_num), (header, output), running_time)
     finished_time = datetime.now()
     update_one_document(mongo.db.records, {"record_id": rec_id}, {
         "$set":
@@ -45,25 +50,31 @@ def get_user_answer_output(rec_id, sql, qid, submit_time, username):
         "username": username,
         "question_id": qid
     }
+    # print(header)
+    # print(output)
     if mongo.db.record_outputs.find_one(doc_filter) is None:
         new_output = {
-                         "question_id": qid,
-                         "username": username,
-                         "output": output,
-                         "record_id": rec_id,
-                         "submit_time": submit_time,
-                         "finished_time": finished_time
-                     },
+            "question_id": qid,
+            "username": username,
+            "record_header": header,
+            "record_output": output,
+            "record_id": rec_id,
+            "submit_time": submit_time,
+            "finished_time": finished_time
+        }
+        # print("w")
         insert_one_document(mongo.db.record_outputs, new_output)
     else:
-        doc_update = {"$set",
-                      {
-                          "output": output,
-                          "record_id": rec_id,
-                          "submit_time": submit_time,
-                          "finished_time": finished_time
-                      },
-                      }
+        doc_update = {"$set":
+            {
+                "record_header": header,
+                "record_output": output,
+                "record_id": rec_id,
+                "submit_time": submit_time,
+                "finished_time": finished_time
+            }
+        }
+        # print("w2")
         update_one_document(mongo.db.record_outputs, doc_filter, doc_update)
 
     print(rec_id + " user code execution finished")
