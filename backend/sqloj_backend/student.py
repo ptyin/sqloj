@@ -205,7 +205,7 @@ class SelectRecordById(Resource):
             'question_type': str(record["question_type"]),
             "record_code": str(record["record_code"]),
             "record_status": str(record["record_status"]) if record["question_type"] == "sql" else None,
-            "output": str(output["output"]) if record["question_type"] == "sql" and output else None,
+            "record_output": str(output["record_output"]) if record["question_type"] == "sql" and output else None,
             "record_lack": str(record["record_lack"]) if record["question_type"] == "sql" else None,
             "record_err": str(record["record_err"]) if record["question_type"] == "sql" else None,
         }
