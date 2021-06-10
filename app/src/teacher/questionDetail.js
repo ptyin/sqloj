@@ -49,17 +49,17 @@ export default function ()
                         {/*<div id="detail">*/}
 
                         <div key="question_name">
-                            <Card className="info-card" title="question name">
+                            <Card className="info-card" title="Question Name">
                                 <div dangerouslySetInnerHTML={{__html: questionName}}/>
                             </Card>
                         </div>
                         <div key="question_description">
-                            <Card className="info-card" title="question description">
+                            <Card className="info-card" title="Question Description">
                                 <div dangerouslySetInnerHTML={{__html: description}}/>
                             </Card>
                         </div>
                         <div key="output">
-                            <Card className="info-card" title="output">
+                            <Card className="info-card" title="Output">
                                 <div dangerouslySetInnerHTML={{__html: output}}/>
                             </Card>
                         </div>

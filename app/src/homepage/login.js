@@ -147,5 +147,5 @@ function login(id, password)
     params.append('username', id);
     params.append('password', password);
     axios.defaults.withCredentials = true;
-    return axios.post('/api/login/', params);
+    return axios.post('/api/login', params);
 }

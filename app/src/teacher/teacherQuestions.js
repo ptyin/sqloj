@@ -48,7 +48,7 @@ export default function Questions()
                     <Button className='button' onClick={() =>
                     {
                         window.sessionStorage.update_question_id = record.question_id;
-                        history.push('/renewQuestion');
+                        history.push('/updateQuestion');
                     }}>update</Button>
                 </Space>
             ),
@@ -98,25 +98,13 @@ export default function Questions()
     {
 
         axios.defaults.withCredentials = true;
-        axios.get('/api/student/selectQuestionsByAssignment', {
+        axios.get('/api/teacher/QuestionList', {
             params:
                 {
                     assignment_id: assignment_id
                 }
         }).then((response) =>
         {
-            const temp = response.data
-            for (let i = 0; i < temp.length; i++)
-            {
-                temp[i].key = temp[i].question_id
-                if (temp[i].is_finished === true)
-                {
-                    temp[i].is_finished = 'T'
-                } else
-                {
-                    temp[i].is_finished = 'F'
-                }
-            }
             setData(response.data)
         })
     }

@@ -20,23 +20,23 @@ import BraftEditor from 'braft-editor'
 import 'braft-editor/dist/index.css'
 
 
-export default function AddQuestion()
+export default function UpdateQuestion()
 {
     // const [timer,setTimer] = useState(0)
     const [data, setData] = useState([])
-    // const [show] = useState(true)
     const [databaseId, setDatabaseId] = useState('')
+    const [assignmentId, setAssignmentId] = useState('')
+    // const [show] = useState(true)
+    const [questionId, setQuestionId] = useState('');
     const [questionName, setQuestionName] = useState('');
-    const [questionDescription, setQuestionDescription] = useState('');
-    const [questionOutput, setQuestionOutput] = useState('');
+    const [questionDescription, setQuestionDescription] = useState('')
+    const [questionOutput, setQuestionOutput] = useState('')
     const [questionType, setQuestionType] = useState('SQL')
-
     const [code, setCode] = useState('');
-    // const [operate, setOperate] = useState('query');
-    // const [isOrder, setIsOrder] = useState('')
+
     const {Header, Content, Sider} = Layout;
     const {Option} = Select;
-    const { Panel } = Collapse;
+    const {Panel} = Collapse
     const history = useHistory();
     const editorProps = {
         contentStyle: {height: 300},
@@ -44,16 +44,33 @@ export default function AddQuestion()
         // defaultValue: '<p>Hello World!</p>',
         // onChange: this.handleChange
     }
-    const assignment_id = window.sessionStorage.assignment_id;
-
+    const id = window.sessionStorage.update_question_id
     useEffect(() =>
     {
+        setDatabaseId("db-60c1ca024c0f043131a05b8d")
+        axios.get('/api/teacher/QuestionDetail', {
+            params: {
+                question_id: id
+            }
+        }).then((response) =>
+        {
+            console.log(response.data)
+            setDatabaseId(response.data.db_id)
+            setAssignmentId(response.data.assignment_id)
+            setQuestionId(response.data.question_id)
+            setQuestionName(response.data.question_name)
+            setQuestionDescription(response.data.question_description)
+            setQuestionOutput(response.data.question_output)
+            setQuestionType(response.data.question_type)
+            setCode(response.data.question_answer)
+        })
 
         axios.get('/api/teacher/DatabaseListQuery').then((response) =>
         {
             setData(response.data)
         })
     }, [])
+
     return <Layout>
         <Header className="header">
             <img src={logo} style={{height: '45px'}} alt=""/>
@@ -67,15 +84,18 @@ export default function AddQuestion()
                         type={['right', 'left']}
                         duration="2000"
                         ease={['easeOutQuart', 'easeInOutQuart']}>
-
-                        <Card key="demo1" title="Add Question">
+                        <Card key="demo1" title="Update Question">
                             <div>
                                 <Badge status="processing" text="Corresponding Database"/>
                             </div>
                             <Select
                                 showSearch
                                 style={{width: 200}}
-                                placeholder="Search to Select"
+                                // defaultValue="db-60c1ca024c0f043131a05b8d"
+                                defaultValue={databaseId}
+                                // placeholder={databaseId}
+                                // value={databaseId}
+                                // placeholder="Search to Select"
                                 optionFilterProp="children"
                                 filterOption={(input, option) =>
                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -90,7 +110,7 @@ export default function AddQuestion()
                             >
                                 {
                                     data.map((v) => (
-                                        <Option value={v.db_id}>{v.db_name}</Option>
+                                        <Option key={v.db_id} value={v.db_id}>{v.db_name}</Option>
                                     ))
                                 }
                             </Select>
@@ -98,17 +118,16 @@ export default function AddQuestion()
                             <div>
                                 <Badge status="processing" text="Question Name"/>
                             </div>
-                            <Input style={{width: "200px"}} placeholder="Question Name" onChange={value =>
-                            {
-                                setQuestionName(value.target.value)
-                            }}/>
+                            <Input key="name" style={{width: "200px"}} placeholder={questionName}
+                                   onChange={value =>
+                                   {
+                                       setQuestionName(value.target.value)
+                                   }}/>
                             <div style={{height: "10px"}}/>
                             <div style={{padding: '3px'}}/>
-
-                            {/*<Collapse key="detail" defaultActiveKey={["description"]}>*/}
                             <Collapse key="detail" defaultActiveKey={[]}>
                                 <Panel key="description" header="Question Description">
-                                    <BraftEditor {...editorProps} onChange={(content) =>
+                                    <BraftEditor {...editorProps} defaultValue={BraftEditor.createEditorState(questionDescription)} onChange={(content) =>
                                     {
                                         setQuestionDescription(content.toHTML())
                                     }}/>
@@ -116,7 +135,7 @@ export default function AddQuestion()
                                 <div style={{height: "5px"}}/>
                                 <div style={{padding: '3px'}}/>
                                 <Panel key="output" header="Output">
-                                    <BraftEditor {...editorProps} onChange={(content) =>
+                                    <BraftEditor {...editorProps} defaultValue={BraftEditor.createEditorState(questionOutput)} onChange={(content) =>
                                     {
                                         setQuestionOutput(content.toHTML())
                                     }}/>
@@ -126,7 +145,9 @@ export default function AddQuestion()
                                 <Panel key="answer" header="Standard Answer">
                                     <CodeMirror
                                         key='editor'
-                                        value='# press Ctrl to autocomplete'
+                                        // defaultValue={code}
+                                        value={code}
+                                        // value='# press Ctrl to autocomplete'
                                         onChange={(value) => setCode(value)}
                                         options={{
                                             lineNumbers: true,
@@ -162,30 +183,31 @@ export default function AddQuestion()
                                     question_output: questionOutput,
                                     question_answer: code,
                                     question_type: questionType,
-                                    assignment_id: assignment_id,
+                                    assignment_id: assignmentId,
                                     db_id: databaseId
                                 })
-                                axios.post('/api/teacher/QuestionDetail',
-                                {
-                                    question_name: questionName,
-                                    question_description: questionDescription,
-                                    question_output: questionOutput,
-                                    question_answer: code,
-                                    question_type: questionType,
-                                    assignment_id: assignment_id,
-                                    db_id: databaseId
-                                }).then((response) =>
+                                axios.patch('/api/teacher/QuestionDetail',
+                                    {
+                                        question_id: questionId,
+                                        question_name: questionName,
+                                        question_description: questionDescription,
+                                        question_output: questionOutput,
+                                        question_answer: code,
+                                        question_type: questionType,
+                                        assignment_id: assignmentId,
+                                        db_id: databaseId
+                                    }).then((response) =>
                                 {
                                     if (response.data.success)
                                     {
-                                        message.success('Upload successfully.');
+                                        message.success('update successfully.');
                                         history.push('/teacherQuestions')
                                     } else
                                     {
-                                        message.error('Fail to upload, please retry.');
+                                        message.error('Fail to update, please retry.');
                                     }
                                 })
-                            }}>submit</Button>
+                            }}>update</Button>
                         </Card>
                     </QueueAnim>
                 </Content>
