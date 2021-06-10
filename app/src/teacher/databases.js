@@ -127,7 +127,7 @@ export default function Databases()
                         <div key="databases">
                             <Button style={{width: "90px"}} type="primary" onClick={() =>
                             {
-                                history.push('/AddDatabase')
+                                history.push('/addDatabase')
                             }}>Add</Button>
                             <div style={{height: '20px'}}/>
                             <Table columns={columns} key="demo1" dataSource={data}/>

@@ -43,11 +43,16 @@ export default class BasicDemo extends React.Component {
 
         // const { editorState, outputHTML } = this.state
         const { editorState} = this.state
+        const editorProps = {
+            height: 500,
+            contentFormat: 'html',
+            initialContent: '<p>Hello World!</p>',
+            onChange: this.handleChange
+        }
         return (
                 <div className="editor-wrapper">
                     <BraftEditor
-                        value={editorState}
-                        onChange={this.handleChange}
+                        {...editorProps}
                     />
                 </div>
         )

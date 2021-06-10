@@ -34,7 +34,7 @@ export default function Questions()
                 <Space size="middle">
                     <Button className='button' onClick={() =>
                     {
-                        window.sessionStorage.post_question_id = record.question_id;
+                        window.sessionStorage.detail_question_id = record.question_id;
                         history.push('/detail');
                     }}>details</Button>
                 </Space>
