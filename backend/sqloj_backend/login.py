@@ -44,7 +44,7 @@ def request_loader(request):
     return None
 
 
-@api.route("/")
+@api.route("/login")
 class Login(Resource):
     @api.doc(parser=parser)
     @api.marshal_with(login_res)

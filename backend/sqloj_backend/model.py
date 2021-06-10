@@ -46,6 +46,7 @@ question_status = {
 }
 
 question_detail = {
+    "question_type": fields.String(required=True),
     'question_name': fields.String(required=True, description="Question name"),
     'question_description': fields.String(required=False, description="Question description"),
     'question_output': fields.String(required=True, description="Required question output"),
@@ -54,11 +55,12 @@ question_detail = {
 question_detail_all_model = {
     'question_id': fields.String(required=True, description="Question unique id"),
     'question_name': fields.String(required=True, description="Question name"),
+    "question_type": fields.String(required=True, description="sql or text"),
     'question_description': fields.String(required=False, description="Question description"),
-    'question_output': fields.String(required=True, description="Required question output"),
-    'question_answer':fields.String(required=True, description="Standard question answer"),
+    'question_output': fields.String(required=False, description="Required question output"),
+    'question_answer': fields.String(required=False, description="Standard question answer"),
     'assignment_id': fields.String(required=True, description="Assignment id the question belongs to"),
-    'db_id': fields.String(required=True, description="Database id the question uses"),
+    'db_id': fields.String(required=False, description="Database id the question uses"),
 }
 
 db_list_res_model = {
@@ -120,8 +122,9 @@ record_output_res_model = {
     "username": fields.String(required=True),
     "submit_time": fields.String(required=True, description="Code submitted time"),
     "finished_time": fields.String(required=False, description="Execution finished time"),
+    "question_type": fields.String(required=True, description="Sql or text "),
     "record_code": fields.String(required=True, description="User submitted code"),
-    'record_status': fields.String(required=True, enum=[x.name for x in RecordStatus],
+    'record_status': fields.String(required=False, enum=[x.name for x in RecordStatus],
                                    description="Record status: RUNNING, AC, TLE, WA"),
     "output": fields.String(required=False, description="Sql command output if latest"),
     "record_lack": fields.String(required=False, description="Missing line number"),
@@ -132,10 +135,11 @@ records_list = {
     'record_id': fields.String(required=True),
     'record_time': fields.String(required=True, description="Time when record submitted"),
     'assignment_id': fields.String(required=True),
+    "question_type": fields.String(required=True, description="Sql or text "),
     'assignment_name': fields.String(required=True),
     'question_id': fields.String(required=True),
     'question_name': fields.String(required=True),
-    'record_status': fields.String(required=True, enum=[x.name for x in RecordStatus],
+    'record_status': fields.String(required=False, enum=[x.name for x in RecordStatus],
                                    description="Record status: RUNNING, AC, TLE, WA"),
     'running_time': fields.String(required=False, description="Run time for the code, not included if code is running")
 }

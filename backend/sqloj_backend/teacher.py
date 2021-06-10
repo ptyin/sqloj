@@ -194,21 +194,46 @@ class RecordListQuery(Resource):
     def get(self):
         try:
             args = question_id_parser.parse_args()
-            finishes_filter = {
-                "question_id": args["question_id"],
-                "record_status": "AC"
-            }
-            print(finishes_filter)
-            group_pipeline = {
-                "_id": "$username",
-                "submit_time": {"$last": "$submit_time"},
-                "record_id": {"$last": "$record_id"},
-            }
-            finishes = list(mongo.db.records.aggregate([
-                {"$match": finishes_filter},
-                {"$group": group_pipeline}
-            ]))
-            print(finishes)
+            question = mongo.db.questions.find_one({"question_id": args["question_id"], })
+            if question is not None:
+                qtype = question["question_type"]
+                if qtype == "sql":
+                    finishes_filter = {
+                        "question_id": args["question_id"],
+                        "record_status": "AC"
+                    }
+                    print(finishes_filter)
+                    group_pipeline = {
+                        "_id": "$username",
+                        "submit_time": {"$last": "$submit_time"},
+                        "record_id": {"$last": "$record_id"},
+                    }
+                    finishes = list(mongo.db.records.aggregate([
+                        {"$match": finishes_filter},
+                        {"$group": group_pipeline}
+                    ]))
+                    print(finishes)
+                elif qtype == "text":
+                    finishes_filter = {
+                        "question_id": args["question_id"],
+                    }
+                    print(finishes_filter)
+                    group_pipeline = {
+                        "_id": "$username",
+                        "submit_time": {"$last": "$submit_time"},
+                        "record_id": {"$last": "$record_id"},
+                    }
+                    finishes = list(mongo.db.records.aggregate([
+                        {"$match": finishes_filter},
+                        {"$group": group_pipeline}
+                    ]))
+                    print(finishes)
+            else:
+                return [{
+                    "record_id": None,
+                    "username": None,
+                    "submit_time": None
+                }]
         except Exception as e:
             print("An exception occurred ::", e)
             return [{
@@ -240,13 +265,14 @@ class RecordOutput(Resource):
         return {
             "username": str(record["username"]),
             "submit_time": record["submit_time"].strftime('%B %d, %Y %H:%M:%S'),
-            "finished_time": record["finished_time"].strftime('%B %d, %Y %H:%M:%S') if record[
-                                                                                           "record_status"] != "RUNNING" else None,
+            "finished_time": record["finished_time"].strftime('%B %d, %Y %H:%M:%S')
+            if record["question_type"] == "sql" and record["record_status"] != "RUNNING" else None,
+            'question_type': str(record["question_type"]),
             "record_code": str(record["record_code"]),
-            "record_status": str(record["record_status"]),
-            "output": str(output["output"]) if output else None,
-            "record_lack": str(record["record_lack"]),
-            "record_err": str(record["record_err"]),
+            "record_status": str(record["record_status"]) if record["question_type"] == "sql" else None,
+            "output": str(output["output"]) if record["question_type"] == "sql" and output else None,
+            "record_lack": str(record["record_lack"]) if record["question_type"] == "sql" else None,
+            "record_err": str(record["record_err"]) if record["question_type"] == "sql" else None,
         }
 
 
@@ -290,22 +316,24 @@ post_question_parser.add_argument(
     "question_name", type=str, required=True,
 )
 post_question_parser.add_argument(
+    "question_type", type=str, required=True,
+)
+post_question_parser.add_argument(
     "question_description", type=str, required=False,
 )
 
 post_question_parser.add_argument(
-    "question_output", type=str, required=True,
+    "question_output", type=str, required=False,
 )
 post_question_parser.add_argument(
-    "question_answer", type=str, required=True,
+    "question_answer", type=str, required=False,
 )
-
 
 post_question_parser.add_argument(
     "assignment_id", type=str, required=True,
 )
 post_question_parser.add_argument(
-    "db_id", type=str, required=True,
+    "db_id", type=str, required=False,
 )
 
 modify_question_parser = api.parser()
@@ -316,19 +344,22 @@ modify_question_parser.add_argument(
     "question_name", type=str, required=True,
 )
 modify_question_parser.add_argument(
-    "question_description", type=str, required=False,
-)
-post_question_parser.add_argument(
-    "question_answer", type=str, required=True,
+    "question_type", type=str, required=True,
 )
 modify_question_parser.add_argument(
-    "question_output", type=str, required=True,
+    "question_description", type=str, required=False,
+)
+modify_question_parser.add_argument(
+    "question_answer", type=str, required=False,
+)
+modify_question_parser.add_argument(
+    "question_output", type=str, required=False,
 )
 modify_question_parser.add_argument(
     "assignment_id", type=str, required=True,
 )
 modify_question_parser.add_argument(
-    "db_id", type=str, required=True,
+    "db_id", type=str, required=False,
 )
 
 delete_question_parser = api.parser()
@@ -350,10 +381,13 @@ class QuestionDetail(Resource):
         return {
             'question_id': str(q["question_id"]),
             'question_name': str(q["question_name"]),
+            "question_type": str(q["question_type"]),
             'question_description': str(q["question_description"]),
             'question_output': str(q["question_output"]),
+            'question_answer': q["question_answer"] if str(q["question_type"]) == "sql" else None,  # todo handle list
             'assignment_id': str(q["assignment_id"]),
-            'db_id': str(q["db_id"]),
+            'db_id': str(q["db_id"]) if str(q["question_type"]) == "sql" else None,
+        } if q is not None else {
         }
 
     @api.doc(parser=post_question_parser)
@@ -361,23 +395,29 @@ class QuestionDetail(Resource):
     @api.marshal_with(modify_question_res)
     def post(self):
         args = post_question_parser.parse_args()
+        qtype = args["question_type"]
         question_id = "q-" + str(ObjectId())
         assignment = mongo.db.assignments.find_one({"assignment_id": str(args["assignment_id"])})
-        db = mongo.db.dbs.find_one({"db_id": str(args["db_id"])})
-        if db is None or assignment is None:
+        if assignment is None:
             return {"success": False}
+        if qtype == "sql":
+            db = mongo.db.dbs.find_one({"db_id": str(args["db_id"])})
+            if db is None:
+                return {"success": False}
         new_question = {
             "question_id": question_id,
             "question_name": str(args["question_name"]),
+            "question_type": qtype,
             "assignment_id": str(args["assignment_id"]),
-            "question_answer": str(args["question_answer"]),
+            "question_answer": str(args["question_answer"]) if qtype == "sql" else None,
             "question_output": str(args["question_output"]),
             "question_description": str(args["question_description"]),
-            "db_id": str(args["db_id"]),
+            "db_id": str(args["db_id"]) if qtype == "sql" else None,
         }
         insert_status = insert_one_document(mongo.db.questions, new_question)
-        Thread(target=update_question_standard_output,
-               args=[[question_id]]).start()
+        if qtype == "sql":
+            Thread(target=update_question_standard_output,
+                   args=[[question_id]]).start()
         return {
             "success": insert_status,
             "question_id": question_id,
@@ -388,27 +428,33 @@ class QuestionDetail(Resource):
     @api.marshal_with(modify_question_res)
     def patch(self):
         args = modify_question_parser.parse_args()
+        qtype = args["question_type"]
         question_id = str(args["question_id"])
         assignment = mongo.db.assignments.find_one({"assignment_id": str(args["assignment_id"])})
-        db = mongo.db.dbs.find_one({"db_id": str(args["db_id"])})
-        if db is None or assignment is None:
+        if assignment is None:
             return {"success": False}
+        if qtype == "sql":
+            db = mongo.db.dbs.find_one({"db_id": str(args["db_id"])})
+            if db is None:
+                return {"success": False}
         assignment_filter = {"question_id": question_id}
         update_question = {'$set': {
+            "question_type": qtype,
             "question_name": str(args["assignment_name"]),
             "question_description": str(args["question_description"]),
-            "question_answer": str(args["question_answer"]),
+            "question_answer": str(args["question_answer"]) if qtype == "sql" else None,
             "question_output": str(args["question_output"]),
             "assignment_id": str(args["assignment_id"]),
-            "db_id": str(args["db_id"]),
+            "db_id": str(args["db_id"]) if qtype == "sql" else None,
         }}
         update_status = update_one_document(mongo.db.questions, assignment_filter, update_question)
-        Thread(target=update_question_standard_output,
-               args=[[question_id]]).start()
+        if qtype == "sql":
+            Thread(target=update_question_standard_output,
+                   args=[[question_id]]).start()
         return {
-            "success": update_status,
+            "success": True,
             "question_id": question_id,
-        } if update_status else {"success": update_status}
+        } if update_status else {"success": False}
 
     @api.doc(parser=delete_question_parser)
     @api.expect(delete_question_req)
@@ -428,7 +474,7 @@ class QuestionDetail(Resource):
 class DatabaseListQuery(Resource):
     @api.marshal_with(db_list_res)
     def get(self):
-        dbs = list(mongo.db.db.find({}))
+        dbs = list(mongo.db.dbs.find({}))
         return [{
             "db_id": str(i["db_id"]),
             "db_name": str(i["db_name"]),
