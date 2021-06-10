@@ -46,35 +46,46 @@ def get_user_answer_output(rec_id, sql, qid, submit_time, username):
                 "finished_time": finished_time
             }
     })
-    doc_filter = {
-        "username": username,
-        "question_id": qid
-    }
+    # doc_filter = {
+    #     "username": username,
+    #     "question_id": qid
+    # }
     # print(header)
     # print(output)
-    if mongo.db.record_outputs.find_one(doc_filter) is None:
-        new_output = {
-            "question_id": qid,
-            "username": username,
-            "record_header": header,
-            "record_output": output,
-            "record_id": rec_id,
-            "submit_time": submit_time,
-            "finished_time": finished_time
-        }
-        # print("w")
-        insert_one_document(mongo.db.record_outputs, new_output)
-    else:
-        doc_update = {"$set":
-            {
-                "record_header": header,
-                "record_output": output,
-                "record_id": rec_id,
-                "submit_time": submit_time,
-                "finished_time": finished_time
-            }
-        }
-        # print("w2")
-        update_one_document(mongo.db.record_outputs, doc_filter, doc_update)
+    # if mongo.db.record_outputs.find_one(doc_filter) is None:
+    #     new_output = {
+    #         "question_id": qid,
+    #         "username": username,
+    #         "record_header": header,
+    #         "record_output": output,
+    #         "record_id": rec_id,
+    #         "submit_time": submit_time,
+    #         "finished_time": finished_time
+    #     }
+    #     # print("w")
+    #     insert_one_document(mongo.db.record_outputs, new_output)
+    # else:
+    #     doc_update = {"$set":
+    #         {
+    #             "record_header": header,
+    #             "record_output": output,
+    #             "record_id": rec_id,
+    #             "submit_time": submit_time,
+    #             "finished_time": finished_time
+    #         }
+    #     }
+    #     # print("w2")
+    #     update_one_document(mongo.db.record_outputs, doc_filter, doc_update)
 
+    new_output = {
+        "question_id": qid,
+        "username": username,
+        "record_header": header,
+        "record_output": output,
+        "record_id": rec_id,
+        "submit_time": submit_time,
+        "finished_time": finished_time
+    }
+    # print("w")
+    insert_one_document(mongo.db.record_outputs, new_output)
     print(rec_id + " user code execution finished")
