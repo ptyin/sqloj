@@ -28,9 +28,9 @@ export default function Submit()
     useEffect(() =>
     {
         // const now = Date.now()
-        axios.get('/api/user/selectQuestionById', {
+        axios.get('/api/student/selectQuestionById', {
             params: {
-                question_id: window.sessionStorage.recordQuestionId
+                question_id: window.sessionStorage.record_question_id
             }
         }).then((response) =>
         {
@@ -40,7 +40,7 @@ export default function Submit()
         })
         axios.get('api/user/selectRecordById', {
             params: {
-                record_id: window.sessionStorage.recordId
+                record_id: window.sessionStorage.record_id
             }
         }).then((response) =>
         {

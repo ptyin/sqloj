@@ -4,7 +4,7 @@ import GuideTeacher from "../components/guideTeacher";
 import logo from '../common/images/logo.png';
 import '../common/layout.css';
 import '../common/question.css'
-import {Layout, Card, Button} from "antd";
+import {Layout, Table, Card, Button, Tag, Space} from "antd";
 import axios from "axios";
 import QueueAnim from "rc-queue-anim";
 import 'github-markdown-css'
@@ -14,12 +14,40 @@ export default function ()
 {
     // const [timer,setTimer] = useState(0)
     // const [show] = useState(true)
+    const [data, setData] = useState([])
     const [questionName, setQuestionName] = useState('');
     const [description, setDescription] = useState('');
     const [output, setOutput] = useState('');
+    const [answer, setAnswer] = useState('');
     const {Header, Content, Sider} = Layout;
     const id = window.sessionStorage.detail_question_id;
     const history = useHistory();
+    const columns = [
+        {
+            title: 'Student Name',
+            dataIndex: 'username',
+            key: 'username',
+            // render: text => <a>{text}</a>
+        },
+        {
+            title: 'Submit Time',
+            dataIndex: 'submit_time',
+            key: 'submit_time'
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (record) => (
+                <Space size="middle">
+                    <Button className='button' onClick={() =>
+                    {
+                        window.sessionStorage.record_id = record.record_id;
+                        history.push("/teacherRecordDetail");
+                    }}>{"detail"}</Button>
+                </Space>
+            ),
+        }
+    ]
     useEffect(() =>
     {
         axios.get('/api/teacher/QuestionDetail', {
@@ -31,8 +59,50 @@ export default function ()
             setQuestionName(response.data.question_name);
             setDescription(response.data.question_description)
             setOutput(response.data.question_output)
+            setAnswer(response.data.question_answer)
         })
-    })
+
+        function query_record_list()
+        {
+            axios.get('/api/teacher/RecordListQuery', {
+                params: {
+                    question_id: id
+                }
+            }).then((response) =>
+            {
+                const temp = response.data
+                for (let i = 0; i < temp.length; i++)
+                {
+                    temp[i].key = temp[i].username;
+                    // let newTime = new Date(temp[i].assignment_start_time);
+                    // temp[i].assignment_start_time = strftime("%y/%m/%d %H:%M:%S", newTime)
+                    // newTime = new Date(temp[i].assignment_end_time);
+                    // temp[i].assignment_end_time = strftime("%y/%m/%d %H:%M:%S", newTime)
+                }
+                for (let k = 0; k < temp.length; k++)
+                {
+                    for (let j = k; j < temp.length; j++)
+                    {
+                        if (Date.parse(temp[k].assignment_end_time) > Date.parse(temp[j].assignment_end_time))
+                        {
+                            const op = temp[k];
+                            temp[k] = temp[j];
+                            temp[j] = op;
+                        }
+                    }
+                }
+                setData(response.data)
+            })
+        }
+
+        query_record_list()
+        const timer = setInterval(query_record_list, 3000)
+
+        return () =>
+        {
+            clearInterval(timer)
+        }
+    }, [])
     return <Layout>
         <Header className="header">
             <img src={logo} style={{height: '45px'}} alt=""/>
@@ -63,8 +133,18 @@ export default function ()
                                 <div dangerouslySetInnerHTML={{__html: output}}/>
                             </Card>
                         </div>
+                        <div key="answer">
+                            <Card className="info-card" title="Standard Answer">
+                                <div dangerouslySetInnerHTML={{__html: answer}}/>
+                            </Card>
+                        </div>
+                        <div key="Completion">
+                            <Card className="info-card" title="Completion">
+                                <Table columns={columns} dataSource={data}/>
+                            </Card>
+                        </div>
                         {/*<div style={{padding:'3px'}}/>*/}
-                        <div key="submit" className="button-container">
+                        <div key="return" className="button-container">
                             <Button style={{width: "90px"}} type="primary" onClick={() =>
                             {
                                 history.push('/teacherQuestions')

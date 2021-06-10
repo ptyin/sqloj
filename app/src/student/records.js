@@ -83,8 +83,8 @@ export default function Records()
                 <Space size="middle">
                     <Button className='button' onClick={() =>
                     {
-                        window.sessionStorage.recordId = record.record_id
-                        window.sessionStorage.recordQuestionId = record.question_id;
+                        window.sessionStorage.record_id = record.record_id
+                        window.sessionStorage.record_question_id = record.question_id;
                         history.push('recordDetail');
                     }}>detail</Button>
                 </Space>

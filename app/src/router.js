@@ -17,6 +17,7 @@ import AddAssignment from "./teacher/addAssignment";
 
 import TeacherQuestions from "./teacher/teacherQuestions"
 import QuestionDetail from "./teacher/questionDetail";
+import TeacherRecordDetail from "./teacher/teacherRecordDetail"
 import AddQuestion from "./teacher/addQuestion";
 import UpdateQuestion from "./teacher/updateQuestion";
 
@@ -50,6 +51,7 @@ export default function IRouter()
 
             <Route path="/teacherQuestions" component={TeacherQuestions}/>
             <Route path="/questionDetail" component={QuestionDetail}/>
+            <Route path="/teacherRecordDetail" component={TeacherRecordDetail}/>
             {/*<Route path="/change_pwd_teacher" component={Change_pwd_teacher}/>}*/}
             <Route path="/addQuestion" component={AddQuestion}/>
             <Route path="/databases" component={Databases}/>

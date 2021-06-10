@@ -60,7 +60,7 @@ export default function Questions()
                 <Space size="middle">
                     <Button className='button' onClick={() =>
                     {
-                        axios.delete('api/teacher/QuestionsDetail', {
+                        axios.delete('api/teacher/QuestionDetail', {
                             params: {
                                 question_id: record.question_id,
                             }
