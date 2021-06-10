@@ -22,22 +22,30 @@ export default function Databases()
     const {Header, Content, Sider} = Layout;
     const [data, setData] = useState([])
     const history = useHistory();
+    function queryDatabaseList()
+    {
+        axios.get('/api/teacher/DatabaseListQuery').then((response) =>
+        {
+            const temp = response.data
+            setData(temp)
+        })
+    }
     const columns = [
         {
             title: 'Name',
-            dataIndex: 'database_name',
+            dataIndex: 'db_name',
             key: 'database_name'
         },
         {
             title: 'Description',
-            dataIndex: 'database_description',
+            dataIndex: 'db_description',
             key: 'database_description'
         },
-        // {
-        //     title: 'Enabled',
-        //     dataIndex: 'is_enabled',
-        //     key: 'is_enabled',
-        // },
+        {
+            title: 'Upload Time',
+            dataIndex: 'upload_time',
+            key: 'upload_time'
+        },
         {
             title: 'Delete',
             key: 'delete',
@@ -46,57 +54,32 @@ export default function Databases()
                     <Button className='button' onClick={() =>
                     {
                         console.log(record.database_id)
-                        axios.get('/api/teacher/deleteDatabaseById', {
+                        axios.delete('/api/teacher/DatabaseDetail', {
                             params: {
-                                database_id: record.database_id,
+                                db_id: record.db_id,
+                            }
+                        }).then((response) =>
+                        {
+                            if (response.data.success)
+                            {
+                                message.success('delete successfully.');
+                                queryDatabaseList()
+                            }
+                            else
+                            {
+                                message.error('Fail to delete, there are some questions dependent on this database.');
                             }
                         })
-                        success_delete()
-                        history.push('/database')
                     }}>delete</Button>
                 </Space>
             ),
         },
-        // {
-        //     title: 'Init_type',
-        //     key: 'init_type',
-        //     render: (record) => (
-        //         <Space size="middle">
-        //             <Radio.Group value={operation_type} onChange={e =>
-        //             {
-        //                 setOperation_type(e.target.value);
-        //             }}>
-        //                 <Radio.Button value="query">query</Radio.Button>
-        //                 <Radio.Button value="trigger">trigger</Radio.Button>
-        //             </Radio.Group>
-        //         </Space>
-        //     ),
-        // },
-
-        // {
-        //     title: 'Init_Docker',
-        //     key: 'Init',
-        //     render: (record) => (
-        //         <Space size="middle">
-        //             <Button className='button' onClick={() =>
-        //             {
-        //                 axios.get('/api/admin/initDatabaseDocker', {
-        //                     params: {
-        //                         database_id: record.id,
-        //                         operation_type: operation_type
-        //                     }
-        //                 })
-        //                 success_init();
-        //             }}>start</Button>
-        //         </Space>
-        //     ),
-        // }
     ];
     useEffect(() =>
     {
         function queryDatabaseList()
         {
-            axios.get('/api/teacher/queryDatabaseList').then((response) =>
+            axios.get('/api/teacher/DatabaseListQuery').then((response) =>
             {
                 const temp = response.data
                 setData(temp)
@@ -127,7 +110,7 @@ export default function Databases()
                         <div key="databases">
                             <Button style={{width: "90px"}} type="primary" onClick={() =>
                             {
-                                history.push('/AddDatabase')
+                                history.push('/addDatabase')
                             }}>Add</Button>
                             <div style={{height: '20px'}}/>
                             <Table columns={columns} key="demo1" dataSource={data}/>

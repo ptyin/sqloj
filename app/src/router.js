@@ -13,16 +13,19 @@ import RecordDetail from "./student/recordDetail";
 import './common/font.css'
 import TeacherAssignments from './teacher/teacherAssignments'
 import UpdateAssignment from "./teacher/updateAssignment";
-import Databases from "./teacher/databases";
 import AddAssignment from "./teacher/addAssignment";
+
 import TeacherQuestions from "./teacher/teacherQuestions"
+import QuestionDetail from "./teacher/questionDetail";
+import TeacherRecordDetail from "./teacher/teacherRecordDetail"
+import AddQuestion from "./teacher/addQuestion";
+import UpdateQuestion from "./teacher/updateQuestion";
+
+import Databases from "./teacher/databases";
+import AddDatabase from "./teacher/addDatabase";
 // import Change_pwd_teacher from './teacher_pages/change_pwd_teacher'
-// import AddQuestion from "./teacher_pages/AddQuestion";
-// import Detail from "./teacher_pages/detail";
-// import AddDatabase from "./teacher_pages/AddDatabase";
 // import Admin_users from "./admin_pages/admin_users";
 // import Admin_chet from "./admin_pages/admin_chet";
-// import RenewQuestion from "./teacher_pages/renewQuestion";
 // import Copycat from "./teacher_pages/copycat";
 // import Add_trigger from "./teacher_pages/add_trigger";
 // import AnimatedRouter from "react-animated-router";
@@ -45,15 +48,17 @@ export default function IRouter()
             <Route path="/teacherAssignments" component={TeacherAssignments}/>}
             <Route path="/updateAssignment" component={UpdateAssignment}/>
             <Route path="/addAssignment" component={AddAssignment}/>
+
             <Route path="/teacherQuestions" component={TeacherQuestions}/>
+            <Route path="/questionDetail" component={QuestionDetail}/>
+            <Route path="/teacherRecordDetail" component={TeacherRecordDetail}/>
             {/*<Route path="/change_pwd_teacher" component={Change_pwd_teacher}/>}*/}
-            {/*<Route path="/AddQuestion" component={AddQuestion}/>*/}
-            {/*<Route path="/detail" component={Detail}/>*/}
+            <Route path="/addQuestion" component={AddQuestion}/>
             <Route path="/databases" component={Databases}/>
-            {/*<Route path="/AddDatabase" component={AddDatabase}/>*/}
+            <Route path="/addDatabase" component={AddDatabase}/>
+            <Route path="/updateQuestion" component={UpdateQuestion}/>
             {/*<Route path="/admin_users" component={Admin_users}/>*/}
             {/*<Route path="/admin_chet" component={Admin_chet}/>*/}
-            {/*<Route path="/renewQuestion" component={RenewQuestion}/>*/}
             {/*<Route path="/copycat" component={Copycat}/>*/}
             {/*<Route path="/add_trigger" component={Add_trigger}/>*/}
             <Route path="/" component={App}/>

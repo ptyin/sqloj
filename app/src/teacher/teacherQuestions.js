@@ -34,9 +34,9 @@ export default function Questions()
                 <Space size="middle">
                     <Button className='button' onClick={() =>
                     {
-                        window.sessionStorage.post_question_id = record.question_id;
-                        history.push('/detail');
-                    }}>details</Button>
+                        window.sessionStorage.detail_question_id = record.question_id;
+                        history.push('/questionDetail');
+                    }}>detail</Button>
                 </Space>
             ),
         },
@@ -48,7 +48,7 @@ export default function Questions()
                     <Button className='button' onClick={() =>
                     {
                         window.sessionStorage.update_question_id = record.question_id;
-                        history.push('/renewQuestion');
+                        history.push('/updateQuestion');
                     }}>update</Button>
                 </Space>
             ),
@@ -60,7 +60,7 @@ export default function Questions()
                 <Space size="middle">
                     <Button className='button' onClick={() =>
                     {
-                        axios.delete('api/teacher/QuestionsDetail', {
+                        axios.delete('api/teacher/QuestionDetail', {
                             params: {
                                 question_id: record.question_id,
                             }
@@ -98,25 +98,13 @@ export default function Questions()
     {
 
         axios.defaults.withCredentials = true;
-        axios.get('/api/student/selectQuestionsByAssignment', {
+        axios.get('/api/teacher/QuestionList', {
             params:
                 {
                     assignment_id: assignment_id
                 }
         }).then((response) =>
         {
-            const temp = response.data
-            for (let i = 0; i < temp.length; i++)
-            {
-                temp[i].key = temp[i].question_id
-                if (temp[i].is_finished === true)
-                {
-                    temp[i].is_finished = 'T'
-                } else
-                {
-                    temp[i].is_finished = 'F'
-                }
-            }
             setData(response.data)
         })
     }
@@ -136,7 +124,7 @@ export default function Questions()
             <img src={logo} style={{height: '45px'}} alt=""/>
         </Header>
         <Layout>
-            <Sider width={200} className="site-layout-content"><GuideTeacher/></Sider>
+            <Sider width={200} className="site-layout-content"><GuideTeacher item="assignments"/></Sider>
             <Layout style={{padding: '0 24px 24px'}}>
                 <Content className="default_font" style={{margin: '24px 0'}}>
                     <QueueAnim

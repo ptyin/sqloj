@@ -83,8 +83,8 @@ export default function Records()
                 <Space size="middle">
                     <Button className='button' onClick={() =>
                     {
-                        window.sessionStorage.recordId = record.record_id
-                        window.sessionStorage.recordQuestionId = record.question_id;
+                        window.sessionStorage.record_id = record.record_id
+                        window.sessionStorage.record_question_id = record.question_id;
                         history.push('recordDetail');
                     }}>detail</Button>
                 </Space>
@@ -105,8 +105,7 @@ export default function Records()
                 const temp = response.data
                 for (let i = 0; i < temp.length; i++)
                 {
-                    temp[i].record_time = new Date(temp[i].record_time)
-                    if (temp[i].running_time === undefined)
+                    if (temp[i].running_time === undefined || temp[i].running_time === null)
                     {
                         temp[i].running_time = 'not available'
                     }
@@ -115,7 +114,7 @@ export default function Records()
                 {
                     for (let j = k; j < temp.length; j++)
                     {
-                        if (temp[k].record_time < temp[j].record_time)
+                        if (new Date(temp[k].record_time) < new Date(temp[j].record_time))
                         {
                             const op = temp[k];
                             temp[k] = temp[j];
@@ -123,11 +122,11 @@ export default function Records()
                         }
                     }
                 }
-                for (let i = 0; i < temp.length; i++)
-                {
-                    const newTime = temp[i].record_time;
-                    temp[i].record_time = newTime.getFullYear() + '/' + newTime.getMonth() + '/' + newTime.getDate() + ' ' + newTime.getHours() + ':' + newTime.getMinutes()
-                }
+                // for (let i = 0; i < temp.length; i++)
+                // {
+                //     const newTime = temp[i].record_time;
+                //     temp[i].record_time = newTime.getFullYear() + '/' + newTime.getMonth() + '/' + newTime.getDate() + ' ' + newTime.getHours() + ':' + newTime.getMinutes()
+                // }
                 setData(temp)
             })
         }, 500)

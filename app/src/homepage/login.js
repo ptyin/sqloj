@@ -100,6 +100,7 @@ export default function Login()
                                 if (response.data.success)
                                 {
                                     message.success('Log in successfully.');
+                                    window.sessionStorage.username = username
                                     window.localStorage.remember = remember
                                     console.log(remember)
                                     if (remember)
@@ -146,5 +147,5 @@ function login(id, password)
     params.append('username', id);
     params.append('password', password);
     axios.defaults.withCredentials = true;
-    return axios.post('/api/login/', params);
+    return axios.post('/api/login', params);
 }

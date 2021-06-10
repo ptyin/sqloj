@@ -34,7 +34,7 @@ export default function Questions()
             render: tag =>
             {
                 let color = 'green';
-                if (tag === 'F')
+                if (tag === 'No')
                 {
                     color = 'volcano';
                 }
@@ -80,10 +80,10 @@ export default function Questions()
                     temp[i].key = temp[i].question_id
                     if (temp[i].is_finished === true)
                     {
-                        temp[i].is_finished = 'T'
+                        temp[i].is_finished = 'Yes'
                     } else
                     {
-                        temp[i].is_finished = 'F'
+                        temp[i].is_finished = 'No'
                     }
                 }
                 setData(response.data)

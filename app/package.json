@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^12.8.3",
     "antd": "^4.16.1",
     "axios": "^0.21.1",
+    "braft-editor": "^2.3.9",
     "github-markdown-css": "^4.0.0",
     "http-proxy-middleware": "^2.0.0",
     "js-cookie": "^2.2.1",

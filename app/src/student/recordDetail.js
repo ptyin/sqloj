@@ -28,9 +28,9 @@ export default function Submit()
     useEffect(() =>
     {
         // const now = Date.now()
-        axios.get('/api/user/selectQuestionById', {
+        axios.get('/api/student/selectQuestionById', {
             params: {
-                question_id: window.sessionStorage.recordQuestionId
+                question_id: window.sessionStorage.record_question_id
             }
         }).then((response) =>
         {
@@ -38,13 +38,29 @@ export default function Submit()
             setDescription(response.data.question_description)
             setOutput(response.data.question_output)
         })
-        axios.get('api/user/selectRecordById', {
+        axios.get('api/student/selectRecordById', {
             params: {
-                record_id: window.sessionStorage.recordId
+                record_id: window.sessionStorage.record_id
             }
         }).then((response) =>
         {
-            console.log(response.data.record_code)
+            if (response.data.record_status.toUpperCase() === 'AC')
+            {
+                message.success('Congrats! You completed this question');
+            }
+            else if (response.data.record_status.toUpperCase() === 'WA')
+            {
+                message.error('Please retry! Your answer is ' + response.data.record_lack +
+                    ' rows missing and ' + response.data.record_err + ' rows wrong');
+            }
+            else if (response.data.record_status.toUpperCase() === 'TLE')
+            {
+                message.error('Please retry! The execution of your commands reached the time limit');
+            }
+            else if (response.data.record_status.toUpperCase() === 'RUNNING')
+            {
+                message.info('Executing...')
+            }
             setCode(response.data.record_code)
         })
     }, [])

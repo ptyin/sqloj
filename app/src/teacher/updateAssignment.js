@@ -14,7 +14,7 @@ import strftime from 'strftime'
 export default function UpdateAssignment()
 {
     // const [timer, setTimer] = useState(0)
-    const [show] = useState(true)
+    // const [show] = useState(true)
     const [id, setID] = useState('')
     const [name, setName] = useState('')
     const [start, setStart] = useState('');
@@ -26,18 +26,18 @@ export default function UpdateAssignment()
     // const {TextArea} = Input;
     const history = useHistory();
 
-    setID(window.sessionStorage.assignment_id)
-    setName(window.sessionStorage.assignment_name)
-    setStart(window.sessionStorage.assignment_start_time)
-    setEnd(window.sessionStorage.assignment_end_time)
-    // window.sessionStorage.removeItem('assignment_id')
-    // window.sessionStorage.removeItem('assignment_name')
-    // window.sessionStorage.removeItem('assignment_start_time')
-    // window.sessionStorage.removeItem('assignment_end_time')
-    // setDescription(props.assignment_description)
     useEffect(() =>
     {
-
+        // const id = window.sessionStorage.assignment_id
+        setID(window.sessionStorage.assignment_id)
+        setName(window.sessionStorage.assignment_name)
+        setStart(window.sessionStorage.assignment_start_time)
+        setEnd(window.sessionStorage.assignment_end_time)
+        // window.sessionStorage.removeItem('assignment_id')
+        // window.sessionStorage.removeItem('assignment_name')
+        // window.sessionStorage.removeItem('assignment_start_time')
+        // window.sessionStorage.removeItem('assignment_end_time')
+        // setDescription(props.assignment_description)
     }, [])
 
     return <Layout>
@@ -56,7 +56,7 @@ export default function UpdateAssignment()
                         type={['right', 'left']}
                         duration="2000"
                         ease={['easeOutQuart', 'easeInOutQuart']}>
-                        {show ? [
+                        {
                             <Card key="demo1" title="Update Assignment">
                                 <div><Badge status="processing" text="Assignment Name"/></div>
                                 <Input style={{width: "200px"}} placeholder={name} onChange={value =>
@@ -71,6 +71,7 @@ export default function UpdateAssignment()
                                         'This Month': [moment().startOf('month'), moment().endOf('month')],
                                     }}
                                     showTime
+                                    defaultValue={[moment(start), moment(end)]}
                                     format="YYYY/MM/DD HH:mm:ss"
                                     onChange={(dateStrings) =>
                                     {
@@ -81,21 +82,6 @@ export default function UpdateAssignment()
                                         }
                                     }}
                                 />
-                                {/*<div style={{height: "20px"}}/>*/}
-                                {/*<TextArea className="submit_text" key="demo4" rows={5} placeholder={description}*/}
-                                {/*          onChange={value =>*/}
-                                {/*          {*/}
-                                {/*              setDescription(value.target.value)*/}
-                                {/*          }}/>*/}
-                                {/*<div style={{height: "20px"}}/>*/}
-                                {/*<Checkbox onChange={e =>*/}
-                                {/*{*/}
-                                {/*    if (e.target.checked)*/}
-                                {/*    {*/}
-                                {/*        setIsvisible(1)*/}
-                                {/*    } else*/}
-                                {/*        setIsvisible(0)*/}
-                                {/*}}>Are students visible</Checkbox>*/}
                                 <div style={{height: "20px"}}/>
                                 <Button style={{width: "90px", margin: "0 10px"}} type="primary" onClick={() =>
                                 {
@@ -118,7 +104,7 @@ export default function UpdateAssignment()
                                     })
                                 }}>submit</Button>
                             </Card>
-                        ] : null}
+                        }
                     </QueueAnim>
                 </Content>
             </Layout>

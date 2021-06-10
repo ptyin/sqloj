@@ -9,7 +9,7 @@ import QueueAnim from "rc-queue-anim";
 // import Cookies from 'js-cookie'
 import 'github-markdown-css'
 import '../common/otto.css'
-import './submit.css'
+import '../common/question.css'
 import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/sql/sql';
@@ -17,6 +17,7 @@ import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/addon/hint/show-hint.js';
 import 'codemirror/addon/hint/sql-hint.js';
 import 'codemirror/theme/solarized.css';
+
 
 const Submit = forwardRef((props, refSelf) =>
 {
@@ -146,7 +147,7 @@ const Submit = forwardRef((props, refSelf) =>
                             //     <Option value="postgreSQL">postgresql</Option>
                             // </Select>,
                             <div key="submit" className="button-container">
-                                <Button type="primary" className='button' onClick={() =>
+                                <Button type="primary" style={{width: "90px"}} className='button' onClick={() =>
                                 {
                                     axios.defaults.withCredentials = true;
                                     const params = new URLSearchParams();
