@@ -14,6 +14,8 @@ from .teacher import api as teacher_api
 def create_app():
     app = Flask(__name__)
     app.secret_key = 'dev'
+    # enable login required
+    # app.config['LOGIN_DISABLED'] = True
     app.config["MONGO_URI"] = "mongodb://localhost:27017/sqloj_db"
     # initialize extensions
     mongo.init_app(app, uri=app.config["MONGO_URI"])
@@ -62,6 +64,7 @@ def create_app():
                 "question_description": "2",
                 "question_output": "3333333333",
                 "question_answer": "select * from albums;",
+                "question_standard_header": [],
                 "question_standard_output": [],
                 "question_type":"sql",
                 'db_id': "db-21ru2933hui4"
@@ -73,6 +76,7 @@ def create_app():
                 "question_description": "234",
                 "question_output": "3333333333",
                 "question_answer": "select * from albums;",
+                "question_standard_header": [],
                 "question_standard_output": [],
                 "question_type": "sql",
                 'db_id': "db-r9imvrvnq40s"
@@ -144,7 +148,8 @@ def create_app():
             {
                 "question_id": "q-21ru2933hui4",
                 "username": "admin",
-                "output": "123456",
+                "record_header":"123",
+                "record_output": "123456",
                 "record_id": "r-21ru2923hui4",
                 "submit_time": datetime.fromisoformat('2021-05-04 00:05:23.283'),
                 "finished_time": datetime.fromisoformat('2021-05-07 00:05:23.283'),
@@ -152,7 +157,8 @@ def create_app():
             {
                 "question_id": "q-21ru2933hui4",
                 "username": "123",
-                "output": "lalalala",
+                "record_header": "1111",
+                "record_output": "lalalala",
                 "record_id": "r-21ru2943hui4",
                 "submit_time": datetime.fromisoformat('2021-05-04 00:05:23.283'),
                 "finished_time": datetime.fromisoformat('2021-05-08 00:05:23.283'),

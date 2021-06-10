@@ -2,6 +2,7 @@ from flask_restx import Namespace, Resource, fields
 
 import bcrypt
 from flask_login import login_required, login_user, logout_user, current_user
+from flask import abort
 from .extension import mongo, login_manager, User
 
 from .model import *
@@ -10,6 +11,8 @@ from .util import update_one_document
 api = Namespace('login', description='User login request')
 
 login_res = api.model('Login', login_res_model)
+
+logout_res = api.model('Logout', login_res_model)
 
 cp_res = api.model('Login',
                    {'success': fields.Boolean(required=True, description="Change status")})
@@ -68,6 +71,16 @@ class Login(Resource):
         return {"success": False, "data": ""}
 
 
+@api.route("logout")
+class Login(Resource):
+    @login_required
+    @api.marshal_with(logout_res)
+    def get(self):
+        print(current_user.id)
+        logout_user()
+        return {"success": True, "username": ""}
+
+
 @api.route("register")
 class Register(Resource):
     @api.doc(parser=parser)
@@ -98,10 +111,10 @@ cp_parser.add_argument(
 )
 
 
-@login_required
 @api.route("ChangePassword")
 @api.doc(description="Change current user's password")
 class ChangePassword(Resource):
+    @login_required
     @api.doc(parser=cp_parser)
     @api.marshal_with(cp_res, as_list=True)
     def get(self):
@@ -121,3 +134,9 @@ class ChangePassword(Resource):
             if status:
                 return {"success": True}
         return {"success": False}
+
+
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    print("user not login")
+    abort(401, "user not login")

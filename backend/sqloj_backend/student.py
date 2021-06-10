@@ -76,6 +76,7 @@ class QuestionListQuery(Resource):
         return [{
             "question_id": str(i["question_id"]),
             "question_name": str(i["question_name"]),
+            "question_type": str(i["question_type"]),
             "is_finished": False if mongo.db.records.find_one(
                 {"assignment_id": args["assignment_id"],
                  "question_id": str(i["question_id"]),
@@ -128,7 +129,7 @@ class QuestionSubmit(Resource):
     @api.marshal_with(submit_status_res)
     def post(self):
         args = answer_parser.parse_args()
-        # print(args["question_id"])
+        #print(args["question_id"])
         q = mongo.db.questions.find_one({"question_id": args["question_id"]})
         if q is None:
             return {"success": False}
@@ -142,10 +143,11 @@ class QuestionSubmit(Resource):
             "username": str(current_user.id),
             "submit_time": submit_time,
             "record_code": str(args["code"]),
-            "record_status": "RUNNING" if str(q["question_type"]) == "sql" else None,
+            "record_status": "RUNNING" if str(q["question_type"]) == "sql" else "AC",
             "running_time": 0
         }
         insert_status = insert_one_document(mongo.db.records, new_record)
+        #print(insert_status)
         if str(q["question_type"]) == "sql":
             # call judger function, update record
             Thread(target=get_user_answer_output,
@@ -187,11 +189,11 @@ recId_parser.add_argument(
 @login_required
 @api.route("/selectRecordById")
 @api.doc(description="Get submitted code for a specific record")
-class RecordDetailQuery(Resource):
+class SelectRecordById(Resource):
     @api.doc(parser=recId_parser)
     @api.marshal_with(record_detail_res)
     def get(self):
-        args = quesId_parser.parse_args()
+        args = recId_parser.parse_args()
         # print("question_id " + str(args["question_id"]))
         record = mongo.db.records.find_one({"record_id": args["record_id"]})
         output = mongo.db.record_outputs.find_one({"record_id": args["record_id"]})
@@ -199,7 +201,7 @@ class RecordDetailQuery(Resource):
             "username": str(record["username"]),
             "submit_time": record["submit_time"].strftime('%B %d, %Y %H:%M:%S'),
             "finished_time": record["finished_time"].strftime('%B %d, %Y %H:%M:%S')
-            if record["question_type"] == "sql" and record["record_status"] != "RUNNING" else None,
+            if str(record["question_type"] == "sql") and record["record_status"] != "RUNNING" else None,
             'question_type': str(record["question_type"]),
             "record_code": str(record["record_code"]),
             "record_status": str(record["record_status"]) if record["question_type"] == "sql" else None,
@@ -209,8 +211,4 @@ class RecordDetailQuery(Resource):
         }
 
 
-# todo
-@login_manager.unauthorized_handler
-def unauthorized_handler():
-    print("user not login")
-    return 'login_required'
+

@@ -7,6 +7,11 @@ login_res_model = {
     'data': fields.String(required=True, description="User's role: student or teacher")
 }
 
+logout_res_model = {
+    'success': fields.Boolean(required=True, description="Logout status"),
+    'username': fields.String(required=True, description="username")
+}
+
 add_assignment_res_model = {
     'success': fields.Boolean(required=True, description="Whether the assignment is added successfully"),
     'assignment_id': fields.String(required=False, description="New assignment unique id"),
@@ -35,6 +40,7 @@ assignment_detail = {
 question_list = {
     'question_id': fields.String(required=True, description="Question unique id"),
     'question_name': fields.String(required=True, description="Question name for displaying"),
+    'question_type': fields.String(required=True, description="sql or text"),
 }
 
 question_detail_req_model = {'question_id': fields.String(required=True, description="Requested question id")}
@@ -42,6 +48,7 @@ question_detail_req_model = {'question_id': fields.String(required=True, descrip
 question_status = {
     'question_id': fields.String(required=True, description="Question unique id"),
     'question_name': fields.String(required=True, description="Question name for displaying"),
+    'question_type': fields.String(required=True, description="Question type"),
     'is_finished': fields.Boolean(required=True, description="Question finish status"),
 }
 

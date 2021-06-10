@@ -51,7 +51,15 @@ add_question_req = api.model('Added question detail',
                                      required=True,
                                      description="Database id the question uses")}})
 
-get_question_res = api.model('Question detail', question_detail_all_model)
+get_question_res = api.model('Question detail', {**question_detail_all_model,
+                                                 **{'question_standard_header': fields.String(required=False,
+                                                                                              description=
+                                                                                              "Header of standard answer"),
+                                                    'question_standard_output': fields.String(required=False,
+                                                                                              description=
+                                                                                              "Output of standard answer"),
+                                                    }}
+                             )
 
 modify_question_req = api.model('Modified question detail', question_detail_all_model)
 delete_question_req = api.model("Delete question request", question_detail_req_model)
@@ -73,10 +81,10 @@ modify_db_res = api.model('Assignment adding status', add_db_res_model)
 # todo judge user role
 
 
-@login_required
 @api.route("/AssignmentListQuery")
 @api.doc(description="Get assignment list and their time span")
 class AssignmentListQuery(Resource):
+    @login_required
     @api.marshal_with(assignment_list_res, as_list=True)
     def get(self):
         assignments = list(mongo.db.assignments.find({}))
@@ -295,6 +303,7 @@ class QuestionListQuery(Resource):
         return [{
             "question_id": str(i["question_id"]),
             "question_name": str(i["question_name"]),
+            "question_type": str(i["question_type"])
         } for i in questions]
 
 
@@ -308,6 +317,7 @@ class QuestionListFullQuery(Resource):
         return [{
             "question_id": str(i["question_id"]),
             "question_name": str(i["question_name"]),
+            "question_type": str(i["question_type"])
         } for i in questions]
 
 
@@ -384,7 +394,9 @@ class QuestionDetail(Resource):
             "question_type": str(q["question_type"]),
             'question_description': str(q["question_description"]),
             'question_output': str(q["question_output"]),
-            'question_answer': q["question_answer"] if str(q["question_type"]) == "sql" else None,  # todo handle list
+            'question_standard_header': q["question_standard_header"] if str(q["question_type"]) == "sql" else None,
+            'question_standard_output': q["question_standard_output"] if str(q["question_type"]) == "sql" else None,
+            'question_answer': q["question_answer"] if str(q["question_type"]) == "sql" else None,
             'assignment_id': str(q["assignment_id"]),
             'db_id': str(q["db_id"]) if str(q["question_type"]) == "sql" else None,
         } if q is not None else {
@@ -440,7 +452,7 @@ class QuestionDetail(Resource):
         assignment_filter = {"question_id": question_id}
         update_question = {'$set': {
             "question_type": qtype,
-            "question_name": str(args["assignment_name"]),
+            "question_name": str(args["question_name"]),
             "question_description": str(args["question_description"]),
             "question_answer": str(args["question_answer"]) if qtype == "sql" else None,
             "question_output": str(args["question_output"]),
@@ -462,11 +474,13 @@ class QuestionDetail(Resource):
     def delete(self):
         args = delete_question_parser.parse_args()
         question_id = str(args["question_id"])
-        delete_status = delete_many_document(mongo.db.questions, {"question_id": question_id})
+        delete_status = delete_many_document(mongo.db.questions, {"question_id": question_id}) \
+                        and delete_many_document(mongo.db.records, {"question_id": question_id}) \
+                        and delete_many_document(mongo.record_outputs.records, {"question_id": question_id})
         return {
-            "success": delete_status,
+            "success": True,
             "question_id": question_id,
-        } if delete_status else {"success": delete_status}
+        } if delete_status else {"success": False}
 
 
 @login_required
@@ -614,7 +628,7 @@ class DatabaseDetail(Resource):
                 # keep trying deleting
                 while delete_status:
                     try:
-                        os.remove('/database/' + str(db["db_filename"]))
+                        os.remove(folder / "database" / str(db["db_filename"]))
                     except Exception as e:
                         print("An exception occurred ::", e)
                         continue
