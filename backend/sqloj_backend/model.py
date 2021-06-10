@@ -133,6 +133,7 @@ record_output_res_model = {
     "record_code": fields.String(required=True, description="User submitted code"),
     'record_status': fields.String(required=False, enum=[x.name for x in RecordStatus],
                                    description="Record status: RUNNING, AC, TLE, WA"),
+    "record_header": fields.String(required=False, description="Sql command header if latest"),
     "record_output": fields.String(required=False, description="Sql command output if latest"),
     "record_lack": fields.String(required=False, description="Missing line number"),
     "record_err": fields.String(required=False, description="Error line number"),
