@@ -474,7 +474,7 @@ class QuestionDetail(Resource):
 class DatabaseListQuery(Resource):
     @api.marshal_with(db_list_res)
     def get(self):
-        dbs = list(mongo.db.db.find({}))
+        dbs = list(mongo.db.dbs.find({}))
         return [{
             "db_id": str(i["db_id"]),
             "db_name": str(i["db_name"]),
