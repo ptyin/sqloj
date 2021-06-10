@@ -110,7 +110,15 @@ export default function Guide(props)
                 <Menu.Item key="out" icon={<LogoutOutlined/>} onClick={(event) =>
                 {
                     // window.sessionStorage.current = 'assignments'
-                    history.push('/')
+                    window.sessionStorage.removeItem('username')
+                    axios.get('/api/logout').then((response) =>
+                    {
+                        if (response.data.success)
+                        {
+                            message.success('Log out successfully.');
+                            history.push('/')
+                        }
+                    })
                 }}>
                     Log out
                 </Menu.Item>

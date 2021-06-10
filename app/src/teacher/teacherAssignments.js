@@ -6,6 +6,7 @@ import logo from '../common/images/logo.png';
 import QueueAnim from 'rc-queue-anim';
 import '../common/layout.css';
 import Guide from "../components/guideTeacher";
+
 import strftime from "strftime";
 
 

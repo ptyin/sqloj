@@ -3,7 +3,7 @@ import {useHistory} from "react-router-dom";
 import Guide from "../components/guide";
 import logo from '../common/images/logo.png';
 import '../common/layout.css';
-import {Layout, Card, Button, message} from "antd";
+import {Layout, Card, Button, message, Table} from "antd";
 import axios from "axios";
 import QueueAnim from "rc-queue-anim";
 import 'github-markdown-css'
@@ -14,6 +14,7 @@ import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/addon/hint/show-hint.js';
 import 'codemirror/addon/hint/sql-hint.js';
 import 'codemirror/theme/solarized.css';
+import CodeMirror from "react-codemirror";
 
 export default function Submit()
 {
@@ -21,8 +22,9 @@ export default function Submit()
     // const [show] = useState(true)
     const [questionName, setQuestionName] = useState('');
     const [description, setDescription] = useState('');
-    const [output, setOutput] = useState([]);
     const [code, setCode] = useState('');
+    const [header, setHeader] = useState([]);
+    const [output, setOutput] = useState([]);
     const {Header, Content, Sider} = Layout;
     const history = useHistory();
     useEffect(() =>
@@ -44,22 +46,47 @@ export default function Submit()
             }
         }).then((response) =>
         {
-            if (response.data.record_status.toUpperCase() === 'AC')
-            {
-                message.success('Congrats! You completed this question');
-            }
-            else if (response.data.record_status.toUpperCase() === 'WA')
-            {
-                message.error('Please retry! Your answer is ' + response.data.record_lack +
-                    ' rows missing and ' + response.data.record_err + ' rows wrong');
-            }
-            else if (response.data.record_status.toUpperCase() === 'TLE')
-            {
-                message.error('Please retry! The execution of your commands reached the time limit');
-            }
-            else if (response.data.record_status.toUpperCase() === 'RUNNING')
+
+            if (response.data.record_status.toUpperCase() === 'RUNNING')
             {
                 message.info('Executing...')
+            }
+            else
+            {
+                if (response.data.record_status.toUpperCase() === 'AC')
+                {
+                    message.success('Congrats! You completed this question');
+                }
+                else if (response.data.record_status.toUpperCase() === 'WA')
+                {
+                    message.error('Please retry! Your answer is ' + response.data.record_lack +
+                        ' rows missing and ' + response.data.record_err + ' rows wrong');
+                }
+                else if (response.data.record_status.toUpperCase() === 'TLE')
+                {
+                    message.error('Please retry! The execution of your commands reached the time limit');
+                }
+                response.data.record_header = eval(response.data.record_header)
+                response.data.record_output = eval(response.data.record_output)
+                // console.log(response.data.record_header, response.data.record_output)
+                let temp_header = []
+                response.data.record_header.forEach((element) =>
+                {
+                    temp_header.push({title: element, dataIndex: element, key: element, align: "center"})
+                })
+                setHeader(temp_header)
+                let temp_output = []
+                response.data.record_output.forEach((list) =>
+                {
+                    let temp = {}
+                    list.forEach((element, i) =>
+                    {
+                        temp[temp_header[i].title] = element
+                    })
+                    temp_output.push(temp)
+                })
+                setOutput(temp_output)
+                console.log(temp_output)
             }
             setCode(response.data.record_code)
         })
@@ -95,7 +122,23 @@ export default function Submit()
                             // </div>,
                             <div key="code">
                                 <Card title="submitted code">
-                                    {code}
+                                    <CodeMirror
+                                        key='editor'
+                                        value={code}
+                                        options={{
+                                            readOnly: true,
+                                            lineNumbers: true,
+                                            mode: {name: "text/x-mysql"},
+                                            lineWrapping: true,
+                                            foldGutter: true,
+                                            theme: "solarized",
+                                        }}
+                                    />
+                                </Card>
+                            </div>,
+                            <div key="record_output">
+                                <Card className="info-card" title="Output">
+                                    <Table pagination={{pageSize: 5}} columns={header} dataSource={output}/>
                                 </Card>
                             </div>,
                             <div key="return" className="button-container">

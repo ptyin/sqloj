@@ -8,6 +8,7 @@ import {Layout, Table, Card, Button, Tag, Space} from "antd";
 import axios from "axios";
 import QueueAnim from "rc-queue-anim";
 import 'github-markdown-css'
+import CodeMirror from "react-codemirror";
 
 
 export default function ()
@@ -58,11 +59,21 @@ export default function ()
                             </Card>
                         </div>
                         <div key="code">
-                            <Card className="info-card" title="Submitted">
-                                {/*{code}*/}
-                                <div dangerouslySetInnerHTML={{__html: code}}/>
+                            <Card title="submitted code">
+                                <CodeMirror
+                                    key='editor'
+                                    value={code}
+                                    options={{
+                                        readOnly: true,
+                                        lineNumbers: true,
+                                        mode: {name: "text/x-mysql"},
+                                        lineWrapping: true,
+                                        foldGutter: true,
+                                        theme: "solarized",
+                                    }}
+                                />
                             </Card>
-                        </div>
+                        </div>,
                         {/*<div key="output">*/}
                         {/*    <Card className="info-card" title="Output">*/}
                         {/*        <div dangerouslySetInnerHTML={{__html: output}}/>*/}

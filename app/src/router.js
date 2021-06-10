@@ -62,6 +62,7 @@ export default function IRouter()
             {/*<Route path="/copycat" component={Copycat}/>*/}
             {/*<Route path="/add_trigger" component={Add_trigger}/>*/}
             <Route path="/" component={App}/>
+            <Route component={App}/>
         </Switch>
     </Router>
 }

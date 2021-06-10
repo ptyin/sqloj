@@ -64,17 +64,17 @@ export default function Records()
             title: 'Running',
             dataIndex: 'running_time',
             key: 'running_time',
-            render: tag =>
-            {
-                // if (tag<0) {
-                //     tag = tag + 400;
-                // }
-                return (
-                    <Tag color={'geekblue'} key={tag}>
-                        {tag}
-                    </Tag>
-                );
-            }
+            // render: tag =>
+            // {
+            //     // if (tag<0) {
+            //     //     tag = tag + 400;
+            //     // }
+            //     return (
+            //         <Tag color={'geekblue'} key={tag}>
+            //             {tag}
+            //         </Tag>
+            //     );
+            // }
         },
         {
             title: 'Action',
@@ -95,10 +95,8 @@ export default function Records()
     {
         // fireworks.init(document,{})
         // fireworks.start()
-        const timer = setInterval(() =>
+        function query_record_list()
         {
-            const now = Date.now()
-            console.log(now)
             axios.defaults.withCredentials = true;
             axios.get('/api/student/queryRecordList').then((response) =>
             {
@@ -129,7 +127,10 @@ export default function Records()
                 // }
                 setData(temp)
             })
-        }, 500)
+        }
+
+        query_record_list()
+        const timer = setInterval(query_record_list, 500)
         return () =>
         {
             clearInterval(timer)
