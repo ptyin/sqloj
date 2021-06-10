@@ -69,6 +69,18 @@ export default function Assignments()
                     // newTime = new Date(temp[i].assignment_end_time);
                     // temp[i].assignment_end_time = strftime("%y/%m/%d %H:%M:%S", newTime)
                 }
+                for (let k = 0; k < temp.length; k++)
+                {
+                    for (let j = k; j < temp.length; j++)
+                    {
+                        if (Date.parse(temp[k].assignment_end_time) > Date.parse(temp[j].assignment_end_time))
+                        {
+                            const op = temp[k];
+                            temp[k] = temp[j];
+                            temp[j] = op;
+                        }
+                    }
+                }
                 setData(temp)
             })
         }

@@ -3,11 +3,12 @@ import {useHistory} from "react-router-dom";
 import GuideTeacher from "../components/guideTeacher";
 import logo from '../common/images/logo.png';
 import '../common/layout.css';
-import {Layout, Card, Input, Button, Upload, Badge} from "antd";
+import {Layout, Card, Input, Button, Upload, Badge, message} from "antd";
 import axios from "axios";
 import {UploadOutlined} from '@ant-design/icons';
 import QueueAnim from "rc-queue-anim";
 import 'github-markdown-css'
+// import CustomUpload from '../components/upload'
 
 
 export default function AddDatabase()
@@ -22,26 +23,36 @@ export default function AddDatabase()
     const history = useHistory();
 
     const props = {
-        action: '',
-        // fileList: fileList,
-        beforeUpload()
+        // action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+        beforeUpload: (curFile, curFileList) =>
         {
+            console.log(curFile);
+            setFile(curFile);
             return false;
         },
-        onChange(info)
+        onChange: (info) =>
         {
-            console.log(info)
-            info.fileList = info.fileList.slice(-1)
-            // setFileList(list)
-            // console.log(file, list, fileList);
-            // if (file.status !== 'uploading')
-            // {
-            //     console.log(file, fileList);
-            //     setFile(file.response.data);
-            // }
+            let fileList = [...info.fileList];
+
+            // 1. Limit the number of uploaded files
+            // Only to show two recent uploaded files, and old ones will be replaced by the new
+            fileList = fileList.slice(-1);
+
+            // 2. Read from response and show file link
+            fileList = fileList.map(file =>
+            {
+                if (file.response)
+                {
+                    // Component will show file.url as link
+                    file.url = file.response.url;
+                }
+                return file;
+            });
+
+            setFileList(fileList)
         },
-        defaultFileList: [],
-    }
+        fileList: fileList
+    };
 
     return <Layout>
         <Header className="header">
@@ -72,23 +83,38 @@ export default function AddDatabase()
                             }}/>
                             <div style={{height: "20px"}}/>
                             <div><Badge status="processing" text="Select the SQLite database file."/></div>
+                            {/*<form id="upload" encType="multipart/form-data" method="post">*/}
+                            {/*    <input type="file" name="Select"/>*/}
+                            {/*    <input type="button" value="提交" onClick={(event) =>*/}
+                            {/*    {*/}
+                            {/*        const upload = document.getElementById('upload')*/}
+                            {/*        console.log(upload)*/}
+                            {/*        const form = new FormData(upload)*/}
+                            {/*        console.log(form.get('Select'))*/}
+                            {/*    }}/>*/}
+                            {/*</form>*/}
                             <Upload {...props}>
                                 <Button icon={<UploadOutlined/>}>Select</Button>
                             </Upload>
                             <div style={{height: "20px"}}/>
                             <Button style={{width: "90px"}} type="primary" onClick={() =>
                             {
-                                const params = new URLSearchParams();
-                                params.append('database_name', databaseName)
-                                params.append('database_description', description)
-                                params.append('file_id', file)
-                                axios.post('api/admin/files/createDatabase',
+                                const form = new FormData()
+                                form.append("db_name", databaseName)
+                                form.append("db_description", description)
+                                form.append("file", file)
+                                axios.post('api/teacher/DatabaseDetail', form).then((response) =>
+                                {
+                                    if (response.data.success)
                                     {
-                                        db_name: databaseName,
-                                        db_description: description,
-
-                                    })
-                                history.push('/Database')
+                                        message.success('Add successfully.');
+                                        history.push('/databases')
+                                    }
+                                    else
+                                    {
+                                        message.error('Fail to add, please retry.');
+                                    }
+                                })
                             }}>submit</Button>
                         </Card>
                     </QueueAnim>

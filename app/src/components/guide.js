@@ -29,7 +29,7 @@ export default function Guide(props)
                     Records
                 </Menu.Item>
                 <SubMenu key="user" icon={<UserOutlined/>} title="user">
-                    <Menu.ItemGroup title={'The current user' + window.sessionStorage.id}>
+                    <Menu.ItemGroup title={'The current student: ' + window.sessionStorage.username}>
                         <Menu.Item key="change_pwd" icon={<ToolOutlined/>} onClick={(event) =>
                         {
                             // window.sessionStorage.current = event.key

@@ -14,6 +14,7 @@ import './common/font.css'
 import TeacherAssignments from './teacher/teacherAssignments'
 import UpdateAssignment from "./teacher/updateAssignment";
 import AddAssignment from "./teacher/addAssignment";
+
 import TeacherQuestions from "./teacher/teacherQuestions"
 import QuestionDetail from "./teacher/questionDetail";
 import AddQuestion from "./teacher/addQuestion";
@@ -46,6 +47,7 @@ export default function IRouter()
             <Route path="/teacherAssignments" component={TeacherAssignments}/>}
             <Route path="/updateAssignment" component={UpdateAssignment}/>
             <Route path="/addAssignment" component={AddAssignment}/>
+
             <Route path="/teacherQuestions" component={TeacherQuestions}/>
             <Route path="/questionDetail" component={QuestionDetail}/>
             {/*<Route path="/change_pwd_teacher" component={Change_pwd_teacher}/>}*/}

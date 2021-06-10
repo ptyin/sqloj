@@ -19,7 +19,7 @@ export default function GuideTeacher(props)
                     Assignments
                 </Menu.Item>
                 <SubMenu key="user" icon={<UserOutlined/>} title="user">
-                    <Menu.ItemGroup title={'Current teacher user' + window.sessionStorage.id}>
+                    <Menu.ItemGroup title={'Current teacher : ' + window.sessionStorage.username}>
                         <Menu.Item key="change_pwd" icon={<ToolOutlined/>} onClick={(event) =>
                         {
                             // window.localStorage.current = event.key

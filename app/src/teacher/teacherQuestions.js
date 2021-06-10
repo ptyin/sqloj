@@ -35,8 +35,8 @@ export default function Questions()
                     <Button className='button' onClick={() =>
                     {
                         window.sessionStorage.detail_question_id = record.question_id;
-                        history.push('/detail');
-                    }}>details</Button>
+                        history.push('/questionDetail');
+                    }}>detail</Button>
                 </Space>
             ),
         },
@@ -136,7 +136,7 @@ export default function Questions()
             <img src={logo} style={{height: '45px'}} alt=""/>
         </Header>
         <Layout>
-            <Sider width={200} className="site-layout-content"><GuideTeacher/></Sider>
+            <Sider width={200} className="site-layout-content"><GuideTeacher item="assignments"/></Sider>
             <Layout style={{padding: '0 24px 24px'}}>
                 <Content className="default_font" style={{margin: '24px 0'}}>
                     <QueueAnim

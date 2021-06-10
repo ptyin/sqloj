@@ -49,7 +49,7 @@ export default function AddQuestion()
     useEffect(() =>
     {
 
-        axios.get('/api/admin/queryDatabaseList').then((response) =>
+        axios.get('/api/teacher/DatabaseListQuery').then((response) =>
         {
             setData(response.data)
         })
@@ -90,7 +90,7 @@ export default function AddQuestion()
                             >
                                 {
                                     data.map((v) => (
-                                        <Option value={v.database_id}>{v.database_name}</Option>
+                                        <Option value={v.db_id}>{v.db_name}</Option>
                                     ))
                                 }
                             </Select>
