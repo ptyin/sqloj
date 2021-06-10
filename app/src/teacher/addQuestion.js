@@ -29,14 +29,14 @@ export default function AddQuestion()
     const [questionName, setQuestionName] = useState('');
     const [questionDescription, setQuestionDescription] = useState('');
     const [questionOutput, setQuestionOutput] = useState('');
-    const [questionType, setQuestionType] = useState('SQL')
+    const [questionType, setQuestionType] = useState('sql')
 
     const [code, setCode] = useState('');
     // const [operate, setOperate] = useState('query');
     // const [isOrder, setIsOrder] = useState('')
     const {Header, Content, Sider} = Layout;
     const {Option} = Select;
-    const { Panel } = Collapse;
+    const {Panel} = Collapse;
     const history = useHistory();
     const editorProps = {
         contentStyle: {height: 300},
@@ -69,31 +69,36 @@ export default function AddQuestion()
                         ease={['easeOutQuart', 'easeInOutQuart']}>
 
                         <Card key="demo1" title="Add Question">
-                            <div>
-                                <Badge status="processing" text="Corresponding Database"/>
-                            </div>
-                            <Select
-                                showSearch
-                                style={{width: 200}}
-                                placeholder="Search to Select"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                }
-                                filterSort={(optionA, optionB) =>
-                                    optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                }
-                                onChange={(value) =>
-                                {
-                                    setDatabaseId(value)
-                                }}
-                            >
-                                {
-                                    data.map((v) => (
-                                        <Option value={v.db_id}>{v.db_name}</Option>
-                                    ))
-                                }
-                            </Select>
+                            {
+                                questionType === 'sql' ?
+                                    [<div>
+                                        <Badge status="processing" text="Corresponding Database"/>
+                                    </div>,
+                                        <Select
+                                            showSearch
+                                            style={{width: 200}}
+                                            placeholder="Search to Select"
+                                            optionFilterProp="children"
+                                            filterOption={(input, option) =>
+                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+                                            filterSort={(optionA, optionB) =>
+                                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                                            }
+                                            onChange={(value) =>
+                                            {
+                                                setDatabaseId(value)
+                                            }}
+                                        >
+                                            {
+                                                data.map((v) => (
+                                                    <Option value={v.db_id}>{v.db_name}</Option>
+                                                ))
+                                            }
+                                        </Select>
+                                    ] : null
+                            }
+
                             <div style={{height: "10px"}}/>
                             <div>
                                 <Badge status="processing" text="Question Name"/>
@@ -113,40 +118,51 @@ export default function AddQuestion()
                                         setQuestionDescription(content.toHTML())
                                     }}/>
                                 </Panel>
-                                <div style={{height: "5px"}}/>
-                                <div style={{padding: '3px'}}/>
-                                <Panel key="output" header="Output">
-                                    <BraftEditor {...editorProps} onChange={(content) =>
-                                    {
-                                        setQuestionOutput(content.toHTML())
-                                    }}/>
-                                </Panel>
-                                <div style={{height: "5px"}}/>
-                                <div style={{padding: '3px'}}/>
-                                <Panel key="answer" header="Standard Answer">
-                                    <CodeMirror
-                                        key='editor'
-                                        value='# press Ctrl to autocomplete'
-                                        onChange={(value) => setCode(value)}
-                                        options={{
-                                            lineNumbers: true,
-                                            mode: {name: "text/x-mysql"},
-                                            extraKeys: {"Ctrl": "autocomplete"},
-                                            // autofocus: true,
-                                            styleActiveLine: true,
-                                            lineWrapping: true,
-                                            foldGutter: true,
-                                            theme: "solarized",
-                                        }}
-                                    />
-                                </Panel>
+                                {/*<div style={{height: "5px"}}/>*/}
+                                {/*<div style={{padding: '3px'}}/>*/}
+                                {/*<Panel key="output" header="Output">*/}
+                                {/*    <BraftEditor {...editorProps} onChange={(content) =>*/}
+                                {/*    {*/}
+                                {/*        setQuestionOutput(content.toHTML())*/}
+                                {/*    }}/>*/}
+                                {/*</Panel>*/}
+                                {
+                                    questionType === 'sql' ?
+                                        [
+                                            <div style={{height: "5px"}}/>,
+                                            <div style={{padding: '3px'}}/>,
+                                            <Panel key="answer" header="Standard Answer">
+                                                <CodeMirror
+                                                    key='editor'
+                                                    value='# press Ctrl to autocomplete'
+                                                    onChange={(value) => setCode(value)}
+                                                    options={{
+                                                        lineNumbers: true,
+                                                        mode: {name: "text/x-mysql"},
+                                                        extraKeys: {"Ctrl": "autocomplete"},
+                                                        // autofocus: true,
+                                                        styleActiveLine: true,
+                                                        lineWrapping: true,
+                                                        foldGutter: true,
+                                                        theme: "solarized",
+                                                    }}
+                                                />
+                                            </Panel>
+                                        ] : null
+                                    // <BraftEditor {...editorProps} onChange={(content) =>
+                                    // {
+                                    //     setCode(content.toHTML())
+                                    // }}/>
+                                }
+
                             </Collapse>
-                            <div style={{height:"20px"}}/>
+                            <div style={{height: "20px"}}/>
                             <div>
-                                <Badge status="processing" text="Question Type" />
+                                <Badge status="processing" text="Question Type"/>
                             </div>
 
-                            <Select key="type" defaultValue="SQL"  onChange={(value)=>{
+                            <Select key="type" defaultValue={questionType} onChange={(value) =>
+                            {
                                 setQuestionType(value)
                             }}>
                                 <Option value="sql">SQL</Option>
@@ -166,15 +182,15 @@ export default function AddQuestion()
                                     db_id: databaseId
                                 })
                                 axios.post('/api/teacher/QuestionDetail',
-                                {
-                                    question_name: questionName,
-                                    question_description: questionDescription,
-                                    question_output: questionOutput,
-                                    question_answer: code,
-                                    question_type: questionType,
-                                    assignment_id: assignment_id,
-                                    db_id: databaseId
-                                }).then((response) =>
+                                    {
+                                        question_name: questionName,
+                                        question_description: questionDescription,
+                                        question_output: questionOutput,
+                                        question_answer: code,
+                                        question_type: questionType,
+                                        assignment_id: assignment_id,
+                                        db_id: databaseId
+                                    }).then((response) =>
                                 {
                                     if (response.data.success)
                                     {

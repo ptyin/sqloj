@@ -88,11 +88,11 @@ export default function Submit()
                                     <div dangerouslySetInnerHTML={{__html: description}}/>
                                 </Card>
                             </div>,
-                            <div key="output">
-                                <Card className="info-card" title="output">
-                                    <div dangerouslySetInnerHTML={{__html: output}}/>
-                                </Card>
-                            </div>,
+                            // <div key="output">
+                            //     <Card className="info-card" title="output">
+                            //         <div dangerouslySetInnerHTML={{__html: output}}/>
+                            //     </Card>
+                            // </div>,
                             <div key="code">
                                 <Card title="submitted code">
                                     {code}

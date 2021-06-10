@@ -31,7 +31,7 @@ export default function UpdateQuestion()
     const [questionName, setQuestionName] = useState('');
     const [questionDescription, setQuestionDescription] = useState('')
     const [questionOutput, setQuestionOutput] = useState('')
-    const [questionType, setQuestionType] = useState('SQL')
+    const [questionType, setQuestionType] = useState('sql')
     const [code, setCode] = useState('');
 
     const {Header, Content, Sider} = Layout;
@@ -47,7 +47,6 @@ export default function UpdateQuestion()
     const id = window.sessionStorage.update_question_id
     useEffect(() =>
     {
-        setDatabaseId("db-60c1ca024c0f043131a05b8d")
         axios.get('/api/teacher/QuestionDetail', {
             params: {
                 question_id: id
@@ -85,35 +84,41 @@ export default function UpdateQuestion()
                         duration="2000"
                         ease={['easeOutQuart', 'easeInOutQuart']}>
                         <Card key="demo1" title="Update Question">
-                            <div>
-                                <Badge status="processing" text="Corresponding Database"/>
-                            </div>
-                            <Select
-                                showSearch
-                                style={{width: 200}}
-                                // defaultValue="db-60c1ca024c0f043131a05b8d"
-                                defaultValue={databaseId}
-                                // placeholder={databaseId}
-                                // value={databaseId}
-                                // placeholder="Search to Select"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                }
-                                filterSort={(optionA, optionB) =>
-                                    optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                }
-                                onChange={(value) =>
-                                {
-                                    setDatabaseId(value)
-                                }}
-                            >
-                                {
-                                    data.map((v) => (
-                                        <Option key={v.db_id} value={v.db_id}>{v.db_name}</Option>
-                                    ))
-                                }
-                            </Select>
+                            {
+                                questionType === 'sql' ?
+                                    [
+                                        <div>
+                                            <Badge status="processing" text="Corresponding Database"/>
+                                        </div>,
+                                        <Select
+                                            showSearch
+                                            style={{width: 200}}
+                                            key={databaseId}
+                                            defaultValue={databaseId}
+                                            // placeholder={databaseId}
+                                            // value={databaseId}
+                                            // placeholder="Search to Select"
+                                            optionFilterProp="children"
+                                            filterOption={(input, option) =>
+                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+                                            filterSort={(optionA, optionB) =>
+                                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                                            }
+                                            onChange={(value) =>
+                                            {
+                                                setDatabaseId(value)
+                                            }}
+                                        >
+                                            {
+                                                data.map((v) => (
+                                                    <Option value={v.db_id}>{v.db_name}</Option>
+                                                ))
+                                            }
+                                        </Select>
+                                    ] : null
+                            }
+
                             <div style={{height: "10px"}}/>
                             <div>
                                 <Badge status="processing" text="Question Name"/>
@@ -127,47 +132,59 @@ export default function UpdateQuestion()
                             <div style={{padding: '3px'}}/>
                             <Collapse key="detail" defaultActiveKey={[]}>
                                 <Panel key="description" header="Question Description">
-                                    <BraftEditor {...editorProps} defaultValue={BraftEditor.createEditorState(questionDescription)} onChange={(content) =>
-                                    {
-                                        setQuestionDescription(content.toHTML())
-                                    }}/>
+                                    <BraftEditor {...editorProps}
+                                                 defaultValue={BraftEditor.createEditorState(questionDescription)}
+                                                 onChange={(content) =>
+                                                 {
+                                                     setQuestionDescription(content.toHTML())
+                                                 }}/>
                                 </Panel>
-                                <div style={{height: "5px"}}/>
-                                <div style={{padding: '3px'}}/>
-                                <Panel key="output" header="Output">
-                                    <BraftEditor {...editorProps} defaultValue={BraftEditor.createEditorState(questionOutput)} onChange={(content) =>
-                                    {
-                                        setQuestionOutput(content.toHTML())
-                                    }}/>
-                                </Panel>
-                                <div style={{height: "5px"}}/>
-                                <div style={{padding: '3px'}}/>
-                                <Panel key="answer" header="Standard Answer">
-                                    <CodeMirror
-                                        key='editor'
-                                        // defaultValue={code}
-                                        value={code}
-                                        // value='# press Ctrl to autocomplete'
-                                        onChange={(value) => setCode(value)}
-                                        options={{
-                                            lineNumbers: true,
-                                            mode: {name: "text/x-mysql"},
-                                            extraKeys: {"Ctrl": "autocomplete"},
-                                            // autofocus: true,
-                                            styleActiveLine: true,
-                                            lineWrapping: true,
-                                            foldGutter: true,
-                                            theme: "solarized",
-                                        }}
-                                    />
-                                </Panel>
+                                {/*<div style={{height: "5px"}}/>*/}
+                                {/*<div style={{padding: '3px'}}/>*/}
+                                {/*<Panel key="output" header="Output">*/}
+                                {/*    <BraftEditor {...editorProps} defaultValue={BraftEditor.createEditorState(questionOutput)} onChange={(content) =>*/}
+                                {/*    {*/}
+                                {/*        setQuestionOutput(content.toHTML())*/}
+                                {/*    }}/>*/}
+                                {/*</Panel>*/}
+                                {
+                                    questionType === 'sql' ?
+                                        [
+                                            <div style={{height: "5px"}}/>,
+                                            <div style={{padding: '3px'}}/>,
+                                            <Panel key="answer" header="Standard Answer">
+                                                <CodeMirror
+                                                    key='editor'
+                                                    // defaultValue={code}
+                                                    value={code}
+                                                    // value='# press Ctrl to autocomplete'
+                                                    onChange={(value) => setCode(value)}
+                                                    options={{
+                                                        lineNumbers: true,
+                                                        mode: {name: "text/x-mysql"},
+                                                        extraKeys: {"Ctrl": "autocomplete"},
+                                                        // autofocus: true,
+                                                        styleActiveLine: true,
+                                                        lineWrapping: true,
+                                                        foldGutter: true,
+                                                        theme: "solarized",
+                                                    }}
+                                                />
+                                            </Panel>
+                                        ] : null
+                                    // <BraftEditor {...editorProps} onChange={(content) =>
+                                    // {
+                                    //     setCode(content.toHTML())
+                                    // }}/>
+                                }
                             </Collapse>
-                            <div style={{height:"20px"}}/>
+                            <div style={{height: "20px"}}/>
                             <div>
-                                <Badge status="processing" text="Question Type" />
+                                <Badge status="processing" text="Question Type"/>
                             </div>
 
-                            <Select key="type" defaultValue="SQL"  onChange={(value)=>{
+                            <Select key={questionType} defaultValue={questionType} onChange={(value) =>
+                            {
                                 setQuestionType(value)
                             }}>
                                 <Option value="sql">SQL</Option>

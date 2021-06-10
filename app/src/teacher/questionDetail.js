@@ -8,6 +8,13 @@ import {Layout, Table, Card, Button, Tag, Space} from "antd";
 import axios from "axios";
 import QueueAnim from "rc-queue-anim";
 import 'github-markdown-css'
+import CodeMirror from "react-codemirror";
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/sql/sql';
+import 'codemirror/addon/hint/show-hint.css';
+import 'codemirror/addon/hint/show-hint.js';
+import 'codemirror/addon/hint/sql-hint.js';
+import 'codemirror/theme/solarized.css';
 
 
 export default function ()
@@ -128,14 +135,25 @@ export default function ()
                                 <div dangerouslySetInnerHTML={{__html: description}}/>
                             </Card>
                         </div>
-                        <div key="output">
-                            <Card className="info-card" title="Output">
-                                <div dangerouslySetInnerHTML={{__html: output}}/>
-                            </Card>
-                        </div>
+                        {/*<div key="output">*/}
+                        {/*    <Card className="info-card" title="Output">*/}
+                        {/*        <div dangerouslySetInnerHTML={{__html: output}}/>*/}
+                        {/*    </Card>*/}
+                        {/*</div>*/}
                         <div key="answer">
                             <Card className="info-card" title="Standard Answer">
-                                <div dangerouslySetInnerHTML={{__html: answer}}/>
+                                <CodeMirror
+                                    key='editor'
+                                    value={answer}
+                                    options={{
+                                        readOnly: true,
+                                        lineNumbers: true,
+                                        mode: {name: "text/x-mysql"},
+                                        lineWrapping: true,
+                                        foldGutter: true,
+                                        theme: "solarized",
+                                    }}
+                                />
                             </Card>
                         </div>
                         <div key="Completion">
