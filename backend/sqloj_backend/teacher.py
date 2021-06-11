@@ -476,7 +476,7 @@ class QuestionDetail(Resource):
         question_id = str(args["question_id"])
         delete_status = delete_many_document(mongo.db.questions, {"question_id": question_id}) \
                         and delete_many_document(mongo.db.records, {"question_id": question_id}) \
-                        and delete_many_document(mongo.record_outputs.records, {"question_id": question_id})
+                        and delete_many_document(mongo.db.record_outputs, {"question_id": question_id})
         return {
             "success": True,
             "question_id": question_id,
