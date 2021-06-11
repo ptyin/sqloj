@@ -66,7 +66,7 @@ export default function GuideTeacher(props)
                         </FormItem>
                         <FormItem  {...doubleLayout} label="old password">
                             <Input placeholder="Please enter your old password."
-                                   maxLength={10} type={"password"}
+                                   maxLength={30} type={"password"}
                                    onChange={(event) =>
                                    {
                                        setOldPassword(event.target.value)
@@ -74,7 +74,7 @@ export default function GuideTeacher(props)
                         </FormItem>
                         <FormItem  {...doubleLayout} label="new password">
                             <Input placeholder="Please enter your new password."
-                                   maxLength={10} type={"password"}
+                                   maxLength={30} type={"password"}
                                    onChange={(event) =>
                                    {
                                        setNewPassword(event.target.value)
@@ -82,7 +82,7 @@ export default function GuideTeacher(props)
                         </FormItem>
                     </Form>
                 </Modal>
-                <Modal title="Add User" visible={isAddUserVisible}
+                <Modal title="Add Student" visible={isAddUserVisible}
                        onOk={() =>
                        {
                            axios.defaults.withCredentials = true;
@@ -117,7 +117,7 @@ export default function GuideTeacher(props)
                         </FormItem>
                         <FormItem  {...doubleLayout} label="student password">
                             <Input placeholder="Please enter the student password."
-                                   maxLength={10} type={"password"}
+                                   maxLength={30} type={"password"}
                                    onChange={(event) =>
                                    {
                                        setStudentPassword(event.target.value)

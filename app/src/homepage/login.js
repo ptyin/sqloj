@@ -78,7 +78,7 @@ export default function Login()
                     <FormItem  {...doubleLayout} label="password">
                         <Input placeholder="Please enter your password."
                                defaultValue={password}
-                               maxLength={10} type={"password"}
+                               maxLength={30} type={"password"}
                                onChange={(event) =>
                                {
                                    setPassword(event.target.value)

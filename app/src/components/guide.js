@@ -76,7 +76,7 @@ export default function Guide(props)
                         </FormItem>
                         <FormItem  {...doubleLayout} label="old password">
                             <Input placeholder="Please enter your old password."
-                                   maxLength={10} type={"password"}
+                                   maxLength={30} type={"password"}
                                    onChange={(event) =>
                                    {
                                        setOldPassword(event.target.value)
@@ -84,7 +84,7 @@ export default function Guide(props)
                         </FormItem>
                         <FormItem  {...doubleLayout} label="new password">
                             <Input placeholder="Please enter your new password."
-                                   maxLength={10} type={"password"}
+                                   maxLength={30} type={"password"}
                                    onChange={(event) =>
                                    {
                                        setNewPassword(event.target.value)

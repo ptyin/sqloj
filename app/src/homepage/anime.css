@@ -52,6 +52,7 @@
     right: 0;
 }
 .combined .title {
+    text-align: center;
     font-size: 58px;
     letter-spacing: 8px;
     position: absolute;
