@@ -76,7 +76,6 @@ class Login(Resource):
     @login_required
     @api.marshal_with(logout_res)
     def get(self):
-        print(current_user.id)
         logout_user()
         return {"success": True, "username": ""}
 

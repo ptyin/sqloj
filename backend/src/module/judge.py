@@ -28,7 +28,7 @@ class Dispacher(threading.Thread):
 
 
 def get_answer(database, sql):
-    start_time = time.thread_time()
+    start_time = time.time()
     conn = sqlite3.connect(database=database)
     cursor = conn.cursor()
     sql_list = sql.split(";")
@@ -41,7 +41,7 @@ def get_answer(database, sql):
     a = 0
     for i in range(2000):
         a += i
-    stop_time = time.thread_time()
+    stop_time = time.time()
     running_time = stop_time - start_time
     out = cursor.fetchall()
     cursor.close()

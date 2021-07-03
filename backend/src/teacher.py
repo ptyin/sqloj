@@ -14,7 +14,8 @@ from .extension import mongo, login_manager
 from .util import insert_one_document, update_one_document, delete_many_document
 from .task import update_question_standard_output
 
-folder = pathlib.Path(__file__).parent
+from .config import folder
+# folder = pathlib.Path(__file__).parent
 
 api = Namespace('teacher', description="Students' manipulations")
 
@@ -564,7 +565,7 @@ class DatabaseDetail(Resource):
         file = args['file']
         if insert_status:
             try:
-                file.save(folder / "database" / filename)
+                file.save(os.path.join(folder, "database", filename))
             except OSError as e:
                 print("An exception occurred when saving file ::", e)
                 delete_many_document(mongo.db.dbs, {"db_id": db_id})
@@ -596,7 +597,7 @@ class DatabaseDetail(Resource):
             # the file may not be updated
             if file is not None:
                 try:
-                    file.save(folder / "database" / filename)
+                    file.save(os.path.join(folder, "database", filename))
                 except OSError as e:
                     print("An exception occurred when saving file ::", e)
                     return {"success": False}
@@ -628,7 +629,7 @@ class DatabaseDetail(Resource):
                 # keep trying deleting
                 while delete_status:
                     try:
-                        os.remove(folder / "database" / str(db["db_filename"]))
+                        os.remove(os.path.join(folder, "database", str(db["db_filename"])))
                     except Exception as e:
                         print("An exception occurred ::", e)
                         continue

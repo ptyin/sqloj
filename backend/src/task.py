@@ -1,3 +1,4 @@
+import os
 import pathlib
 from datetime import datetime
 
@@ -6,7 +7,7 @@ from .util import update_one_document, insert_one_document
 
 from .extension import mongo
 
-folder = pathlib.Path(__file__).parent
+from .config import folder
 
 
 def update_question_standard_output(qids):
@@ -14,7 +15,8 @@ def update_question_standard_output(qids):
     for qid in qids:
         question = mongo.db.questions.find_one({"question_id": qid})
         # print(question, qid)
-        header, output, _ = get_answer(folder / "database" / question["db_id"][3:], str(question["question_answer"]), )
+        header, output, _ = get_answer(os.path.join(folder, "database", question["db_id"][3:]),
+                                       str(question["question_answer"]), )
         update_one_document(mongo.db.questions, {"question_id": qid}, {
             "$set":
                 {
@@ -32,7 +34,8 @@ def get_user_answer_output(rec_id, sql, qid, submit_time, username):
     # print((standard_header, standard_output))
     # print("")
     # after getting output
-    status, (lack_num, err_num), (header, output), running_time = judge(folder / "database" / question["db_id"][3:],
+    status, (lack_num, err_num), (header, output), running_time = judge(os.path.join(folder, "database",
+                                                                                     question["db_id"][3:]),
                                                                         sql, standard_header, standard_output)
     # print(status, (lack_num, err_num), (header, output), running_time)
     finished_time = datetime.now()

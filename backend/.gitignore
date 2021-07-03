@@ -1,4 +1,4 @@
-./sqloj_backend/database/
+src/database/
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template

@@ -1,10 +1,9 @@
 # SQLOJ
 An open judge platform for SQL
 
-## run
+## compile
     cd app
     npm install && npm run build
-    docker compose -f ../docker-compose.yml up -d
 
-## stop
-    docker compose down
+## run
+    docker run -p 80:80 -v D:\SQLOJ\mongodb\data:/data/db -v D:\SQLOJ\mongodb\config:/data/configdb -v D:\SQLOJ\sqlite:/var/lib/sqloj --name test ptyin/sqloj:latest 

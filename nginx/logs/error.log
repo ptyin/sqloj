@@ -1113,3 +1113,8 @@
 2021/06/11 07:03:53 [notice] 19352#25192: signal process started
 2021/06/11 07:21:32 [notice] 9236#8008: signal process started
 2021/06/11 07:21:32 [error] 9236#8008: CreateFile() "E:\Projects\web\SQLOJ\nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2021/06/11 10:13:28 [notice] 24712#23064: signal process started
+2021/06/11 10:13:28 [error] 24712#23064: CreateFile() "E:\Projects\web\SQLOJ\nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2021/06/11 11:36:15 [notice] 17860#25956: signal process started
+2021/06/11 22:12:47 [notice] 27188#26740: signal process started
+2021/06/11 22:12:47 [error] 27188#26740: CreateFile() "E:\Projects\web\SQLOJ\nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
