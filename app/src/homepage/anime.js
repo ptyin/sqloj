@@ -5,6 +5,7 @@ import TweenOne from 'rc-tween-one';
 import Button from 'antd/lib/button';
 import {PlayCircleTwoTone} from '@ant-design/icons';
 import './anime.css'
+import QueueAnim from "rc-queue-anim";
 
 export default class Anime extends React.Component
 {
@@ -136,7 +137,8 @@ export default class Anime extends React.Component
                                 }}
                             >
                                 {/*SQL OnlineJudge*/}
-                                DBS EXPERT
+                                {/*DBS EXPERT*/}
+                                SQLOJ
                             </Texty>
                             <TweenOne
                                 className="combined-bar"
@@ -149,14 +151,24 @@ export default class Anime extends React.Component
                                 delay={2200}
                                 interval={30}
                             >
-                                an online DataBase System EXPERimenTal platform
-                                {/*An open judge platform for SDU Database System.*/}
+                                {/*an online DataBase System EXPERimenTal platform*/}
+                                An open judge platform for Database System.
                             </Texty>
-
+                            <QueueAnim
+                                key="demo"
+                                type={['left', 'right']}
+                                delay="2300"
+                                duration="1400"
+                                ease={['easeOutQuart', 'easeInOutQuart']}>
+                                <div key="button-container">
+                                    <Button className="jump"
+                                            type="primary"
+                                            icon="Login" onClick={this.onClick2}/>
+                                </div>
+                            </QueueAnim>
                         </div>
                     )}
                 </div>
-                <Button className="jump" type="primary" icon="Login" onClick={this.onClick2}/>
             </div>
         );
     }

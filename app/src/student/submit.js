@@ -1,16 +1,16 @@
-import React, {useState, useEffect, forwardRef} from "react";
+import React, {forwardRef, useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import Guide from "../components/guide";
 import logo from '../common/images/logo.png';
 import '../common/layout.css';
-import {Layout, Card, Button, Tag, Table, message} from "antd";
+import {Button, Card, Layout, message} from "antd";
 import axios from "axios";
 import QueueAnim from "rc-queue-anim";
 // import Cookies from 'js-cookie'
 import 'github-markdown-css'
 import '../common/otto.css'
 import '../common/question.css'
-import CodeMirror from 'react-codemirror';
+import {Controlled as CodeMirror} from 'react-codemirror2';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/sql/sql';
 import 'codemirror/addon/hint/show-hint.css';
@@ -28,7 +28,7 @@ const Submit = forwardRef((props, refSelf) =>
     const [questionName, setQuestionName] = useState('');
     const [description, setDescription] = useState('');
     const [output, setOutput] = useState([]);
-    const [code, setCode] = useState('# press Ctrl to autocomplete.');
+    const [code, setCode] = useState('');
     // const [mode,setMode] = useState('sqlite');
     const {Header, Content, Sider} = Layout;
     const id = window.sessionStorage.question_ID;
@@ -117,28 +117,33 @@ const Submit = forwardRef((props, refSelf) =>
                                 </Card>
                             </div>,
                             // <div style={{padding:'3px'}}/>,
-                            <div key="output">
-                                <Card className="info-card" title="output">
-                                    <div dangerouslySetInnerHTML={{__html: output}}/>
-                                </Card>
-                            </div>,
+                            // <div key="output">
+                            //     <Card className="info-card" title="output">
+                            //         <div dangerouslySetInnerHTML={{__html: output}}/>
+                            //     </Card>
+                            // </div>,
                             // <div style={{height:'10px'}}/>,
                             // <div style={{padding:'3px'}}/>,
-                            <CodeMirror
-                                key='editor'
-                                // value='# press Ctrl to autocomplete.'
-                                onChange={(value) => setCode(value)}
-                                options={{
-                                    lineNumbers: true,
-                                    mode: {name: "text/x-mysql"},
-                                    extraKeys: {"Ctrl": "autocomplete"},
-                                    // autofocus: true,
-                                    styleActiveLine: true,
-                                    lineWrapping: true,
-                                    foldGutter: true,
-                                    theme: "solarized",
-                                }}
-                            />,
+                            <div key="question_answer">
+                                <Card className="info-card" title="question answer">
+                                    <CodeMirror
+                                        key='editor'
+                                        value={code}
+                                        // value='# press Ctrl to autocomplete.'
+                                        onBeforeChange={(editor, data, value) => setCode(value)}
+                                        options={{
+                                            lineNumbers: true,
+                                            mode: {name: "text/x-mysql"},
+                                            extraKeys: {"Ctrl": "autocomplete"},
+                                            // autofocus: true,
+                                            styleActiveLine: true,
+                                            lineWrapping: true,
+                                            foldGutter: true,
+                                            theme: "solarized",
+                                        }}
+                                    />
+                                </Card>
+                            </div>,
                             // <Select key="demo5" defaultValue="postgreSQL" style={{ width: 120,left:800 ,top:15}} onChange={(value)=>{
                             //     console.log(this.refs.editor.outputHTML)
                             //     setMode(value)

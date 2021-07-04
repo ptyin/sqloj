@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import GuideTeacher from "../components/guideTeacher";
 import logo from '../common/images/logo.png';
 import '../common/layout.css';
-import {Layout, Card, Input, Button, DatePicker, Checkbox, Badge, message} from "antd";
+import {Badge, Button, Card, DatePicker, Input, Layout, message} from "antd";
 import axios from "axios";
 import QueueAnim from "rc-queue-anim";
 import 'github-markdown-css'
@@ -96,8 +96,7 @@ export default function UpdateAssignment()
                                         {
                                             message.success('Update successfully.');
                                             history.push('/teacherAssignments')
-                                        }
-                                        else
+                                        } else
                                         {
                                             message.error('Fail to update, please retry.');
                                         }

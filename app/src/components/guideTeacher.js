@@ -2,7 +2,14 @@ import React, {useState} from "react";
 import {Form, Input, Menu, message, Modal} from 'antd';
 import {useHistory} from "react-router-dom";
 import '../common/font.css'
-import {UserOutlined, CalendarOutlined, ToolOutlined, UserAddOutlined, LogoutOutlined, DatabaseOutlined} from '@ant-design/icons';
+import {
+    CalendarOutlined,
+    DatabaseOutlined,
+    LogoutOutlined,
+    ToolOutlined,
+    UserAddOutlined,
+    UserOutlined
+} from '@ant-design/icons';
 import axios from "axios";
 
 const FormItem = Form.Item;
@@ -50,8 +57,7 @@ export default function GuideTeacher(props)
                                {
                                    message.success('Change successfully.');
                                    setIsChangePasswordVisible(false)
-                               }
-                               else
+                               } else
                                {
                                    message.error('Invalid authentication information.');
                                }
@@ -96,8 +102,7 @@ export default function GuideTeacher(props)
                                {
                                    message.success('Add successfully.');
                                    setIsAddUserVisible(false)
-                               }
-                               else
+                               } else
                                {
                                    message.error('Fail to add, please retry.');
                                }

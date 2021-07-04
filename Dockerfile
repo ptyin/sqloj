@@ -26,3 +26,4 @@
 FROM ptyin/sqloj:v2
 COPY /backend/src/task.py /opt/sqloj/src/task.py
 COPY /backend/src/module/judge.py /opt/sqloj/src/module/judge.py
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime

@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import GuideTeacher from "../components/guideTeacher";
 import axios from 'axios';
 import {useHistory} from "react-router-dom";
-import {Table, Space, Button, Layout, Card, message} from 'antd';
+import {Button, Layout, message, Space, Table} from 'antd';
 import logo from '../common/images/logo.png';
 import '../common/layout.css';
 import QueueAnim from "rc-queue-anim";

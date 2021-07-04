@@ -1,14 +1,12 @@
-.ant-layout
-{
+.ant-layout {
     /*height: 100%;*/
     background-color: #fff;
 }
-.ant-layout-header
-{
-    padding: 0 20px;
+
+.ant-layout-header {
+    padding: 0 10px;
 }
 
-.site-layout-content
-{
+.site-layout-content {
     background-color: #fff;
 }

@@ -1,17 +1,20 @@
-.form_title{
+.form_title {
     line-height: 1.5em;
     font-family: "Times New Roman", Times, serif;
     font-size: 24px;
     font-weight: 900;
 }
-.form_label{
+
+.form_label {
     line-height: 1.5em;
     font-family: "Times New Roman", Times, serif;
 }
-.default_font{
+
+.default_font {
     /*font-family: "Times New Roman", Times, serif;*/
 }
-.submit_text{
+
+.submit_text {
     font-family: "Times New Roman", Times, serif;
     font-size: 20px;
 }

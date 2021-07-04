@@ -3,13 +3,13 @@ import {useHistory} from "react-router-dom";
 import GuideTeacher from "../components/guideTeacher";
 import logo from '../common/images/logo.png';
 import '../common/layout.css';
-import {Layout, Card, Input, Button, Select, InputNumber, Checkbox, Badge, Collapse, message} from "antd";
+import {Badge, Button, Card, Collapse, Input, Layout, message, Select} from "antd";
 import axios from "axios";
 import QueueAnim from "rc-queue-anim";
 import 'github-markdown-css'
 import '../common/otto.css'
 // import Editor from "../components/editor";
-import CodeMirror from 'react-codemirror';
+import {Controlled as CodeMirror} from 'react-codemirror2';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/sql/sql';
 import 'codemirror/addon/hint/show-hint.css';
@@ -158,7 +158,7 @@ export default function UpdateQuestion()
                                                     // defaultValue={code}
                                                     value={code}
                                                     // value='# press Ctrl to autocomplete'
-                                                    onChange={(value) => setCode(value)}
+                                                    onBeforeChange={(editor, data, value) => setCode(value)}
                                                     options={{
                                                         lineNumbers: true,
                                                         mode: {name: "text/x-mysql"},
@@ -172,10 +172,6 @@ export default function UpdateQuestion()
                                                 />
                                             </Panel>
                                         ] : null
-                                    // <BraftEditor {...editorProps} onChange={(content) =>
-                                    // {
-                                    //     setCode(content.toHTML())
-                                    // }}/>
                                 }
                             </Collapse>
                             <div style={{height: "20px"}}/>

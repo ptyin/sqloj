@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import GuideTeacher from "../components/guideTeacher";
 import axios from 'axios';
 import {useHistory} from "react-router-dom";
-import {Table, Space, Button, Layout, Radio, message} from 'antd';
+import {Button, Layout, message, Space, Table} from 'antd';
 import logo from '../common/images/logo.png';
 import QueueAnim from 'rc-queue-anim';
 import '../common/layout.css';
@@ -22,6 +22,7 @@ export default function Databases()
     const {Header, Content, Sider} = Layout;
     const [data, setData] = useState([])
     const history = useHistory();
+
     function queryDatabaseList()
     {
         axios.get('/api/teacher/DatabaseListQuery').then((response) =>
@@ -30,6 +31,7 @@ export default function Databases()
             setData(temp)
         })
     }
+
     const columns = [
         {
             title: 'Name',
@@ -64,8 +66,7 @@ export default function Databases()
                             {
                                 message.success('delete successfully.');
                                 queryDatabaseList()
-                            }
-                            else
+                            } else
                             {
                                 message.error('Fail to delete, there are some questions dependent on this database.');
                             }

@@ -1,13 +1,11 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import axios from 'axios';
 import {useHistory} from "react-router-dom";
-import {Table, Space, Button, Layout} from 'antd';
+import {Button, Layout, Space, Table} from 'antd';
 import logo from '../common/images/logo.png';
 import QueueAnim from 'rc-queue-anim';
 import '../common/layout.css';
 import Guide from "../components/guide";
-import strftime from "strftime";
-
 
 
 export default function Assignments()
@@ -53,7 +51,8 @@ export default function Assignments()
 
     useEffect(() =>
     {
-        const now = Date.now()
+        // const now = Date.now()
+
         // if (timer === 0 || now - timer > 3000)
         function query_assignment_list()
         {
@@ -84,6 +83,7 @@ export default function Assignments()
                 setData(temp)
             })
         }
+
         query_assignment_list()
         const timer = setInterval(query_assignment_list, 3000)
 
@@ -109,7 +109,7 @@ export default function Assignments()
                         duration="1400"
                         ease={['easeOutQuart', 'easeInOutQuart']}>
                         <div key="assignments">
-                            <Table columns={columns}  dataSource={data}/>
+                            <Table columns={columns} dataSource={data}/>
                         </div>
                     </QueueAnim>
                 </Content>
@@ -117,8 +117,6 @@ export default function Assignments()
         </Layout>
     </Layout>
 }
-
-
 
 
 // import React from 'react';

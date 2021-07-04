@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import Guide from "../components/guide";
 import axios from 'axios';
-import {Table, Layout, Tag, Space, Button} from 'antd';
+import {Button, Layout, Space, Table, Tag} from 'antd';
 import logo from '../common/images/logo.png';
 import QueueAnim from 'rc-queue-anim';
 import '../common/layout.css';

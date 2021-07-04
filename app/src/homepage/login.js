@@ -1,12 +1,11 @@
-import React, {useEffect, useRef, useState} from 'react'
-import {Form, Input, Button, message, Checkbox} from "antd";
+import React, {useEffect, useState} from 'react'
+import {Button, Checkbox, Form, Input, message} from "antd";
 import {useHistory} from "react-router-dom";
 import axios from 'axios';
 import QueueAnim from 'rc-queue-anim';
 import './login.css'
 import './anime.css'
 import '../common/font.css'
-import {QuestionCircleTwoTone} from '@ant-design/icons';
 
 const FormItem = Form.Item;
 axios.defaults.withCredentials = true
@@ -39,8 +38,7 @@ export default function Login()
             setUsername(window.localStorage.username)
             setPassword(window.localStorage.password)
             // refCheckBox.current.state.checked = true
-        }
-        else
+        } else
         {
             window.localStorage.removeItem("username")
             window.localStorage.removeItem("password")
@@ -107,8 +105,7 @@ export default function Login()
                                     {
                                         window.localStorage.username = username
                                         window.localStorage.password = password
-                                    }
-                                    else
+                                    } else
                                     {
                                         window.localStorage.removeItem("username")
                                         window.localStorage.removeItem("password")
@@ -116,8 +113,7 @@ export default function Login()
                                     if (response.data.data === 'teacher')
                                     {
                                         history.push('/teacherAssignments')
-                                    }
-                                    else if (response.data.data === 'student')
+                                    } else if (response.data.data === 'student')
                                     {
                                         history.push('/assignments');
                                     }

@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import Guide from "../components/guide";
 import logo from '../common/images/logo.png';
 import '../common/layout.css';
-import {Layout, Card, Button, message, Table} from "antd";
+import {Button, Card, Layout, message, Table} from "antd";
 import axios from "axios";
 import QueueAnim from "rc-queue-anim";
 import 'github-markdown-css'
@@ -14,7 +14,7 @@ import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/addon/hint/show-hint.js';
 import 'codemirror/addon/hint/sql-hint.js';
 import 'codemirror/theme/solarized.css';
-import CodeMirror from "react-codemirror";
+import {Controlled as CodeMirror} from "react-codemirror2";
 
 export default function Submit()
 {
@@ -25,73 +25,75 @@ export default function Submit()
     const [code, setCode] = useState('');
     const [header, setHeader] = useState([]);
     const [output, setOutput] = useState([]);
+    // const [output, setOutput] = useState({header:[], data:[]});
+
     const {Header, Content, Sider} = Layout;
     const history = useHistory();
     useEffect(() =>
     {
         // const now = Date.now()
-        axios.get('/api/student/selectQuestionById', {
+        const questionPromise = axios.get('/api/student/selectQuestionById', {
             params: {
                 question_id: window.sessionStorage.record_question_id
             }
-        }).then((response) =>
-        {
-            setQuestionName(response.data.question_name)
-            setDescription(response.data.question_description)
-            setOutput(response.data.question_output)
         })
-        axios.get('api/student/selectRecordById', {
+        const recordPromise = axios.get('api/student/selectRecordById', {
             params: {
                 record_id: window.sessionStorage.record_id
             }
-        }).then((response) =>
+        })
+
+        Promise.all([questionPromise, recordPromise]).then((responses) =>
         {
-            console.log(response.data.record_code)
-            setCode(response.data.record_code)
-            if (response.data.record_status.toUpperCase() === 'RUNNING')
+            const questionResponse = responses[0], recordResponse = responses[1]
+            if (recordResponse.data.record_status.toUpperCase() === 'RUNNING')
             {
                 message.info('Executing...')
-            }
-            else if (response.data.record_status.toUpperCase() === 'RE')
+            } else if (recordResponse.data.record_status.toUpperCase() === 'RE')
             {
                 message.error('Please retry! The execution of your commands caused runtime error.');
-            }
-            else
+            } else
             {
-                if (response.data.record_status.toUpperCase() === 'AC')
+                if (recordResponse.data.record_status.toUpperCase() === 'AC')
                 {
                     message.success('Congrats! You completed this question');
-                }
-                else if (response.data.record_status.toUpperCase() === 'WA')
+                } else if (recordResponse.data.record_status.toUpperCase() === 'WA')
                 {
-                    message.error('Please retry! Your answer is ' + response.data.record_lack +
-                        ' rows missing and ' + response.data.record_err + ' rows wrong');
-                }
-                else if (response.data.record_status.toUpperCase() === 'TLE')
+                    message.error('Please retry! Your answer is ' + recordResponse.data.record_lack +
+                        ' rows missing and ' + recordResponse.data.record_err + ' rows wrong');
+                } else if (recordResponse.data.record_status.toUpperCase() === 'TLE')
                 {
                     message.error('Please retry! The execution of your commands reached the time limit');
                 }
-                response.data.record_header = eval(response.data.record_header)
-                response.data.record_output = eval(response.data.record_output)
+                recordResponse.data.record_header = eval(recordResponse.data.record_header)
+                recordResponse.data.record_output = eval(recordResponse.data.record_output)
                 // console.log(response.data.record_header, response.data.record_output)
                 let temp_header = []
-                response.data.record_header.forEach((element) =>
+                recordResponse.data.record_header.forEach((element) =>
                 {
                     temp_header.push({title: element, dataIndex: element, key: element, align: "center"})
                 })
-                setHeader(temp_header)
                 let temp_output = []
-                response.data.record_output.forEach((list) =>
+                recordResponse.data.record_output.forEach((list, i) =>
                 {
-                    let temp = {}
-                    list.forEach((element, i) =>
+                    let temp = {key: i}
+                    list.forEach((element, j) =>
                     {
-                        temp[temp_header[i].title] = element
+                        temp[temp_header[j].title] = element
                     })
                     temp_output.push(temp)
                 })
-                setOutput(temp_output)
+                console.log(temp_header)
                 console.log(temp_output)
+                // setTimeout(()=>setOutput(temp_output), 1000)
+
+                setQuestionName(questionResponse.data.question_name)
+                setDescription(questionResponse.data.question_description)
+                setOutput(questionResponse.data.question_output)
+                setCode(recordResponse.data.record_code)
+                setHeader(temp_header)
+                setOutput(temp_output)
+                // setOutput({header: temp_header, data: temp_output})
             }
         })
     }, [])
@@ -108,51 +110,50 @@ export default function Submit()
                         type={['right', 'left']}
                         duration="2000"
                         ease={['easeOutQuart', 'easeInOutQuart']}>
-                        {[
-                            <div key="question_name">
-                                <Card className="info-card" title="question name">
-                                    <div dangerouslySetInnerHTML={{__html: questionName}}/>
-                                </Card>
-                            </div>,
-                            <div key="question_description">
-                                <Card className="info-card" title="question description">
-                                    <div dangerouslySetInnerHTML={{__html: description}}/>
-                                </Card>
-                            </div>,
-                            // <div key="output">
-                            //     <Card className="info-card" title="output">
-                            //         <div dangerouslySetInnerHTML={{__html: output}}/>
-                            //     </Card>
-                            // </div>,
-                            <div key="code">
-                                <Card title="submitted code">
-                                    <CodeMirror
-                                        key='editor'
-                                        value={code}
-                                        options={{
-                                            readOnly: true,
-                                            lineNumbers: true,
-                                            mode: {name: "text/x-mysql"},
-                                            lineWrapping: true,
-                                            foldGutter: true,
-                                            theme: "solarized",
-                                        }}
-                                    />
-                                </Card>
-                            </div>,
-                            <div key="record_output">
-                                <Card className="info-card" title="Output">
-                                    <Table pagination={{pageSize: 5}} columns={header} dataSource={output}/>
-                                </Card>
-                            </div>,
-                            <div key="return" className="button-container">
-                                <Button type="primary"
-                                        className='button' onClick={() =>
-                                {
-                                    history.push('/records');
-                                }}>return</Button>
-                            </div>
-                        ]}
+                        <div key="question_name">
+                            <Card className="info-card" title="question name">
+                                <div dangerouslySetInnerHTML={{__html: questionName}}/>
+                            </Card>
+                        </div>
+                        <div key="question_description">
+                            <Card className="info-card" title="question description">
+                                <div dangerouslySetInnerHTML={{__html: description}}/>
+                            </Card>
+                        </div>
+                        {/*<div key="output">*/}
+                        {/*    <Card className="info-card" title="output">*/}
+                        {/*        <div dangerouslySetInnerHTML={{__html: output}}/>*/}
+                        {/*    </Card>*/}
+                        {/*</div>*/}
+                        <div key="code">
+                            <Card title="submitted code">
+                                <CodeMirror
+                                    key='editor'
+                                    value={code}
+                                    options={{
+                                        readOnly: true,
+                                        lineNumbers: true,
+                                        mode: {name: "text/x-mysql"},
+                                        lineWrapping: true,
+                                        foldGutter: true,
+                                        theme: "solarized",
+                                    }}
+                                />
+                            </Card>
+                        </div>
+                        <div key="record_output">
+                            <Card className="info-card" title="Output">
+                                <Table pagination={{defaultPageSize: 5, showSizeChanger: true, showQuickJumper: true}} columns={header} dataSource={output}/>
+                                {/*<Table pagination={{defaultPageSize: 5, showSizeChanger: true, showQuickJumper: true}} columns={output.header} dataSource={output.data}/>*/}
+                            </Card>
+                        </div>
+                        <div key="return" className="button-container">
+                            <Button type="primary"
+                                    className='button' onClick={() =>
+                            {
+                                history.push('/records');
+                            }}>return</Button>
+                        </div>
                     </QueueAnim>
                 </Content>
             </Layout>

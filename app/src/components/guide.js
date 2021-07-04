@@ -1,8 +1,8 @@
 import React, {useState} from "react";
-import {Button, Checkbox, Form, Input, Menu, message, Modal} from 'antd';
+import {Form, Input, Menu, message, Modal} from 'antd';
 import {useHistory} from "react-router-dom";
 import '../common/font.css'
-import {UserOutlined, SnippetsOutlined, CalendarOutlined, ToolOutlined, LogoutOutlined} from '@ant-design/icons';
+import {CalendarOutlined, LogoutOutlined, SnippetsOutlined, ToolOutlined, UserOutlined} from '@ant-design/icons';
 import axios from "axios";
 
 
@@ -60,8 +60,7 @@ export default function Guide(props)
                                {
                                    message.success('Change successfully.');
                                    setIsModalVisible(false)
-                               }
-                               else
+                               } else
                                {
                                    message.error('Invalid authentication information.');
                                }

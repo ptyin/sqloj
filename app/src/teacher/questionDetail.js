@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import GuideTeacher from "../components/guideTeacher";
 import logo from '../common/images/logo.png';
 import '../common/layout.css';
 import '../common/question.css'
-import {Layout, Table, Card, Button, Tag, Space} from "antd";
+import {Button, Card, Layout, Space, Table} from "antd";
 import axios from "axios";
 import QueueAnim from "rc-queue-anim";
 import 'github-markdown-css'
-import CodeMirror from "react-codemirror";
+import {Controlled as CodeMirror} from "react-codemirror2";
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/sql/sql';
 import 'codemirror/addon/hint/show-hint.css';

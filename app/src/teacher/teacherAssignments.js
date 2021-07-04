@@ -1,13 +1,11 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import axios from 'axios';
 import {useHistory} from "react-router-dom";
-import {Table, Space, Button, Layout, message} from 'antd';
+import {Button, Layout, message, Space, Table} from 'antd';
 import logo from '../common/images/logo.png';
 import QueueAnim from 'rc-queue-anim';
 import '../common/layout.css';
 import Guide from "../components/guideTeacher";
-
-import strftime from "strftime";
 
 
 export default function Assignments()
@@ -54,7 +52,8 @@ export default function Assignments()
             key: 'update',
             render: (record) => (
                 <Space size="middle">
-                    <Button className='button' onClick={()=>{
+                    <Button className='button' onClick={() =>
+                    {
                         window.sessionStorage.assignment_id = record.assignment_id;
                         window.sessionStorage.assignment_name = record.assignment_name;
                         window.sessionStorage.assignment_start_time = record.assignment_start_time;
@@ -70,7 +69,8 @@ export default function Assignments()
             key: 'delete',
             render: (record) => (
                 <Space size="middle">
-                    <Button className='button' onClick={()=>{
+                    <Button className='button' onClick={() =>
+                    {
                         axios.delete('/api/teacher/AssignmentDetail', {
                             params: {
                                 assignment_id: record.assignment_id,
@@ -81,8 +81,7 @@ export default function Assignments()
                             {
                                 message.success('Delete successfully.');
                                 query_assignment_list()
-                            }
-                            else
+                            } else
                             {
                                 message.error('Fail to delete, please retry.');
                             }
@@ -151,10 +150,11 @@ export default function Assignments()
                         duration="1400"
                         ease={['easeOutQuart', 'easeInOutQuart']}>
                         <div key="assignments">
-                            <Button type="primary" style={{width: "90px", margin: '0 0 20px 0'}} onClick={()=>{
+                            <Button type="primary" style={{width: "90px", margin: '0 0 20px 0'}} onClick={() =>
+                            {
                                 history.push('/addAssignment')
                             }}>Add</Button>
-                            <Table columns={columns}  dataSource={data}/>
+                            <Table columns={columns} dataSource={data}/>
                         </div>
                     </QueueAnim>
                 </Content>
@@ -162,7 +162,6 @@ export default function Assignments()
         </Layout>
     </Layout>
 }
-
 
 
 // import React from 'react';

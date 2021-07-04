@@ -1,21 +1,27 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 import GuideTeacher from "../components/guideTeacher";
 import logo from '../common/images/logo.png';
 import '../common/layout.css';
 import '../common/question.css'
-import {Layout, Table, Card, Button, Tag, Space} from "antd";
+import {Button, Card, Layout} from "antd";
 import axios from "axios";
 import QueueAnim from "rc-queue-anim";
 import 'github-markdown-css'
-import CodeMirror from "react-codemirror";
+import {Controlled as CodeMirror} from "react-codemirror2";
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/sql/sql';
+import 'codemirror/addon/hint/show-hint.css';
+import 'codemirror/addon/hint/show-hint.js';
+import 'codemirror/addon/hint/sql-hint.js';
+import 'codemirror/theme/solarized.css';
 
 
 export default function ()
 {
     // const [timer,setTimer] = useState(0)
     // const [show] = useState(true)
-    const [data, setData] = useState([])
+    // const [data, setData] = useState([])
     const [username, setUsername] = useState('');
     const [code, setCode] = useState('');
     // const [output, setOutput] = useState('');
@@ -73,7 +79,8 @@ export default function ()
                                     }}
                                 />
                             </Card>
-                        </div>,
+                        </div>
+                        ,
                         {/*<div key="output">*/}
                         {/*    <Card className="info-card" title="Output">*/}
                         {/*        <div dangerouslySetInnerHTML={{__html: output}}/>*/}

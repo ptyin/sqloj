@@ -3,7 +3,7 @@ import {useHistory} from "react-router-dom";
 import GuideTeacher from "../components/guideTeacher";
 import logo from '../common/images/logo.png';
 import '../common/layout.css';
-import {Layout, Card, Input, Button, Upload, Badge, message} from "antd";
+import {Badge, Button, Card, Input, Layout, message, Upload} from "antd";
 import axios from "axios";
 import {UploadOutlined} from '@ant-design/icons';
 import QueueAnim from "rc-queue-anim";
@@ -109,8 +109,7 @@ export default function AddDatabase()
                                     {
                                         message.success('Add successfully.');
                                         history.push('/databases')
-                                    }
-                                    else
+                                    } else
                                     {
                                         message.error('Fail to add, please retry.');
                                     }

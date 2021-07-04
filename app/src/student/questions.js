@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Guide from "../components/guide";
 import axios from 'axios';
 import {useHistory} from "react-router-dom";
-import {Table, Space, Button, Layout, Tag} from 'antd';
+import {Button, Layout, Space, Table, Tag} from 'antd';
 import logo from '../common/images/logo.png';
 import '../common/layout.css';
 import QueueAnim from "rc-queue-anim";
@@ -89,6 +89,7 @@ export default function Questions()
                 setData(response.data)
             })
         }
+
         select_questions_by_assignment()
         const timer = setInterval(select_questions_by_assignment, 3000)
 
@@ -96,7 +97,7 @@ export default function Questions()
         {
             clearInterval(timer)
         }
-    }, [])
+    }, [assignment_id])
     return <Layout>
         <Header className="header">
             <img src={logo} style={{height: '45px'}} alt=""/>
