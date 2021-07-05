@@ -1,13 +1,21 @@
 # SQLOJ
 
-一个集成SQL语句自动评测和多种实用功能的轻量级数据库系统实验平台。
+一个集成SQL语句自动评测和多种实用功能的轻量级数据库实验平台。
 
 ## Functionality
 
 ### Module Design
 
 ![modules](doc/images/modules.png)
-
+- 对于老师而言
+	- 在平台上发布作业（实验），同时布置每次作业的题目
+	- 在平台上查看同学们的完成情况，并能具体看到同学们提交的代码或同学们的作答情况
+	- 上传自定义数据库，并在其上设计题目以供学生使用
+- 对于学生而言
+	- 随时查看日常作业的信息（包括第几次作业、DDL等）和自己的完成进度
+	- 利用在线代码编辑器提交SQL语句或者利用富文本编辑器回答文本问题，做到实验平台和作业平台的统一
+	- 学生提交可以看到输出结果并能获得错误信息。在此基础上扩展了数据隔离、错误类型、多语句提交等
+	
 ### User Management
 
 #### User Role
@@ -19,15 +27,11 @@
 - student
   - 此类用户为学生设计，该类型用户为teacher用户创建，允许更改密码，该用户角色可以回答题目、在线debug等。
 
-#### 登录界面
+#### Login Panel
 
 ![login](doc/images/login.png)
 
-### Teacher
-
-#### 教师面板
-
-![teacher](doc/images/teacher.png)
+### Teacher Example Page
 
 #### 添加作业
 
@@ -61,29 +65,13 @@
 
   - 例：SQL
 
-#### 查看学生完成情况
-
-![completion](doc/images/completion.png)
-
-点击detail可以查看学生提交的答案。
-
-#### 管理数据库
-
-![databases](doc/images/databases.png)
-
-在这里添加或者删除问题相关的数据库。
-
 #### 上传数据库
 
 ![addDatabase](doc/images/addDatabase.png)
 
 上传的数据库应为sqlite的.db格式文件。
 
-### Student
-
-#### 学生面板
-
-![student](doc/images/student.png)
+### Student Example Page
 
 #### 查看作业问题列表
 
@@ -103,27 +91,64 @@ Status对应值可能为(RUNNING(正在运行)/AC/WA/RE(运行时错误)/TLE)。
 
 这里可以查看到自己提交的答案和对应的执行结果，进入到该界面会显示该记录的状态，如果提交结果错误会显示与标准答案的差异（例：错n行，少m行）。
 
-## Project Structure
-
-![structure](doc/images/structure.png)
-
-- User Interface
-  - React构建，优点在于有较高的性能，代码逻辑简单。
-  - Ant Design定制界面主题，构造交互语言和视觉风格。
-  - Braft Editor，富文本编辑，用以丰富问题描述。
-  - 代码编辑：Code Mirror，支持SQL自动补全，SQL语法高亮，显示行号等等。
-- Load Balancing
-  - 将前端代码使用webpack打包为静态资源，使用Nginx做负载均衡的反向代理，占有内存少，并发能力强。
-- Logic Handler
-  - Flask框架，使用 Python 编写的轻量级 Web 应用框架。 WSGI 工具箱采用 Werkzeug ，模板引擎则使用 Jinja2 。Flask使用 BSD 授权。
-  - MongoDB存放网站数据，其是一个介于关系数据库和非关系数据库之间的产品，它支持的数据结构非常松散，是类似json的bson格式，因此可以存储比较复杂的数据类型。
-- Asynchronous Judger
-  - Sqlite3存放题目相关数据库，和判题相关。
-  - python threading库来派发调度异步判题器。
-
 ## Deployment
 
 我们设计了多种部署方式，最推荐的方式是使用docker进行部署。
+
+### Run in Docker Container
+
+#### Pull Image from Dockerhub (Recommended)
+
+```shell
+docker pull ptyin/sqloj
+```
+
+#### Build Image Using Dockerfile (Plan B)
+
+```shell
+cd app && npm install && npm run build
+docker build -t sqloj ..
+```
+
+#### Run from The Image
+
+以上述两种方式任意一种获得image之后即可构建container运行。
+
+```shell
+docker run -p 80:80 -v <mongo-db-path>:/data/db -v <mongo-configdb-path>:/data/configdb -v <sqlite-path>:/var/lib/sqloj ptyin/sqloj:latest 
+```
+
+\<mongo-db-path\>\<mongo-configdb-path\>\<sqlite-path\>请分别替换为你服务器中数据可持久化目录路径。
+
+e.g.,
+
+In Windows:
+
+```shell
+docker run -p 80:80 -v D:\SQLOJ\mongodb\data:/data/db -v D:\SQLOJ\mongodb\config:/data/configdb -v D:\SQLOJ\sqlite:/var/lib/sqloj --name test ptyin/sqloj:latest 
+```
+
+In Linux:
+
+```shell
+docker run -p 80:80 -v /opt/SQLOJ/mongodb/data:/data/db -v /opt/SQLOJ/mongodb/config:/data/configdb -v /opt/SQLOJ/sqlite:/var/lib/sqloj --name test ptyin/sqloj:latest 
+```
+
+### Run Using Docker Compose
+
+该方式适用于要求快速启动和删除容器的开发者使用。
+
+#### Start up Container
+
+```shell
+docker compose -f ./docker-compose.yml up -d
+```
+
+#### Stop Container
+
+```shell
+docker compose down
+```
 
 ### Run From Source
 
@@ -242,59 +267,23 @@ http {
     cd backend && python wsgi.py
     ```
 
-### Run in Docker Container
+## Project Structure
 
-#### Pull Image from Dockerhub (Recommended)
+![structure](doc/images/structure.png)
 
-```shell
-docker pull ptyin/sqloj
-```
-
-#### Build Image Using Dockerfile (Plan B)
-
-```shell
-docker build -t ptyin/sqloj:pre .
-```
-
-#### Run from The Image
-
-以上述两种方式任意一种获得image之后即可构建container运行。
-
-```shell
-docker run -p 80:80 -v <mongo-db-path>:/data/db -v <mongo-configdb-path>:/data/configdb -v <sqlite-path>:/var/lib/sqloj ptyin/sqloj:latest 
-```
-
-\<mongo-db-path\>\<mongo-configdb-path\>\<sqlite-path\>请分别替换为你服务器中数据可持久化目录路径。
-
-e.g.,
-
-In Windows:
-
-```shell
-docker run -p 80:80 -v D:\SQLOJ\mongodb\data:/data/db -v D:\SQLOJ\mongodb\config:/data/configdb -v D:\SQLOJ\sqlite:/var/lib/sqloj --name test ptyin/sqloj:latest 
-```
-
-In Linux:
-
-```shell
-docker run -p 80:80 -v /opt/SQLOJ/mongodb/data:/data/db -v /opt/SQLOJ/mongodb/config:/data/configdb -v /opt/SQLOJ/sqlite:/var/lib/sqloj --name test ptyin/sqloj:latest 
-```
-
-### Run Using Docker Compose
-
-该方式适用于要求快速启动和删除容器的开发者使用。
-
-#### Start up Container
-
-```shell
-docker compose -f ./docker-compose.yml up -d
-```
-
-#### Stop Container
-
-```shell
-docker compose down
-```
+- User Interface
+  - React构建，优点在于有较高的性能，代码逻辑简单。
+  - Ant Design定制界面主题，构造交互语言和视觉风格。
+  - Braft Editor，富文本编辑，用以丰富问题描述。
+  - 代码编辑：Code Mirror，支持SQL自动补全，SQL语法高亮，显示行号等等。
+- Load Balancing
+  - 将前端代码使用webpack打包为静态资源，使用Nginx做负载均衡的反向代理，占有内存少，并发能力强。
+- Logic Handler
+  - Flask框架，使用 Python 编写的轻量级 Web 应用框架。 WSGI 工具箱采用 Werkzeug ，模板引擎则使用 Jinja2 。Flask使用 BSD 授权。
+  - MongoDB存放网站数据，其是一个介于关系数据库和非关系数据库之间的产品，它支持的数据结构非常松散，是类似json的bson格式，因此可以存储比较复杂的数据类型。
+- Asynchronous Judger
+  - Sqlite3存放题目相关数据库，和判题相关。
+  - python threading库来派发调度异步判题器。
 
 ## Implementation
 
@@ -337,4 +326,3 @@ docker compose down
 #### 基于Transaction的运行
 
 对于用户提交的代码，我们允许其一次性提交多条语句，我们将SQL语句进行分割，将其视为一组Transaction进行允许，保证了事务的ACID特性。
-
