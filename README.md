@@ -26,7 +26,7 @@ docker pull ptyin/sqloj
 ## Usage
 
 ```sh
-docker run -p 80:80 -v <mongo-db-path>:/data/db -v <mongo-configdb-path>:/data/configdb -v <sqlite-path>:/var/lib/sqloj ptyin/sqloj:latest 
+docker run -d -p 80:80 -v <mongo-db-path>:/data/db -v <mongo-configdb-path>:/data/configdb -v <sqlite-path>:/var/lib/sqloj ptyin/sqloj:latest 
 ```
 
 ## Run tests
