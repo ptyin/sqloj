@@ -134,6 +134,7 @@ export default function AddQuestion()
                                             <Panel key="answer" header="Standard Answer">
                                                 <CodeMirror
                                                     key='editor'
+                                                    value={code}
                                                     // value='# press Ctrl to autocomplete'
                                                     onBeforeChange={(editor, data, value) => setCode(value)}
                                                     options={{
