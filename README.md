@@ -1,5 +1,5 @@
-<h1 style="text-align: center">Welcome to SQLOJ 👋</h1>
-<p>
+<img alt="SQLOJ" src="doc/images/logo.png"/>
+<p style="text-align: center">
   <img alt="Version" src="https://img.shields.io/badge/version-0.1.0-blue.svg?cacheSeconds=2592000" />
   <a href="https://blog.csdn.net/weixin_43090100/article/details/118505354" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
