@@ -1,5 +1,8 @@
+
+<h2 align="center">Welcome to SQLOJ 👋</h2>
+
 <img alt="SQLOJ" src="doc/images/logo.png"/>
-<p style="text-align: center">
+<p align="center">
   <img alt="Version" src="https://img.shields.io/badge/version-0.1.0-blue.svg?cacheSeconds=2592000" />
   <a href="https://blog.csdn.net/weixin_43090100/article/details/118505354" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
@@ -10,6 +13,7 @@
 </p>
 
 > A lightweight database system experimental platform that integrates an OJ of SQL and a variety of practical functionalities.
+
 
 ### ✨ [Demo](http://ptyin.asia:8080/)
 
