@@ -29,6 +29,21 @@ docker pull ptyin/sqloj
 docker run -d -p 80:80 -v <mongo-db-path>:/data/db -v <mongo-configdb-path>:/data/configdb -v <sqlite-path>:/var/lib/sqloj ptyin/sqloj:latest 
 ```
 
+where <mongo-db-path><mongo-configdb-path><sqlite-path> denotes the data persistence directories path in your server. e.g.,
+
+In Windows:
+
+```shell
+docker run -d -p 80:80 -v D:\SQLOJ\mongodb\data:/data/db -v D:\SQLOJ\mongodb\config:/data/configdb -v D:\SQLOJ\sqlite:/var/lib/sqloj --name test ptyin/sqloj:latest 
+```
+
+In Linux:
+
+```shell
+docker run -d -p 80:80 -v /opt/SQLOJ/mongodb/data:/data/db -v /opt/SQLOJ/mongodb/config:/data/configdb -v /opt/SQLOJ/sqlite:/var/lib/sqloj --name test ptyin/sqloj:latest 
+```
+
+
 ## Run tests
 
 ```sh
