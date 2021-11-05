@@ -15,7 +15,7 @@
 > A lightweight database system experimental platform that integrates an OJ of SQL and a variety of practical functionalities.
 
 
-### ✨ [Demo](http://ptyin.asia:8080/)
+### ✨ [Demo](http://101.34.91.143:8080/)
 
 ## Install
 
