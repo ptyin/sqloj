@@ -29,7 +29,7 @@ docker pull ptyin/sqloj
 docker run -d -p 80:80 -v <mongo-db-path>:/data/db -v <mongo-configdb-path>:/data/configdb -v <sqlite-path>:/var/lib/sqloj ptyin/sqloj:latest 
 ```
 
-where <mongo-db-path><mongo-configdb-path><sqlite-path> denotes the data persistence directories path in your server. e.g.,
+where \<mongo-db-path\>\<mongo-configdb-path\>\<sqlite-path\> denotes the data persistence directories path in your server. e.g.,
 
 In Windows:
 
