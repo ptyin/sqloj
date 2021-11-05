@@ -115,7 +115,7 @@ docker build -t sqloj ..
 以上述两种方式任意一种获得image之后即可构建container运行。
 
 ```shell
-docker run -p 80:80 -v <mongo-db-path>:/data/db -v <mongo-configdb-path>:/data/configdb -v <sqlite-path>:/var/lib/sqloj ptyin/sqloj:latest 
+docker run -d -p 80:80 -v <mongo-db-path>:/data/db -v <mongo-configdb-path>:/data/configdb -v <sqlite-path>:/var/lib/sqloj ptyin/sqloj:latest 
 ```
 
 \<mongo-db-path\>\<mongo-configdb-path\>\<sqlite-path\>请分别替换为你服务器中数据可持久化目录路径。
@@ -125,13 +125,13 @@ e.g.,
 In Windows:
 
 ```shell
-docker run -p 80:80 -v D:\SQLOJ\mongodb\data:/data/db -v D:\SQLOJ\mongodb\config:/data/configdb -v D:\SQLOJ\sqlite:/var/lib/sqloj --name test ptyin/sqloj:latest 
+docker run -d -p 80:80 -v D:\SQLOJ\mongodb\data:/data/db -v D:\SQLOJ\mongodb\config:/data/configdb -v D:\SQLOJ\sqlite:/var/lib/sqloj --name test ptyin/sqloj:latest 
 ```
 
 In Linux:
 
 ```shell
-docker run -p 80:80 -v /opt/SQLOJ/mongodb/data:/data/db -v /opt/SQLOJ/mongodb/config:/data/configdb -v /opt/SQLOJ/sqlite:/var/lib/sqloj --name test ptyin/sqloj:latest 
+docker run -d -p 80:80 -v /opt/SQLOJ/mongodb/data:/data/db -v /opt/SQLOJ/mongodb/config:/data/configdb -v /opt/SQLOJ/sqlite:/var/lib/sqloj --name test ptyin/sqloj:latest 
 ```
 
 ### Run Using Docker Compose
