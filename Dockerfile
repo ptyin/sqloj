@@ -9,7 +9,7 @@
 
 FROM ptyin/sqloj:pre
 # app
-COPY /app/build/ /var/www/html/
+COPY /sqloj-app/build/ /var/www/html/
 # nginx
 COPY /conf/nginx.conf /etc/nginx/
 # backend

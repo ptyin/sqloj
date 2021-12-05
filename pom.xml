@@ -32,14 +32,28 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
+        <directory>${project.basedir}/sqloj-backend/target/</directory>
+        <sourceDirectory>${project.basedir}/sqloj-backend/src/main/java/</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/sqloj-backend/src/test/java/</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <mainClass>asia.ptyin.sdu.sqloj.SqlOjApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

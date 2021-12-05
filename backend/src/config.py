@@ -1,2 +1,2 @@
 
-folder = "/var/lib/sqloj/"
+folder = "/var/tmp/sqloj/"
