@@ -95,7 +95,7 @@ export default function Login()
                             login(username, password).then((response) =>
                             {
                                 console.log(response.data)
-                                if (response.data.success)
+                                if (response.data.success === true)
                                 {
                                     message.success('Log in successfully.');
                                     window.sessionStorage.username = username

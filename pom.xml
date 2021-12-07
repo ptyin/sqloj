@@ -58,7 +58,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>asia.ptyin.sdu.sqloj.SqlOjApplication</mainClass>
+                    <mainClass>asia.ptyin.sqloj.SqlOjApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

@@ -1,22 +1,27 @@
-package asia.ptyin.sqloj.auth.user;
+package asia.ptyin.sqloj.user.auth.register;
 
+import asia.ptyin.sqloj.user.auth.login.UserLoginDto;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-public class UserValidator implements Validator
+/**
+ * User Validation Object
+ */
+@Deprecated
+public class UserVo implements Validator
 {
     @Override
     public boolean supports(Class<?> clazz)
     {
-        return UserDto.class.equals(clazz);
+        return UserLoginDto.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors)
     {
         ValidationUtils.rejectIfEmpty(errors, "username", "username.empty");
-        UserDto user = (UserDto) target;
+        UserLoginDto user = (UserLoginDto) target;
     }
 
     private void validateOnUsername(Errors errors)
