@@ -21,9 +21,10 @@ def create_app():
     # app.config['LOGIN_DISABLED'] = True
     app.config["MONGO_URI"] = "mongodb://localhost:27017/sqloj_db"
     # initialize extensions
-    mongo.init_app(app, uri=app.config["MONGO_URI"])
+    client = mongo.init_app(app, uri=app.config["MONGO_URI"])
+    # print(client.list_database_names())
     # for test
-    if mongo.db.users.count() == 0:
+    if mongo.db.users.estimated_document_count() == 0:
         newuser = {
             "username": "admin",
             "password": bcrypt.hashpw(b"tsxt-adm1n", bcrypt.gensalt()),
