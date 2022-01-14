@@ -11,15 +11,21 @@
 ### 1. 登录
 
 #### 1.1 URL
+
 [http://localhost:3000/api/login]()
 
 #### 1.2 Request
+
 ##### 1.2.1 Method
+
 post
+
 ##### 1.2.2 Header
+
 ```json
 {"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"}
 ```
+
 ##### 1.2.2 Content
 
 | 参数名   | 必选 | 类型   | 说明 |
@@ -187,7 +193,7 @@ get
 
 #### 3.1 URL
 
-[http://localhost:3000/api/student/selectQuestionById]() *(modified)* 
+[http://localhost:3000/api/student/selectQuestionById]() *(modified)*
 
 #### 3.2 Request
 

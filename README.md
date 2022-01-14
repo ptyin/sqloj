@@ -1,4 +1,3 @@
-
 <h2 align="center">Welcome to SQLOJ 👋</h2>
 
 <img alt="SQLOJ" src="doc/images/logo.png"/>
@@ -14,7 +13,6 @@
 
 > A lightweight database system experimental platform that integrates an OJ of SQL and a variety of practical functionalities.
 
-
 ### ✨ [Demo](http://101.34.91.143:8080/)
 
 ## Install
@@ -29,7 +27,8 @@ docker pull ptyin/sqloj
 docker run -d -p 80:80 -v <mongo-db-path>:/data/db -v <mongo-configdb-path>:/data/configdb -v <sqlite-path>:/var/lib/sqloj ptyin/sqloj:latest 
 ```
 
-where \<mongo-db-path\>\<mongo-configdb-path\>\<sqlite-path\> denotes the data persistence directories path in your server. e.g.,
+where \<mongo-db-path\>\<mongo-configdb-path\>\<sqlite-path\> denotes the data persistence directories path in your
+server. e.g.,
 
 In Windows:
 
@@ -42,7 +41,6 @@ In Linux:
 ```shell
 docker run -d -p 80:80 -v /opt/SQLOJ/mongodb/data:/data/db -v /opt/SQLOJ/mongodb/config:/data/configdb -v /opt/SQLOJ/sqlite:/var/lib/sqloj --name test ptyin/sqloj:latest 
 ```
-
 
 ## Run tests
 
@@ -61,8 +59,8 @@ npm run test
 #### User Role
 
 - teacher
-  - Default teacher username: admin
-  - Default teacher password: tsxt-adm1n
+    - Default teacher username: admin
+    - Default teacher password: tsxt-adm1n
 - student
 
 #### Login Panel
@@ -79,7 +77,6 @@ npm run test
 
 ![addQuestion](doc/images/addQuestion.png)
 
-
 #### Upload a database
 
 ![addDatabase](doc/images/addDatabase.png)
@@ -89,7 +86,6 @@ npm run test
 #### View question list
 
 ![questions](doc/images/questions.png)
-
 
 #### Review uploaded records
 

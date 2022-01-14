@@ -3,6 +3,7 @@
 ## run
 
 #### 1. nginx:
+
 copy nginx.conf to /conf under nginx director
 
     (windows)cd to nginx directory:
