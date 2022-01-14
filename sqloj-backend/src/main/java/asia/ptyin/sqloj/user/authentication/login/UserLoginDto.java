@@ -1,4 +1,4 @@
-package asia.ptyin.sqloj.user.auth.login;
+package asia.ptyin.sqloj.user.authentication.login;
 
 import lombok.Data;
 

@@ -45,6 +45,11 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
         </dependency>
     </dependencies>
@@ -53,6 +58,12 @@
         <directory>${project.basedir}/sqloj-backend/target/</directory>
         <sourceDirectory>${project.basedir}/sqloj-backend/src/main/java/</sourceDirectory>
         <testSourceDirectory>${project.basedir}/sqloj-backend/src/test/java/</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/sqloj-backend/src/main/resources</directory>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

@@ -1,6 +1,6 @@
-package asia.ptyin.sqloj.user.auth.register;
+package asia.ptyin.sqloj.user.authentication.register;
 
-import asia.ptyin.sqloj.user.auth.login.UserLoginDto;
+import asia.ptyin.sqloj.user.authentication.login.UserLoginDto;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;

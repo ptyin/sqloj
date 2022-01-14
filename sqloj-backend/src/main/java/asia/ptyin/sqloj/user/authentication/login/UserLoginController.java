@@ -1,4 +1,4 @@
-package asia.ptyin.sqloj.user.auth.login;
+package asia.ptyin.sqloj.user.authentication.login;
 
 import asia.ptyin.sqloj.user.UserRole;
 import lombok.extern.log4j.Log4j2;
@@ -17,9 +17,18 @@ import java.util.Objects;
 @RestController
 public class UserLoginController
 {
+    @GetMapping
+    public Map<String, String> login()
+    {
+        var map = new HashMap<String, String>();
+        map.put("abc", "def");
+        return map;
+    }
+
     @PostMapping
     public Map<String, Object> login(@Valid UserLoginDto user)
     {
+        log.info(user.getUsername());
         var result = new HashMap<String, Object>();
         log.info("User %s is trying to login with password %s".formatted(user.getUsername(), user.getPassword()));
         boolean success = Objects.equals(user.getUsername(), "test") && Objects.equals(user.getPassword(), "test@123");
