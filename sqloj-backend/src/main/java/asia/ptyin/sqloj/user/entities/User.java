@@ -3,6 +3,7 @@ package asia.ptyin.sqloj.user.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.List;
 
 /***
@@ -22,7 +23,12 @@ public class User
     private String username;
     private String password;
 
-    private boolean isAdmin;
+    private boolean admin;
+    private boolean enabled = true;
+
+    @Temporal(value = TemporalType.DATE)
+    private Calendar createdAt;
+
 
     @OneToMany(
             mappedBy = "createdBy",
