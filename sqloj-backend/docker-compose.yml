@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  db:
+    container_name: sqloj-db
+    restart: always
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: sqloj
+    ports:
+      - "5432:5432"
+#    volumes:
+#      - ./scripts/db-backup/db-pure.sql:/docker-entrypoint-initdb.d/init.sql
+
+  adminer:
+    container_name: sqloj-adminer
+    restart: always
+    image: adminer
+    ports:
+      - "1080:8080"

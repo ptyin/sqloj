@@ -1,4 +1,4 @@
-package asia.ptyin.sqloj.user.authentication.login;
+package asia.ptyin.sqloj.user.security.login;
 
 public interface LoginService
 {

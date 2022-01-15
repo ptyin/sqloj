@@ -1,6 +1,5 @@
-package asia.ptyin.sqloj.user.authentication.login;
+package asia.ptyin.sqloj.user.security.login;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class LoginServiceImpl implements LoginService

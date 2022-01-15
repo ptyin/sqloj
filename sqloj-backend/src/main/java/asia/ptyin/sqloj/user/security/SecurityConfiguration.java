@@ -1,4 +1,4 @@
-package asia.ptyin.sqloj.user.authentication;
+package asia.ptyin.sqloj.user.security;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;

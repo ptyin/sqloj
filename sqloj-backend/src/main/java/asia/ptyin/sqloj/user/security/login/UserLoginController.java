@@ -1,4 +1,4 @@
-package asia.ptyin.sqloj.user.authentication.login;
+package asia.ptyin.sqloj.user.security.login;
 
 import asia.ptyin.sqloj.user.UserRole;
 import lombok.extern.log4j.Log4j2;
