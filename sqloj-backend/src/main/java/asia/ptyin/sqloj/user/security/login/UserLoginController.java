@@ -25,16 +25,16 @@ public class UserLoginController
         return map;
     }
 
-    @PostMapping
-    public Map<String, Object> login(@Valid UserLoginDto user)
-    {
-        log.info(user.getUsername());
-        var result = new HashMap<String, Object>();
-        log.info("User %s is trying to login with password %s".formatted(user.getUsername(), user.getPassword()));
-        boolean success = Objects.equals(user.getUsername(), "test") && Objects.equals(user.getPassword(), "test@123");
-        result.put("success", success);
-        result.put("data", UserRole.STUDENT);
-        log.info("User %s login %s.".formatted(user.getUsername(), success ? "successfully" : "unsuccessfully"));
-        return result;
-    }
+//    @PostMapping
+//    public Map<String, Object> login(@Valid UserLoginDto user)
+//    {
+//        log.info(user.getUsername());
+//        var result = new HashMap<String, Object>();
+//        log.info("User %s is trying to login with password %s".formatted(user.getUsername(), user.getPassword()));
+//        boolean success = Objects.equals(user.getUsername(), "test") && Objects.equals(user.getPassword(), "test@123");
+//        result.put("success", success);
+//        result.put("data", UserRole.STUDENT);
+//        log.info("User %s login %s.".formatted(user.getUsername(), success ? "successfully" : "unsuccessfully"));
+//        return result;
+//    }
 }

@@ -1,8 +1,10 @@
 package asia.ptyin.sqloj.user.entities;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -15,11 +17,14 @@ import java.util.List;
 @Entity
 @Table(name = "plt_user")
 @Data
+@NoArgsConstructor
 public class User
 {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private String id;
+    private Long id;
+
+    @Column(unique = true)
     private String username;
     private String password;
 
@@ -43,4 +48,15 @@ public class User
             optional = false
     )
     private User createdBy;
+
+    public static User createDefaultAdmin(String username, String password)
+    {
+        var admin = new User();
+        admin.username = username;
+        admin.password = password;
+
+        admin.admin = true;
+        admin.createdBy = admin;
+        return admin;
+    }
 }

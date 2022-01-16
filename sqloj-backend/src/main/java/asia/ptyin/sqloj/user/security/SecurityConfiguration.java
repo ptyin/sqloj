@@ -73,15 +73,22 @@ public class SecurityConfiguration
         protected void configure(HttpSecurity http) throws Exception
         {
             log.debug("Using user defined configure(HttpSecurity).");
-            http.authorizeRequests((requests) -> ((AuthorizedUrl)requests.anyRequest()).authenticated())
-                    .formLogin().disable()
+            http.authorizeRequests()
+                    .anyRequest().permitAll()
+                    .and()
+                    .formLogin()
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+//                        .successHandler()
+                    .and()
                     .httpBasic().disable();
         }
     }
 
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
+        UserDetails user = User.builder()
                 .username("test")
                 .password("test@123")
                 .roles("TEACHER")
