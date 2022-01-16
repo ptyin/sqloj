@@ -1,5 +1,6 @@
 package asia.ptyin.sqloj.user.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -84,13 +85,23 @@ public class SecurityConfiguration
                 .httpBasic().disable()
                 .authorizeRequests()
                     .anyRequest().permitAll()
-                    .and()
-                    .formLogin()
-                        .loginPage("/login")
-                        .usernameParameter("username")
-                        .passwordParameter("password")
-                        .successForwardUrl("/login/success")
-                        .failureForwardUrl("/login/failure");
+                .and()
+                .formLogin()
+                    .loginPage("/login")
+                    .usernameParameter("username")
+                    .passwordParameter("password")
+                    .successForwardUrl("/login/success")
+                    .failureForwardUrl("/login/failure")
+                .and()
+                .logout()
+                    .logoutUrl("/logout")
+                    .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) ->
+                    {
+                        httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+                        httpServletResponse.setContentType("application/json");
+                        httpServletResponse.getWriter().write("{\"success\" : true}");
+                    })
+            ;
         }
     }
 }

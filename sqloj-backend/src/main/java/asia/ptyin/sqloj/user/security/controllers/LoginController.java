@@ -1,6 +1,5 @@
-package asia.ptyin.sqloj.user.security.login;
+package asia.ptyin.sqloj.user.security.controllers;
 
-import asia.ptyin.sqloj.user.UserRole;
 import asia.ptyin.sqloj.user.security.UserDetailsAdapter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +20,7 @@ import java.util.Map;
 @Log4j2
 @RequestMapping("/login")
 @RestController
-public class UserLoginController
+public class LoginController
 {
     @GetMapping
     public String login()
