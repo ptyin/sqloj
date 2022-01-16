@@ -1,7 +1,10 @@
 package asia.ptyin.sqloj.user.entities;
 
+import asia.ptyin.sqloj.user.UserRole;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,8 +19,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "plt_user")
-@Data
-@NoArgsConstructor
+@Getter @Setter
 public class User
 {
     @Id
@@ -28,8 +30,9 @@ public class User
     private String username;
     private String password;
 
-    private boolean admin;
     private boolean enabled = true;
+
+    private UserRole role;
 
     @Temporal(value = TemporalType.DATE)
     private Calendar createdAt;
@@ -55,8 +58,8 @@ public class User
         admin.username = username;
         admin.password = password;
 
-        admin.admin = true;
         admin.createdBy = admin;
+        admin.setRole(UserRole.TEACHER);
         return admin;
     }
 }

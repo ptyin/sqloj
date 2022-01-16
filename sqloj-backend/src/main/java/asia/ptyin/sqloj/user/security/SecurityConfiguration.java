@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,7 +18,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import javax.servlet.http.HttpServletResponse;
 
+/***
+ * Configuration related to security.
+ * @version 0.1.0
+ * @author PTYin
+ * @since 0.1.0
+ */
 @Log4j2
 @Configuration
 @EnableWebSecurity
@@ -42,7 +50,6 @@ public class SecurityConfiguration
     {
         var provider = new DaoAuthenticationProvider();
         provider.setHideUserNotFoundExceptions(false);
-        provider.setUserDetailsPasswordService(userDetailsService());
         provider.setUserDetailsService(securityService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
@@ -73,26 +80,17 @@ public class SecurityConfiguration
         protected void configure(HttpSecurity http) throws Exception
         {
             log.debug("Using user defined configure(HttpSecurity).");
-            http.authorizeRequests()
+            http.csrf().disable()
+                .httpBasic().disable()
+                .authorizeRequests()
                     .anyRequest().permitAll()
                     .and()
                     .formLogin()
-                        .loginProcessingUrl("/login")
+                        .loginPage("/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
-//                        .successHandler()
-                    .and()
-                    .httpBasic().disable();
+                        .successForwardUrl("/login/success")
+                        .failureForwardUrl("/login/failure");
         }
-    }
-
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user = User.builder()
-                .username("test")
-                .password("test@123")
-                .roles("TEACHER")
-                .build();
-        return new InMemoryUserDetailsManager(user);
     }
 }

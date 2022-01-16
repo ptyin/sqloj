@@ -15,6 +15,11 @@ import java.util.Collection;
 public record UserDetailsAdapter(User user) implements UserDetails
 {
 
+    public User getUser()
+    {
+        return user;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities()
     {

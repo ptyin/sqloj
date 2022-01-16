@@ -110,10 +110,10 @@ export default function Login()
                                         window.localStorage.removeItem("username")
                                         window.localStorage.removeItem("password")
                                     }
-                                    if (response.data.data === 'teacher')
+                                    if (response.data.data === 'TEACHER')
                                     {
                                         history.push('/teacherAssignments')
-                                    } else if (response.data.data === 'student')
+                                    } else if (response.data.data === 'STUDENT')
                                     {
                                         history.push('/assignments');
                                     }
