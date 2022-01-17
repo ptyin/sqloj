@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 /***
  * JPA entity class for user.
@@ -23,8 +24,8 @@ import java.util.List;
 public class User
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    @GeneratedValue
+    private UUID uuid;
 
     @Column(unique = true)
     private String username;
@@ -51,6 +52,18 @@ public class User
             optional = false
     )
     private User createdBy;
+
+    public static User registerUser(String username, String password, User creator)
+    {
+        var user = new User();
+        user.username = username;
+        user.password = password;
+
+        user.createdBy = creator;
+        user.setRole(UserRole.STUDENT);
+
+        return user;
+    }
 
     public static User createDefaultAdmin(String username, String password)
     {
