@@ -1,4 +1,4 @@
-package asia.ptyin.sqloj.user.entities;
+package asia.ptyin.sqloj.user;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;

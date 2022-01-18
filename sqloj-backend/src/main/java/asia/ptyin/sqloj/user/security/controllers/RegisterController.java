@@ -1,8 +1,8 @@
 package asia.ptyin.sqloj.user.security.controllers;
 
 import asia.ptyin.sqloj.user.UserRepository;
-import asia.ptyin.sqloj.user.entities.User;
-import asia.ptyin.sqloj.user.entities.UserDto;
+import asia.ptyin.sqloj.user.User;
+import asia.ptyin.sqloj.user.UserDto;
 import asia.ptyin.sqloj.user.security.UserDetailsAdapter;
 import asia.ptyin.sqloj.user.security.exceptions.DuplicateUsernameException;
 import lombok.extern.log4j.Log4j2;

@@ -1,11 +1,14 @@
-package asia.ptyin.sqloj.user.entities;
+package asia.ptyin.sqloj.user;
 
-import asia.ptyin.sqloj.user.UserRole;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,6 +19,7 @@ import java.util.UUID;
  * @since 0.1.0
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "plt_user")
 @Getter @Setter
 public class User
@@ -32,9 +36,11 @@ public class User
 
     private UserRole role;
 
-    @Temporal(value = TemporalType.DATE)
-    private Calendar createdAt;
-
+    @CreatedDate
+    @Column(updatable = false)
+    private Date createdAt;
+    @LastModifiedDate
+    private Date updatedAt;
 
     @OneToMany(
             mappedBy = "createdBy",

@@ -1,6 +1,5 @@
 package asia.ptyin.sqloj.user;
 
-import asia.ptyin.sqloj.user.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /***

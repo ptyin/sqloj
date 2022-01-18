@@ -2,7 +2,7 @@ package asia.ptyin.sqloj.user.security;
 
 import asia.ptyin.sqloj.config.SqlOjConfigurationProperties;
 import asia.ptyin.sqloj.user.UserRepository;
-import asia.ptyin.sqloj.user.entities.User;
+import asia.ptyin.sqloj.user.User;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

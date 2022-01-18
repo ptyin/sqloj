@@ -2,7 +2,7 @@ package asia.ptyin.sqloj.user.security;
 
 import asia.ptyin.sqloj.config.SqlOjConfigurationProperties;
 import asia.ptyin.sqloj.user.UserRepository;
-import asia.ptyin.sqloj.user.entities.User;
+import asia.ptyin.sqloj.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;

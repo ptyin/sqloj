@@ -1,6 +1,6 @@
 package asia.ptyin.sqloj.user.security;
 
-import asia.ptyin.sqloj.user.entities.UserDto;
+import asia.ptyin.sqloj.user.UserDto;
 
 
 public class SecurityTestBase

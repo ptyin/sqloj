@@ -1,6 +1,6 @@
 package asia.ptyin.sqloj.user.security;
 
-import asia.ptyin.sqloj.user.entities.User;
+import asia.ptyin.sqloj.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

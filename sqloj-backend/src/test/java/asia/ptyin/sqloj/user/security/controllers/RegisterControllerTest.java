@@ -1,25 +1,16 @@
 package asia.ptyin.sqloj.user.security.controllers;
 
-import asia.ptyin.sqloj.config.SqlOjConfigurationProperties;
 import asia.ptyin.sqloj.user.UserRepository;
-import asia.ptyin.sqloj.user.entities.User;
-import asia.ptyin.sqloj.user.entities.UserDto;
+import asia.ptyin.sqloj.user.UserDto;
 import asia.ptyin.sqloj.user.security.SecurityService;
 import asia.ptyin.sqloj.user.security.SecurityTestBase;
 import asia.ptyin.sqloj.user.security.SecurityTestConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
