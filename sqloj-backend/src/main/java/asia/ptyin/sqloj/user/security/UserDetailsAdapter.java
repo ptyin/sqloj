@@ -1,19 +1,32 @@
 package asia.ptyin.sqloj.user.security;
 
 import asia.ptyin.sqloj.user.entities.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /***
- * Use to adapt spring security UserDetails
+ * Use for adapting User to spring security UserDetails
  * @version 0.1.0
  * @author PTYin
  * @since 0.1.0
  */
-public record UserDetailsAdapter(User user) implements UserDetails
+public class UserDetailsAdapter implements UserDetails
 {
+    private final User user;
+    private final List<GrantedAuthority> grantedAuthorityList;
+
+    public UserDetailsAdapter(User user)
+    {
+        this.user = user;
+        grantedAuthorityList = new ArrayList<>();
+        grantedAuthorityList.add(new SimpleGrantedAuthority(user.getRole().name()));
+    }
 
     public User getUser()
     {
@@ -23,7 +36,7 @@ public record UserDetailsAdapter(User user) implements UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities()
     {
-        return null;
+        return grantedAuthorityList;
     }
 
     @Override

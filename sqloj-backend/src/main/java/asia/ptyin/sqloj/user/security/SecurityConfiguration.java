@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer.AuthorizedUrl;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -83,10 +84,6 @@ public class SecurityConfiguration
             log.debug("Using user defined configure(HttpSecurity).");
             http.csrf().disable()
                 .httpBasic().disable()
-                .authorizeRequests()
-                    .antMatchers("/login*", "/logout*").permitAll()
-                    .antMatchers("/register*").denyAll()
-                .and()
                 .formLogin()
                     .loginPage("/login")
                     .usernameParameter("username")
