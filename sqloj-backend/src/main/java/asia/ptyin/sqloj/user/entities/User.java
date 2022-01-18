@@ -1,13 +1,10 @@
 package asia.ptyin.sqloj.user.entities;
 
 import asia.ptyin.sqloj.user.UserRole;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
