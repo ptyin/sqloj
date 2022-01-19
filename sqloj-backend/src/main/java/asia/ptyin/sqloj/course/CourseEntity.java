@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +23,11 @@ public class CourseEntity
     @Column(nullable = false)
     private String name;
     private String description;
+
+    @Column(nullable = false)
+    private Date startedAt;
+    @Column(nullable = false)
+    private Date endedAt;
 
     private boolean enabled = true;
 

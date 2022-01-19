@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  * @since 0.1.0
  */
 @Log4j2
-@Service
+@Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService
 {
     private final UserRepository repository;

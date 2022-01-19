@@ -1,9 +1,11 @@
 package asia.ptyin.sqloj.user.security;
 
+import asia.ptyin.sqloj.user.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,6 +31,7 @@ public class SecurityConfiguration
 {
     private UserDetailsService userDetailsService;
 
+    @Lazy
     @Autowired
     public void setUserDetailsService(UserDetailsService userDetailsService)
     {
@@ -78,6 +81,12 @@ public class SecurityConfiguration
             log.debug("Using user defined configure(HttpSecurity).");
             http.csrf().disable()
                 .httpBasic().disable()
+                .authorizeRequests()
+                    .antMatchers("/login*", "/logout*").permitAll()
+                    .antMatchers("/register*").hasAuthority("TEACHER")
+                    .antMatchers("/course-list").hasAnyAuthority("STUDENT", "TEACHER")
+                    .antMatchers("/course").hasAuthority("TEACHER")
+                .and()
                 .formLogin()
                     .loginPage("/login")
                     .usernameParameter("username")
