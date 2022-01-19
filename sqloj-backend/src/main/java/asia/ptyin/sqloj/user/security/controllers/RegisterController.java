@@ -1,15 +1,12 @@
 package asia.ptyin.sqloj.user.security.controllers;
 
-import asia.ptyin.sqloj.user.UserRepository;
-import asia.ptyin.sqloj.user.User;
 import asia.ptyin.sqloj.user.UserDto;
-import asia.ptyin.sqloj.user.security.UserDetailsAdapter;
-import asia.ptyin.sqloj.user.security.exceptions.DuplicateUsernameException;
+import asia.ptyin.sqloj.user.security.service.AuthenticationService;
+import asia.ptyin.sqloj.user.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,38 +21,31 @@ import java.util.Map;
 @RestController
 public class RegisterController
 {
-    private UserRepository repository;
-    private PasswordEncoder passwordEncoder;
+    private UserService userService;
+    private AuthenticationService authenticationService;
 
     @PreAuthorize("hasAuthority('TEACHER')")
     @PostMapping
     public Map<String, Object> register(@Valid @RequestBody UserDto userDto, Authentication authentication)
     {
         var result = new HashMap<String, Object>();
-        if(!repository.existsByUsername(userDto.getUsername()))  // if not exists
-        {
-            var creator = ((UserDetailsAdapter) authentication.getPrincipal()).getUser();
-            var encodedPassword = passwordEncoder.encode(userDto.getPassword());
-            var newUser = User.registerUser(userDto.getUsername(), encodedPassword, creator);
-            repository.save(newUser);
-            log.info("Create user '%s' with password '%s' by '%s'".formatted(userDto.getUsername(), userDto.getPassword(), creator.getUsername()));
-        }
-        else
-            throw new DuplicateUsernameException();
+        var creator = authenticationService.getUser(authentication);
+        userService.registerUser(userDto, creator);
+        log.info("Create user '%s' with password '%s' by '%s'".formatted(userDto.getUsername(), userDto.getPassword(), creator.getUsername()));
 
         result.put("success", true);
         return result;
     }
 
     @Autowired
-    public void setRepository(UserRepository repository)
+    public void setUserService(UserService userService)
     {
-        this.repository = repository;
+        this.userService = userService;
     }
 
     @Autowired
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder)
+    public void setAuthenticationService(AuthenticationService authenticationService)
     {
-        this.passwordEncoder = passwordEncoder;
+        this.authenticationService = authenticationService;
     }
 }

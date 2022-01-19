@@ -1,6 +1,6 @@
 package asia.ptyin.sqloj.user.security;
 
-import asia.ptyin.sqloj.user.User;
+import asia.ptyin.sqloj.user.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,17 +17,17 @@ import java.util.List;
  */
 public class UserDetailsAdapter implements UserDetails
 {
-    private final User user;
+    private final UserEntity user;
     private final List<GrantedAuthority> grantedAuthorityList;
 
-    public UserDetailsAdapter(User user)
+    public UserDetailsAdapter(UserEntity user)
     {
         this.user = user;
         grantedAuthorityList = new ArrayList<>();
         grantedAuthorityList.add(new SimpleGrantedAuthority(user.getRole().name()));
     }
 
-    public User getUser()
+    public UserEntity getUser()
     {
         return user;
     }

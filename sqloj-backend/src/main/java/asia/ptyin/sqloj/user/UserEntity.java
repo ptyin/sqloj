@@ -1,5 +1,6 @@
 package asia.ptyin.sqloj.user;
 
+import asia.ptyin.sqloj.course.CourseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -7,7 +8,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "plt_user")
 @Getter @Setter
-public class User
+public class UserEntity
 {
     @Id
     @GeneratedValue
@@ -45,20 +45,24 @@ public class User
     @OneToMany(
             mappedBy = "createdBy",
             cascade = CascadeType.ALL,
-            targetEntity = User.class,
+            targetEntity = UserEntity.class,
             fetch = FetchType.LAZY
     )
-    private List<User> createdUserList;
+    private List<UserEntity> createdUserList;
 
     @ManyToOne(
             cascade = {CascadeType.MERGE, CascadeType.REFRESH},
             optional = false
     )
-    private User createdBy;
+    private UserEntity createdBy;
 
-    public static User registerUser(String username, String password, User creator)
+    @ManyToMany
+    @JoinTable(name = "plt_r_participates")
+    private List<CourseEntity> participatedCourseList;
+
+    public static UserEntity createUser(String username, String password, UserEntity creator)
     {
-        var user = new User();
+        var user = new UserEntity();
         user.username = username;
         user.password = password;
 
@@ -68,9 +72,9 @@ public class User
         return user;
     }
 
-    public static User createDefaultAdmin(String username, String password)
+    public static UserEntity createDefaultAdmin(String username, String password)
     {
-        var admin = new User();
+        var admin = new UserEntity();
         admin.username = username;
         admin.password = password;
 

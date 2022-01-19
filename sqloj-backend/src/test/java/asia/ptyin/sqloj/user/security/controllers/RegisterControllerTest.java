@@ -2,7 +2,7 @@ package asia.ptyin.sqloj.user.security.controllers;
 
 import asia.ptyin.sqloj.user.UserRepository;
 import asia.ptyin.sqloj.user.UserDto;
-import asia.ptyin.sqloj.user.security.SecurityService;
+import asia.ptyin.sqloj.user.security.UserDetailsServiceImpl;
 import asia.ptyin.sqloj.user.security.SecurityTestBase;
 import asia.ptyin.sqloj.user.security.SecurityTestConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,7 +32,7 @@ class RegisterControllerTest extends SecurityTestBase
     @Autowired
     ObjectMapper mapper;
     @Autowired
-    SecurityService securityService;
+    UserDetailsServiceImpl securityService;
 
     RegisterControllerTest()
     {

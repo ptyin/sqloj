@@ -2,7 +2,7 @@ package asia.ptyin.sqloj.user.security;
 
 import asia.ptyin.sqloj.config.SqlOjConfigurationProperties;
 import asia.ptyin.sqloj.user.UserRepository;
-import asia.ptyin.sqloj.user.User;
+import asia.ptyin.sqloj.user.UserEntity;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,22 +13,22 @@ import org.springframework.stereotype.Service;
 
 
 /***
- * Custom UserDetailService in order to provide UserDetail from data source.
+ * Custom UserDetailsService in order to provide UserDetails from data source.
  * @version 0.1.0
  * @author PTYin
  * @since 0.1.0
  */
 @Log4j2
 @Service
-public class SecurityService implements UserDetailsService
+public class UserDetailsServiceImpl implements UserDetailsService
 {
     private final UserRepository repository;
 
     @Autowired
-    public SecurityService(UserRepository repository, PasswordEncoder passwordEncoder, SqlOjConfigurationProperties.Admin defaultAdminProperties)
+    public UserDetailsServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder, SqlOjConfigurationProperties.Admin defaultAdminProperties)
     {
         this.repository = repository;
-        var defaultAdmin = User.createDefaultAdmin(defaultAdminProperties.getUsername(), passwordEncoder.encode(defaultAdminProperties.getPassword()));
+        var defaultAdmin = UserEntity.createDefaultAdmin(defaultAdminProperties.getUsername(), passwordEncoder.encode(defaultAdminProperties.getPassword()));
         log.info("The admin username is '%s' and default password is '%s'.".formatted(defaultAdmin.getUsername(), defaultAdmin.getPassword()));
         if(repository.findByUsername(defaultAdminProperties.getUsername()) == null)  // If admin already exists, then don't create.
             repository.save(defaultAdmin);

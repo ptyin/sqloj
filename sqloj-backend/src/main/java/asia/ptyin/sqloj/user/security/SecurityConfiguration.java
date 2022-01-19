@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -26,12 +27,12 @@ import javax.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 public class SecurityConfiguration
 {
-    private SecurityService securityService;
+    private UserDetailsService userDetailsService;
 
     @Autowired
-    public void setSecurityService(SecurityService securityService)
+    public void setUserDetailsService(UserDetailsService userDetailsService)
     {
-        this.securityService = securityService;
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -45,7 +46,7 @@ public class SecurityConfiguration
     {
         var provider = new DaoAuthenticationProvider();
         provider.setHideUserNotFoundExceptions(false);
-        provider.setUserDetailsService(securityService);
+        provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }

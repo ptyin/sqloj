@@ -2,7 +2,7 @@ package asia.ptyin.sqloj.user.security;
 
 import asia.ptyin.sqloj.config.SqlOjConfigurationProperties;
 import asia.ptyin.sqloj.user.UserRepository;
-import asia.ptyin.sqloj.user.User;
+import asia.ptyin.sqloj.user.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,7 +27,7 @@ public class SecurityTestConfiguration
     @PostConstruct
     public void init()
     {
-        when(repository.findByUsername("admin")).thenReturn(User.createDefaultAdmin("admin", passwordEncoder().encode("admin@123")));
+        when(repository.findByUsername("admin")).thenReturn(UserEntity.createDefaultAdmin("admin", passwordEncoder().encode("admin@123")));
     }
 
     @Bean
@@ -37,8 +37,8 @@ public class SecurityTestConfiguration
     }
 
     @Bean
-    public SecurityService securityService()
+    public UserDetailsServiceImpl securityService()
     {
-        return new SecurityService(repository, passwordEncoder(), defaultAdminProperties);
+        return new UserDetailsServiceImpl(repository, passwordEncoder(), defaultAdminProperties);
     }
 }
