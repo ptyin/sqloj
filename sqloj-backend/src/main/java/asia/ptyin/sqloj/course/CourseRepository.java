@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface CourseRepository extends JpaRepository<CourseEntity, UUID>
 {
-    List<CourseEntity> findAllByParticipatorList_Uuid(UUID uuid);
+    List<CourseEntity> findAllByParticipatorList_Uuid(UUID userUuid);
 //    Course findByParticipatorList_Username(String username);
 
 }

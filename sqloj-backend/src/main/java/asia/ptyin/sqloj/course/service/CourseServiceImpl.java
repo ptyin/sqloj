@@ -9,6 +9,8 @@ import asia.ptyin.sqloj.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +31,14 @@ public class CourseServiceImpl implements CourseService
     }
 
     @Override
-    public CourseEntity getCourseByUuid(UUID uuid)
+    public CourseEntity findCourse(UUID uuid)
     {
         return null;
     }
 
     @Override
-    public boolean openCourse(CourseDto courseDto)
+    @Transactional(propagation=Propagation.REQUIRED, noRollbackFor=Exception.class)
+    public CourseEntity openCourse(CourseDto courseDto)
     {
         var entity = new CourseEntity();
         entity.setName(courseDto.getName());
@@ -45,13 +48,22 @@ public class CourseServiceImpl implements CourseService
 
         var participatorList = new ArrayList<UserEntity>();
         for(var uuid : courseDto.getParticipatorList())
-            participatorList.add(userService.findUser(uuid));
+        {
+            var participator = userService.findUser(uuid);
+            participatorList.add(participator);
+        }
         entity.setParticipatorList(participatorList);
-
         repository.save(entity);
-        return true;
+        System.out.println("-----------------" + userService.findUser(courseDto.getParticipatorList().get(0)).getParticipatedCourseList().get(0).getName());
+
+        return entity;
     }
 
+    @Override
+    public void deleteCourse(CourseEntity course)
+    {
+        repository.delete(course);
+    }
 
     @Autowired
     public void setAuthenticationService(AuthenticationService authenticationService)

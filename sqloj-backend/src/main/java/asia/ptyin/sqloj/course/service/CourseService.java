@@ -10,7 +10,8 @@ import java.util.UUID;
 public interface CourseService
 {
     List<CourseEntity> getCurrentUserCourseList(Authentication authentication);
-    CourseEntity getCourseByUuid(UUID uuid);
+    CourseEntity findCourse(UUID uuid);
 
-    boolean openCourse(CourseDto courseDto);
+    CourseEntity openCourse(CourseDto courseDto);
+    void deleteCourse(CourseEntity course);
 }

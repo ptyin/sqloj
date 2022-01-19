@@ -51,13 +51,12 @@ public class UserEntity
     private List<UserEntity> createdUserList;
 
     @ManyToOne(
-            cascade = {CascadeType.MERGE, CascadeType.REFRESH},
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
             optional = false
     )
     private UserEntity createdBy;
 
-    @ManyToMany
-    @JoinTable(name = "plt_r_participates")
+    @ManyToMany(mappedBy = "participatorList")
     private List<CourseEntity> participatedCourseList;
 
     public static UserEntity createUser(String username, String password, UserEntity creator)

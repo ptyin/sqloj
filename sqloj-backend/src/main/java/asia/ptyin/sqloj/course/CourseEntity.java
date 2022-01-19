@@ -3,6 +3,7 @@ package asia.ptyin.sqloj.course;
 import asia.ptyin.sqloj.user.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class CourseEntity
 {
     @Id
+    @GeneratedValue
     private UUID uuid;
 
     @Column(nullable = false)
@@ -31,10 +33,11 @@ public class CourseEntity
 
     private boolean enabled = true;
 
-    @GeneratedValue
+    @CreatedDate
     private Date createdAt;
 
-    @ManyToMany(mappedBy = "participatedCourseList")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(name = "plt_r_participates")
     private List<UserEntity> participatorList;
 
 }

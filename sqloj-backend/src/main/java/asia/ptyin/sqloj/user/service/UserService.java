@@ -1,5 +1,6 @@
 package asia.ptyin.sqloj.user.service;
 
+import asia.ptyin.sqloj.course.CourseEntity;
 import asia.ptyin.sqloj.user.UserEntity;
 import asia.ptyin.sqloj.user.UserDto;
 import asia.ptyin.sqloj.user.DuplicateUsernameException;
@@ -11,5 +12,8 @@ public interface UserService
 {
     UserEntity registerUser(UserDto userDto, UserEntity creator) throws DuplicateUsernameException;
     UserEntity findUser(UUID uuid) throws UserNotFoundException;
+    UserEntity findUser(String username) throws UserNotFoundException;
     void deleteUser(UserEntity user);
+
+//    CourseEntity findCourse(UserEntity user);
 }

@@ -1,5 +1,6 @@
 package asia.ptyin.sqloj.user.service;
 
+import asia.ptyin.sqloj.course.CourseEntity;
 import asia.ptyin.sqloj.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +33,15 @@ public class UserServiceImpl implements UserService
         var user = repository.findById(uuid).orElse(null);
         if(user == null)
             throw new UserNotFoundException(uuid);
+        return user;
+    }
+
+    @Override
+    public UserEntity findUser(String username) throws UserNotFoundException
+    {
+        var user = repository.findByUsername(username);
+        if(user == null)
+            throw new UserNotFoundException(username);
         return user;
     }
 
