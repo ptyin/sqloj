@@ -37,7 +37,7 @@ class CourseServiceTest
         testUser2 = userService.registerUser(new UserDto("course-service-test2", "course-service-test@123"), userService.findUser("admin"));
         testUser3 = userService.registerUser(new UserDto("course-service-test3", "course-service-test@123"), userService.findUser("admin"));
 
-        testUserList = new ArrayList<UUID>();
+        testUserList = new ArrayList<>();
         testUserList.add(testUser1.getUuid());
         testUserList.add(testUser2.getUuid());
         testUserList.add(testUser3.getUuid());
@@ -54,7 +54,7 @@ class CourseServiceTest
     @Test
     void openCourse()
     {
-        var courseDto = new CourseDto("2021-2022数据库原理1班", "", new Date(), new Date());
+        var courseDto = new CourseDto("2021-2022数据库原理1班", "", new Date(), new Date(), testUserList);
         var course = courseService.openCourse(courseDto, userService.findAllUser(testUserList));
         assertNotNull(course.getCreatedAt(), "Created date not null");
         assertEquals(course.getParticipatorList().size(), testUserList.size());
@@ -69,7 +69,7 @@ class CourseServiceTest
     void getParticipateList()
     {
         // Open a test course.
-        var courseDto = new CourseDto("2021-2022数据库原理1班", "", new Date(), new Date());
+        var courseDto = new CourseDto("2021-2022数据库原理1班", "", new Date(), new Date(), testUserList);
         var course = courseService.openCourse(courseDto, userService.findAllUser(testUserList));
 
         var participatorList = courseService.getParticipatorList(course.getUuid());
