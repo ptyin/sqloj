@@ -1,6 +1,5 @@
 package asia.ptyin.sqloj.user.service;
 
-import asia.ptyin.sqloj.SqlOjApplication;
 import asia.ptyin.sqloj.user.UserDto;
 import asia.ptyin.sqloj.user.UserEntity;
 import asia.ptyin.sqloj.user.UserNotFoundException;
@@ -13,7 +12,8 @@ import org.springframework.security.test.context.support.WithUserDetails;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @SpringBootTest

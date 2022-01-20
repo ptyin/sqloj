@@ -36,7 +36,7 @@ public class CourseEntity
     @CreatedDate
     private Date createdAt;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany
     @JoinTable(name = "plt_r_participates")
     private List<UserEntity> participatorList;
 

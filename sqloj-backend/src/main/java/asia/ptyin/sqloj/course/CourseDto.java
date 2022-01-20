@@ -24,5 +24,5 @@ public class CourseDto implements Serializable
     private final Date endedAt;
 
     // List of participated user uuid.
-    private final List<UUID> participatorList;
+//    private final List<UUID> participatorList;
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -46,9 +47,22 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
+    public List<UserEntity> findAllUser(Iterable<UUID> uuid)
+    {
+        return repository.findAllById(uuid);
+    }
+
+    @Override
     public void deleteUser(UserEntity user)
     {
         repository.delete(user);
+    }
+
+    @Override
+    public List<CourseEntity> getUserParticipatedCourseList(UserEntity user)
+    {
+
+        return null;
     }
 
     @Autowired

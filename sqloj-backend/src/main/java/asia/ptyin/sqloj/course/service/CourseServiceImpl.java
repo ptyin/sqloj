@@ -2,6 +2,7 @@ package asia.ptyin.sqloj.course.service;
 
 import asia.ptyin.sqloj.course.CourseDto;
 import asia.ptyin.sqloj.course.CourseEntity;
+import asia.ptyin.sqloj.course.CourseNotFoundEntity;
 import asia.ptyin.sqloj.course.CourseRepository;
 import asia.ptyin.sqloj.user.UserEntity;
 import asia.ptyin.sqloj.user.security.service.AuthenticationService;
@@ -12,33 +13,41 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 public class CourseServiceImpl implements CourseService
 {
-    private AuthenticationService authenticationService;
-    private UserService userService;
     private CourseRepository repository;
 
     @Override
-    public List<CourseEntity> getCurrentUserCourseList(Authentication authentication)
+    public List<CourseEntity> getUserParticipatedCourseList(UUID userUuid)
     {
-        var userUuid = authenticationService.getUserUuid(authentication);
         return repository.findAllByParticipatorList_Uuid(userUuid);
     }
 
     @Override
-    public CourseEntity findCourse(UUID uuid)
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<UserEntity> getParticipatorList(UUID courseUuid)
+    {
+        var course = repository.findById(courseUuid).orElse(null);
+        if(course == null)
+            throw new CourseNotFoundEntity(courseUuid);
+        var participatorList = course.getParticipatorList();
+        //noinspection ResultOfMethodCallIgnored
+        participatorList.size();  // Lazy-initialize field.
+        return participatorList;
+    }
+
+    @Override
+    public CourseEntity findCourse(UUID courseUuid)
     {
         return null;
     }
 
     @Override
-    @Transactional(propagation=Propagation.REQUIRED, noRollbackFor=Exception.class)
-    public CourseEntity openCourse(CourseDto courseDto)
+    public CourseEntity openCourse(CourseDto courseDto, List<UserEntity> participatorList)
     {
         var entity = new CourseEntity();
         entity.setName(courseDto.getName());
@@ -46,35 +55,23 @@ public class CourseServiceImpl implements CourseService
         entity.setStartedAt(courseDto.getStartedAt());
         entity.setEndedAt(courseDto.getEndedAt());
 
-        var participatorList = new ArrayList<UserEntity>();
-        for(var uuid : courseDto.getParticipatorList())
-        {
-            var participator = userService.findUser(uuid);
-            participatorList.add(participator);
-        }
+//        var participatorList = userService.findAllUser(courseDto.getParticipatorList());
         entity.setParticipatorList(participatorList);
         repository.save(entity);
-        System.out.println("-----------------" + userService.findUser(courseDto.getParticipatorList().get(0)).getParticipatedCourseList().get(0).getName());
 
         return entity;
+    }
+
+    @Override
+    public void saveCourse(CourseEntity course)
+    {
+        repository.save(course);
     }
 
     @Override
     public void deleteCourse(CourseEntity course)
     {
         repository.delete(course);
-    }
-
-    @Autowired
-    public void setAuthenticationService(AuthenticationService authenticationService)
-    {
-        this.authenticationService = authenticationService;
-    }
-
-    @Autowired
-    public void setUserService(UserService userService)
-    {
-        this.userService = userService;
     }
 
     @Autowired

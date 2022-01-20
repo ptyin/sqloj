@@ -50,10 +50,7 @@ public class UserEntity
     )
     private List<UserEntity> createdUserList;
 
-    @ManyToOne(
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
-            optional = false
-    )
+    @ManyToOne(optional = false)
     private UserEntity createdBy;
 
     @ManyToMany(mappedBy = "participatorList")
