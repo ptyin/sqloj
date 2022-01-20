@@ -1,18 +1,20 @@
 package asia.ptyin.sqloj.user.security.controllers;
 
-import asia.ptyin.sqloj.user.UserRepository;
 import asia.ptyin.sqloj.user.UserDto;
-import asia.ptyin.sqloj.user.security.UserDetailsServiceImpl;
-import asia.ptyin.sqloj.user.security.SecurityTestBase;
-import asia.ptyin.sqloj.user.security.SecurityTestConfiguration;
+import asia.ptyin.sqloj.user.UserEntity;
+import asia.ptyin.sqloj.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
+
+import javax.annotation.PostConstruct;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
@@ -21,32 +23,42 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest
-@Import(SecurityTestConfiguration.class)
-class RegisterControllerTest extends SecurityTestBase
+@SpringBootTest
+@AutoConfigureMockMvc
+class RegisterControllerTest
 {
-    @Autowired
-    UserRepository repository;
     @Autowired
     MockMvc mockMvc;
     @Autowired
     ObjectMapper mapper;
-    @Autowired
-    UserDetailsServiceImpl securityService;
 
-    RegisterControllerTest()
+    @MockBean
+    UserRepository repository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    String testUsername;
+    String testPassword;
+    UserDto testUserDto;
+
+    @PostConstruct
+    public void init()
     {
-        super("register-test", "test@123");
+        testUsername = "admin";
+        testPassword = "admin@123";
+        testUserDto = new UserDto(testUsername, testPassword);
+
+        when(repository.findByUsername("admin")).thenReturn(UserEntity.createDefaultAdmin("admin", passwordEncoder.encode("admin@123")));
+        when(repository.existsByUsername(testUsername)).thenReturn(false);
+        when(repository.save(any())).thenReturn(null);
     }
 
-    @WithUserDetails(value = "admin", userDetailsServiceBeanName = "securityService")
+    @WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
     @Test
     void register() throws Exception
     {
         UserDto userDto = new UserDto(testUsername, testPassword);
 
-        when(repository.existsByUsername(testUsername)).thenReturn(false);
-        when(repository.save(any())).thenReturn(null);
         mockMvc
                 .perform(
                         post("/register")

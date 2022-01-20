@@ -1,6 +1,7 @@
 package asia.ptyin.sqloj.course.service;
 
 import asia.ptyin.sqloj.course.CourseDto;
+import asia.ptyin.sqloj.course.CourseEntity;
 import asia.ptyin.sqloj.user.UserDto;
 import asia.ptyin.sqloj.user.UserEntity;
 import asia.ptyin.sqloj.user.service.UserService;
@@ -28,6 +29,7 @@ class CourseServiceTest
     CourseService courseService;
     UserEntity testUser1, testUser2, testUser3;
     List<UUID> testUserList;
+    CourseEntity testCourse;
 
     @BeforeEach
     void setUp()
@@ -46,6 +48,8 @@ class CourseServiceTest
     @AfterEach
     void tearDown()
     {
+        if(testCourse != null)
+            courseService.deleteCourse(testCourse);
         userService.deleteUser(testUser1);
         userService.deleteUser(testUser2);
         userService.deleteUser(testUser3);
@@ -55,28 +59,22 @@ class CourseServiceTest
     void openCourse()
     {
         var courseDto = new CourseDto("2021-2022数据库原理1班", "", new Date(), new Date(), testUserList);
-        var course = courseService.openCourse(courseDto, userService.findAllUser(testUserList));
-        assertNotNull(course.getCreatedAt(), "Created date not null");
-        assertEquals(course.getParticipatorList().size(), testUserList.size());
-        assertEquals(userService.findUser(testUser1.getUuid()).getParticipatedCourseList().get(0).getName(), "2021-2022数据库原理1班");
-
-        var courseUuid = course.getUuid();
-        courseService.deleteCourse(course);
-        assertNull(courseService.findCourse(courseUuid));
+        testCourse = courseService.openCourse(courseDto, userService.findAllUser(testUserList));
+        assertNotNull(testCourse.getCreatedAt(), "Created date not null");
+        assertEquals(testCourse.getParticipatorList().size(), testUserList.size());
+        assertEquals(courseService.getUserParticipatedCourseList(testUser1.getUuid()).get(0).getName(), "2021-2022数据库原理1班");
     }
 
     @Test
-    void getParticipateList()
+    void getParticipatorList()
     {
         // Open a test course.
         var courseDto = new CourseDto("2021-2022数据库原理1班", "", new Date(), new Date(), testUserList);
-        var course = courseService.openCourse(courseDto, userService.findAllUser(testUserList));
+        testCourse = courseService.openCourse(courseDto, userService.findAllUser(testUserList));
 
-        var participatorList = courseService.getParticipatorList(course.getUuid());
+        var participatorList = courseService.getParticipatorList(testCourse.getUuid());
         assertEquals(participatorList.size(), testUserList.size());
         for(int i = 0; i < testUserList.size(); i++)
             assertEquals(participatorList.get(i).getUuid(), testUserList.get(i));
-        courseService.deleteCourse(course);
-
     }
 }

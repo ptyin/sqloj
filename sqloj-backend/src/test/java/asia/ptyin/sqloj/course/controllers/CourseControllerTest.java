@@ -67,7 +67,8 @@ class CourseControllerTest
     @AfterEach
     void tearDown()
     {
-        courseService.deleteCourse(testCourse);
+        if(testCourse != null)
+            courseService.deleteCourse(testCourse);
         userService.deleteUser(testUser1);
         userService.deleteUser(testUser2);
         userService.deleteUser(testUser3);
@@ -140,5 +141,6 @@ class CourseControllerTest
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true));
         assertThrows(CourseNotFoundException.class, () -> courseService.findCourse(testCourse.getUuid()));
+        testCourse = null;
     }
 }

@@ -1,33 +1,52 @@
 package asia.ptyin.sqloj.user.security;
 
+import asia.ptyin.sqloj.user.UserDto;
+import asia.ptyin.sqloj.user.UserEntity;
 import asia.ptyin.sqloj.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.annotation.PostConstruct;
+
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest
-@Import(SecurityTestConfiguration.class)
-class SecurityConfigurationTest extends SecurityTestBase
+@SpringBootTest
+@AutoConfigureMockMvc
+class SecurityConfigurationTest
 {
     @Autowired
     MockMvc mockMvc;
     @Autowired
     ObjectMapper mapper;
-    @Autowired
+    @MockBean
     UserRepository repository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
-    public SecurityConfigurationTest()
+    String testUsername;
+    String testPassword;
+    UserDto testUserDto;
+
+    @PostConstruct
+    public void init()
     {
-        super("admin", "admin@123");
+
+        testUsername = "admin";
+        testPassword = "admin@123";
+        testUserDto = new UserDto(testUsername, testPassword);
+
+        when(repository.findByUsername("admin")).thenReturn(UserEntity.createDefaultAdmin("admin", passwordEncoder.encode("admin@123")));
     }
 
     @Test
