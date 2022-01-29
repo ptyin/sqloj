@@ -1,28 +1,28 @@
 import React from 'react'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
-import App from './homepage/app'
-import Login from './homepage/login'
-import Assignments from './student/assignments'
-import Questions from './student/questions'
-import Submit from './student/submit'
-import Records from './student/records'
-import RecordDetail from "./student/recordDetail";
+import App from './app'
+import LoginPanel from './pages/entry/LoginPanel'
+import Assignments from './pages/student/assignments'
+import Questions from './pages/student/questions'
+import Submit from './pages/student/submit'
+import Records from './pages/student/records'
+import RecordDetail from "./pages/student/recordDetail";
 // import Users from './homepage/user'
 // import Change_pwd from './homepage/change_pwd'
 // import Forget from './homepage/forget'
-import './common/font.css'
-import TeacherAssignments from './teacher/teacherAssignments'
-import UpdateAssignment from "./teacher/updateAssignment";
-import AddAssignment from "./teacher/addAssignment";
+import './common/css/font.css'
+import TeacherAssignments from './pages/teacher/teacherAssignments'
+import UpdateAssignment from "./pages/teacher/updateAssignment";
+import AddAssignment from "./pages/teacher/addAssignment";
 
-import TeacherQuestions from "./teacher/teacherQuestions"
-import QuestionDetail from "./teacher/questionDetail";
-import TeacherRecordDetail from "./teacher/teacherRecordDetail"
-import AddQuestion from "./teacher/addQuestion";
-import UpdateQuestion from "./teacher/updateQuestion";
+import TeacherQuestions from "./pages/teacher/teacherQuestions"
+import QuestionDetail from "./pages/teacher/questionDetail";
+import TeacherRecordDetail from "./pages/teacher/teacherRecordDetail"
+import AddQuestion from "./pages/teacher/addQuestion";
+import UpdateQuestion from "./pages/teacher/updateQuestion";
 
-import Databases from "./teacher/databases";
-import AddDatabase from "./teacher/addDatabase";
+import Databases from "./pages/teacher/databases";
+import AddDatabase from "./pages/teacher/addDatabase";
 // import Change_pwd_teacher from './teacher_pages/change_pwd_teacher'
 // import Admin_users from "./admin_pages/admin_users";
 // import Admin_chet from "./admin_pages/admin_chet";
@@ -35,7 +35,7 @@ export default function IRouter()
 {
     return <Router>
         <Switch>
-            <Route path="/login" component={Login}/>
+            <Route path="/login" component={LoginPanel}/>
 
             <Route path="/assignments" component={Assignments}/>
             <Route path="/questions" component={Questions}/>}

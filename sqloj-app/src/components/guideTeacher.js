@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Form, Input, Menu, message, Modal} from 'antd';
 import {useHistory} from "react-router-dom";
-import '../common/font.css'
+import '../common/css/font.css'
 import {
     CalendarOutlined,
     DatabaseOutlined,

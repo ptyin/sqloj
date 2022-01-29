@@ -1,0 +1,23 @@
+.forget_frame {
+    left: 30%;
+    width: 40%;
+    background: white;
+    height: 380px;
+    position: relative;
+    top: 30%;
+    box-shadow: 10px 10px 5px #224379;
+    border-radius: 25px;
+    -moz-border-radius: 25px;
+}
+
+.frame_forget {
+    left: 32%;
+    width: 36%;
+    background: white;
+    height: 500px;
+    position: relative;
+    top: 46%;
+    box-shadow: 10px 10px 5px #224379;
+    border-radius: 25px;
+    -moz-border-radius: 25px;
+}
