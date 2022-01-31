@@ -6,6 +6,7 @@ import logo from '../../common/images/logo.png';
 import QueueAnim from 'rc-queue-anim';
 import '../../common/css/layout.css';
 import Guide from "../../components/Guide";
+import EaseAnim from "../../components/anim/EaseAnim";
 
 
 export default function Assignments()
@@ -103,15 +104,11 @@ export default function Assignments()
             </Sider>
             <Layout style={{padding: '0 24px 24px'}}>
                 <Content className="default_font" style={{margin: '24px 0'}}>
-                    <QueueAnim
-                        key="demo"
-                        type={['top', 'bottom']}
-                        duration="1400"
-                        ease={['easeOutQuart', 'easeInOutQuart']}>
+                    <EaseAnim>
                         <div key="assignments">
                             <Table columns={columns} dataSource={data}/>
                         </div>
-                    </QueueAnim>
+                    </EaseAnim>
                 </Content>
             </Layout>
         </Layout>
