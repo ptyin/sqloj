@@ -3,35 +3,31 @@ import axios from 'axios';
 import {useHistory} from "react-router-dom";
 import {Button, Layout, Space, Table} from 'antd';
 import logo from '../../common/images/logo.png';
-import QueueAnim from 'rc-queue-anim';
 import '../../common/css/layout.css';
-import Guide from "../../components/Guide";
+import GuideStudent from "../../components/guideStudent";
 import EaseAnim from "../../components/anim/EaseAnim";
 
 
-export default function Assignments()
+export default function AssignmentList()
 {
-    // window.sessionStorage.current = 'assignments'
-    // const [timer, setTimer] = useState(0)
-    // const [show] = useState(true)
     const {Header, Content, Sider} = Layout;
     const [data, setData] = useState([])
     const history = useHistory();
     const columns = [
         {
-            title: 'Assignment Name',
-            dataIndex: 'assignment_name',
+            title: 'Assignment',
+            dataIndex: 'name',
             key: 'name',
             // render: text => <a>{text}</a>,
         },
         {
             title: 'Start',
-            dataIndex: 'assignment_start_time',
+            dataIndex: 'startedAt',
             key: 'start',
         },
         {
-            title: 'DDL',
-            dataIndex: 'assignment_end_time',
+            title: 'End',
+            dataIndex: 'endedAt',
             key: 'deadline',
         },
         {
@@ -100,7 +96,7 @@ export default function Assignments()
         <Layout>
             <Sider style={{width: '200px'}} className="site-layout-content">
                 {/*{props.guide}*/}
-                <Guide item="assignments"/>
+                <GuideStudent item="assignments"/>
             </Sider>
             <Layout style={{padding: '0 24px 24px'}}>
                 <Content className="default_font" style={{margin: '24px 0'}}>

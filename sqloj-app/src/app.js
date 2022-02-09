@@ -1,6 +1,6 @@
 import React from 'react'
 import 'antd/dist/antd.css'
-import Homepage from './pages/entry/Homepage'
+import Homepage from './views/entry/Homepage'
 import {useHistory} from "react-router-dom";
 
 

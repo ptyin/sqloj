@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
-import Guide from "../../components/Guide";
+import GuideStudent from "../../components/guideStudent";
 import axios from 'axios';
 import {Button, Layout, Space, Table, Tag} from 'antd';
 import logo from '../../common/images/logo.png';
@@ -142,7 +142,7 @@ export default function Records()
         </Header>
         <Layout>
             <Sider width={200} className="site-layout-content">
-                <Guide item="records"/>
+                <GuideStudent item="records"/>
             </Sider>
             <Layout style={{padding: '0 24px 24px'}}>
                 <Content className="default_font" style={{margin: '24px 0'}}>

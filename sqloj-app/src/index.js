@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import * as serviceWorker from './serviceWorker';
-import Router from "./router";
+import Entry from "./views/entry";
 import axios from 'axios'
 import {message} from "antd";
+import IRouter from "./router";
 
 function setup(axios)
 {
@@ -31,4 +31,4 @@ axios.defaults.crossDomain = true;
 axios.defaults.withCredentials = true
 setup(axios)
 // ReactDOM.render(<Router/>, document.body);
-ReactDOM.render(<Router/>, document.getElementById('root'));
+ReactDOM.render(<Entry/>, document.getElementById('root'));

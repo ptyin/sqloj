@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Button, Checkbox, Form, Input, message} from "antd";
 import {useHistory} from "react-router-dom";
 import axios from 'axios';
-import './login.css'
+import './LoginPanel.css'
 import '../../components/anim/HomepageAnim.css'
 import '../../common/css/font.css'
 import EaseAnim from "../../components/anim/EaseAnim";
@@ -84,13 +84,16 @@ export default function LoginPanel()
                             {
                                 login(username, password, remember).then((response) =>
                                 {
-                                    if (response.data.data === 'TEACHER')
+                                    if (response.data.success === true)
                                     {
-                                        history.push('/teacherAssignments')
-                                    } else if (response.data.data === 'STUDENT')
-                                    {
-                                        history.push('/assignments');
+                                        message.success('Log in successfully.');
+                                        if (response.data.data === 'TEACHER')
+                                            history.push('/dashboard/teacher')
+                                        else if (response.data.data === 'STUDENT')
+                                            history.push('/dashboard/student');
                                     }
+                                    else
+                                        message.error('Invalid authentication information.');
                                 })
                             }
                         }>OK</Button>

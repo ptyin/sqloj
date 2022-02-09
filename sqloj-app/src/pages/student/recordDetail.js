@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
-import Guide from "../../components/Guide";
+import GuideStudent from "../../components/guideStudent";
 import logo from '../../common/images/logo.png';
 import '../../common/css/layout.css';
 import {Button, Card, Layout, message, Table} from "antd";
@@ -102,7 +102,7 @@ export default function Submit()
             <img src={logo} style={{height: '45px'}} alt=""/>
         </Header>
         <Layout>
-            <Sider width={200} className="site-layout-content"><Guide item="records"/></Sider>
+            <Sider width={200} className="site-layout-content"><GuideStudent item="records"/></Sider>
             <Layout style={{padding: '0 24px 24px'}}>
                 <Content className="default_font" style={{margin: '24px 0'}}>
                     <QueueAnim

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Guide from "../../components/Guide";
+import GuideStudent from "../../components/guideStudent";
 import axios from 'axios';
 import {useHistory} from "react-router-dom";
 import {Button, Layout, Space, Table, Tag} from 'antd';
@@ -103,7 +103,7 @@ export default function Questions()
             <img src={logo} style={{height: '45px'}} alt=""/>
         </Header>
         <Layout>
-            <Sider width={200} className="site-layout-content"><Guide item="assignments"/></Sider>
+            <Sider width={200} className="site-layout-content"><GuideStudent item="assignments"/></Sider>
             <Layout style={{padding: '0 24px 24px'}}>
                 <Content className="default_font" style={{margin: '24px 0'}}>
                     <QueueAnim

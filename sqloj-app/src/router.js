@@ -1,16 +1,14 @@
 import React from 'react'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import App from './app'
-import LoginPanel from './pages/entry/LoginPanel'
-import Assignments from './pages/student/assignments'
+import LoginPanel from './views/entry/LoginPanel'
+import AssignmentList from './pages/student/AssignmentList'
 import Questions from './pages/student/questions'
 import Submit from './pages/student/submit'
 import Records from './pages/student/records'
 import RecordDetail from "./pages/student/recordDetail";
-// import Users from './homepage/user'
-// import Change_pwd from './homepage/change_pwd'
-// import Forget from './homepage/forget'
 import './common/css/font.css'
+import CourseList from "./views/course/CourseList";
 import TeacherAssignments from './pages/teacher/teacherAssignments'
 import UpdateAssignment from "./pages/teacher/updateAssignment";
 import AddAssignment from "./pages/teacher/addAssignment";
@@ -23,21 +21,15 @@ import UpdateQuestion from "./pages/teacher/updateQuestion";
 
 import Databases from "./pages/teacher/databases";
 import AddDatabase from "./pages/teacher/addDatabase";
-// import Change_pwd_teacher from './teacher_pages/change_pwd_teacher'
-// import Admin_users from "./admin_pages/admin_users";
-// import Admin_chet from "./admin_pages/admin_chet";
-// import Copycat from "./teacher_pages/copycat";
-// import Add_trigger from "./teacher_pages/add_trigger";
-// import AnimatedRouter from "react-animated-router";
-// import 'react-animated-router/animate.css'
 
 export default function IRouter()
 {
     return <Router>
         <Switch>
             <Route path="/login" component={LoginPanel}/>
+            <Route path="/courses" component={CourseList}/>
 
-            <Route path="/assignments" component={Assignments}/>
+            <Route path="/assignments" component={AssignmentList}/>
             <Route path="/questions" component={Questions}/>}
             <Route path="/submit" component={Submit}/>}
             <Route path="/records" component={Records}/>

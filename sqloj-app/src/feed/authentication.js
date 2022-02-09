@@ -21,7 +21,6 @@ export function login(username, password, remember)
         console.log(response.data)
         if (response.data.success === true)
         {
-            message.success('Log in successfully.');
             window.sessionStorage.username = username
             window.localStorage.remember = remember
             console.log(remember)
@@ -34,9 +33,6 @@ export function login(username, password, remember)
                 window.localStorage.removeItem("username")
                 window.localStorage.removeItem("password")
             }
-        } else
-        {
-            message.error('Invalid authentication information.');
         }
         return response
     })
