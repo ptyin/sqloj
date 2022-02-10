@@ -1,17 +1,18 @@
 import {Badge, Button, Descriptions, message, PageHeader} from "antd";
 import AssignmentList from "./assignment/AssignmentList";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {LikeOutlined} from "@ant-design/icons";
+import {Link, Route, Switch, useRouteMatch} from "react-router-dom";
 
 export default function Course(props)
 {
-
+    const match = useRouteMatch()
     const [course, setCourse] = useState(null)
     useEffect(() =>
     {
         const demo = {
             uuid: 'abc',
-            name: `Course abc`,
+            name: `Course mock`,
             description: `This is a mock course`,
             createdAt: new Date().toDateString(),
             startedAt: new Date().toDateString(),
@@ -21,27 +22,32 @@ export default function Course(props)
     }, [])
 
     return (
-        <div>
-            <PageHeader
-                ghost={false}
-                onBack={() => window.history.back()}
-                title={props.match.params.courseUuid}
-                subTitle={course?.description}
-                extra={[
-                        <Badge count={0}>
-                            <Button key="like" onClick={() => message.warn("not developed yet.")}>
+        <Switch>
+            <Route path={`${match.path}/assignments`} component={AssignmentList}/>
+            <Route>
+                <PageHeader
+                    ghost={false}
+                    onBack={() => window.history.back()}
+                    title={match.params.courseUuid}
+                    subTitle={course?.name}
+                    extra={[
+                        <Badge key="like" count={0}>
+                            <Button onClick={() => message.warn("not developed yet.")}>
                                 <LikeOutlined />
                             </Button>
                         </Badge>
-                ]}
-            >
-                <Descriptions size="small" column={3}>
-                    <Descriptions.Item label="Created At">{course?.createdAt}</Descriptions.Item>
-                    <Descriptions.Item label="Started At">{course?.startedAt}</Descriptions.Item>
-                    <Descriptions.Item label="Ended At">{course?.endedAt}</Descriptions.Item>
-                </Descriptions>
-            </PageHeader>
-            <AssignmentList/>
-        </div>
+                    ]}
+                >
+                    <Descriptions size="small" column={3}>
+                        <Descriptions.Item key="createdAt" label="created at">{course?.createdAt}</Descriptions.Item>
+                        <Descriptions.Item key="startedAt" label="started at">{course?.startedAt}</Descriptions.Item>
+                        <Descriptions.Item key="endedAt" label="ended at">{course?.endedAt}</Descriptions.Item>
+                        <Descriptions.Item key="description" label="description">{course?.description}</Descriptions.Item>
+                        <Descriptions.Item key="assignments" label="assignments"><Link to={`${match.url}/assignments`}>assignments</Link></Descriptions.Item>
+                    </Descriptions>
+                </PageHeader>
+                <AssignmentList/>
+            </Route>
+        </Switch>
     )
 }

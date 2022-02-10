@@ -1,38 +1,44 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Card, List} from "antd";
-import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
+import {Link, Route, Switch, useRouteMatch} from "react-router-dom";
 import {ArrowRightOutlined} from "@ant-design/icons";
-import AssignmentList from "./assignment/AssignmentList";
 import Course from "./Course";
+import EaseAnim from "../../components/anim/EaseAnim";
 
 
 export default function CourseList(props)
 {
-    const demo = []
-    for(let i=0;i<40;i++)
-        demo.push({
-            uuid: i,
-            name: `Course ${i}`,
-            description: `Description ${i}`
-        })
+    const match = useRouteMatch()
+    const [data, setData] = useState([])
+    useEffect(() =>
+    {
+        const demo = []
+        for(let i=0;i<40;i++)
+            demo.push({
+                uuid: `${i}`,
+                name: `Course ${i}`,
+                description: `Description ${i}`
+            })
+        setData(demo)
+    }, [])
 
     return (
-        <BrowserRouter>
-            <Switch>
-                {/*<Route path="/dashboard/:role/courses/:courseUuid" component={AssignmentList}/>*/}
-                <Route>
+        <Switch>
+            <Route path={`${match.path}/:courseUuid`} component={Course}/>
+            <Route>
+                <EaseAnim>
                     <List
                         grid={{ gutter: 16, column: 4 }}
                         pagination={{pageSize: 12}}
-                        dataSource={demo}
+                        dataSource={data}
                         renderItem={item => (
-                            <List.Item key={item.uuid}>
-                                <Card title={item.name} extra={<Link to={`${item.uuid}`}><ArrowRightOutlined /></Link>}>{item.description}</Card>
+                            <List.Item key={item.name}>
+                                <Card title={item.name} extra={<Link to={`${match.url}/${item.uuid}`}><ArrowRightOutlined /></Link>}>{item.description}</Card>
                             </List.Item>
                         )}
                     />
-                </Route>
-            </Switch>
-        </BrowserRouter>
+                </EaseAnim>
+            </Route>
+        </Switch>
     )
 }

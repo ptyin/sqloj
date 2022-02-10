@@ -1,22 +1,28 @@
 import React, {useEffect, useState} from "react";
-import {Button, Card, List, Space, Table} from "antd";
-import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
+import {Button, Space, Table} from "antd";
+import {Link, Route, Switch, useLocation, useRouteMatch} from "react-router-dom";
 import EaseAnim from "../../../components/anim/EaseAnim";
+import {ArrowRightOutlined} from "@ant-design/icons";
+import Assignment from "./Assignment";
+import DataTable from "../../../components/data/DataTable";
 
 
 export default function AssignmentList(props)
 {
+    const match = useRouteMatch()
+    const location = useLocation()
     const [data, setData] = useState([])
     useEffect(() =>
     {
         const demo = []
         for(let i=0;i<40;i++)
             demo.push({
-                uuid: i,
+                uuid: `${i}`,
                 name: `Assignment ${i}`,
                 description: `Description ${i}`,
-                startedAt: Date.now(),
-                endedAt: Date.now()
+                createdAt: new Date().toDateString(),
+                startedAt: new Date().toDateString(),
+                endedAt: new Date().toDateString(),
             })
         setData(demo)
     }, [])
@@ -40,10 +46,10 @@ export default function AssignmentList(props)
         {
             title: 'action',
             key: 'action',
-            render: (record) => (
+            render: (assignment) => (
                 <Space size="middle">
-                    <Link to={record.uuid}>
-                        <Button className='button'>{"questions"}</Button>
+                    <Link to={`/dashboard/${match.params.role}/courses/${match.params.courseUuid}/assignments/${assignment.uuid}`}>
+                        <Button className='button'><ArrowRightOutlined /></Button>
                     </Link>
                 </Space>
             ),
@@ -51,17 +57,11 @@ export default function AssignmentList(props)
     ];
 
     return (
-        <BrowserRouter>
-            <Switch>
-                <Route path="/dashboard/:role/courses/:courseUuid/assignments/:assignmentUuid"/>
-                <Route>
-                    <EaseAnim>
-                        <div key="assignments">
-                            <Table columns={columns} dataSource={data} pagination={{pageSize: 5}}/>
-                        </div>
-                    </EaseAnim>
-                </Route>
-            </Switch>
-        </BrowserRouter>
+        <Switch>
+            <Route path={`${match.path}/:assignmentUuid`} component={Assignment}/>
+            <Route>
+                <DataTable columns={columns} data={data}/>
+            </Route>
+        </Switch>
     )
 }
