@@ -3,6 +3,12 @@
 # backup
 *_backup
 
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+
 # dependencies
 /node_modules
 /.pnp

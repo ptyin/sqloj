@@ -8,11 +8,11 @@
         <version>2.5.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>asia.ptyin</groupId>
-    <artifactId>sqloj</artifactId>
+    <groupId>asia.ptyin.sqloj</groupId>
+    <artifactId>sqloj-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>sqloj</name>
-    <description>sqloj</description>
+    <name>sqloj-server</name>
+    <description>Server application for SQLOJ.</description>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -86,15 +86,6 @@
     </dependencies>
 
     <build>
-        <directory>${project.basedir}/sqloj-backend/target/</directory>
-        <sourceDirectory>${project.basedir}/sqloj-backend/src/main/java/</sourceDirectory>
-        <testSourceDirectory>${project.basedir}/sqloj-backend/src/test/java/</testSourceDirectory>
-        <resources>
-            <resource>
-                <directory>${project.basedir}/sqloj-backend/src/main/resources</directory>
-            </resource>
-        </resources>
-
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

@@ -1,9 +1,9 @@
 import logo from "../common/images/logo.png";
 import {Layout, Menu} from "antd";
-import React, {useState} from "react";
+import React from "react";
 import NavigationBar from "../components/NavigationBar";
 import {ToolOutlined, UserOutlined} from "@ant-design/icons";
-import {BrowserRouter, Redirect, Route, Switch, useRouteMatch} from "react-router-dom";
+import {Redirect, Route, Switch, useRouteMatch} from "react-router-dom";
 import CourseList from "./course/CourseList";
 import Guide from "../components/Guide";
 import RecordList from "./record/RecordList";
