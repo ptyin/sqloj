@@ -1,13 +1,13 @@
 package asia.ptyin.sqloj.engine.db;
 
-public enum SupportedDbms
+public enum SupportedDialect
 {
     POSTGRESQL("jdbc:postgresql://localhost:4001/"),
     MYSQL("jdbc:mysql://localhost:4002/"),
     SQLITE("jdbc:sqlite::resource:db/");
 
     private final String jdbcPrefix;
-    SupportedDbms(String jdbcPrefix)
+    SupportedDialect(String jdbcPrefix)
     {
         this.jdbcPrefix = jdbcPrefix;
     }

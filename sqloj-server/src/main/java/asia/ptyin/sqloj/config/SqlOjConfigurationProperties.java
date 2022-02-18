@@ -37,5 +37,13 @@ public class SqlOjConfigurationProperties
          * Default 1 hour.
          */
         private long connectionMaxLiveDuration = 1000L * 60L * 60L;
+
+        private String mysqlDefaultUsername = "root";
+        private String mysqlDefaultPassword = "mysql@sqloj";
+
+
+        private String postgresqlDefaultUsername = "postgres";
+        private String postgresqlDefaultPassword = "postgres@sqloj";
+
     }
 }

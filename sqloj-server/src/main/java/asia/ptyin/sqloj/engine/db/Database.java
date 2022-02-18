@@ -10,5 +10,5 @@ public class Database
 {
     private final UUID uuid;
     private final String name;
-    private final SupportedDbms dbms;
+    private final SupportedDialect dbms;
 }

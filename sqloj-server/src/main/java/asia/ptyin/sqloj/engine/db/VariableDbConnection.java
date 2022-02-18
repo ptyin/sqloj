@@ -25,16 +25,6 @@ public class VariableDbConnection
         return new VariableDbConnection(database, username, password, connection, System.currentTimeMillis());
     }
 
-    public void commit() throws SQLException
-    {
-        connection.commit();
-    }
-
-    public void rollback() throws SQLException
-    {
-        connection.rollback();
-    }
-
     public void close() throws SQLException
     {
         connection.close();
