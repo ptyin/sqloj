@@ -1,14 +1,14 @@
 package asia.ptyin.sqloj.engine.db;
 
-import lombok.Data;
-
 import java.util.UUID;
 
-@SuppressWarnings("ClassCanBeRecord")
-@Data
-public class Database
+
+/**
+ * Data interface for database.
+ */
+public interface Database
 {
-    private final UUID uuid;
-    private final String name;
-    private final SupportedDialect dbms;
+    UUID getUuid();
+    String getName();
+    String getUrl();
 }

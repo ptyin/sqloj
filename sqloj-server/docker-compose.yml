@@ -13,24 +13,6 @@ services:
 #    volumes:
 #      - ./scripts/db-backup/db-pure.sql:/docker-entrypoint-initdb.d/init.sql
 
-  engine-postgres:
-    container_name: sqloj-engine-postgres
-    restart: always
-    image: postgres
-    environment:
-      POSTGRES_PASSWORD: postgres@sqloj
-    ports:
-      - "4001:5432"
-
-  engine-mysql:
-    container_name: sqloj-engine-mysql
-    restart: always
-    image: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: mysql@sqloj
-    ports:
-      - "4002:3306"
-
   adminer:
     container_name: sqloj-adminer
     restart: always

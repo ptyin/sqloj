@@ -14,15 +14,13 @@ import java.sql.SQLException;
 public class VariableDbConnection
 {
     private final Database database;
-    private final String username, password;
     private final Connection connection;
     private final long timestamp;
 
-    public static VariableDbConnection create(Database database, String username, String password) throws SQLException
+    public static VariableDbConnection create(Database database) throws SQLException
     {
-        var url = database.getDbms().getJdbcPrefix() + database.getName();
-        var connection = DriverManager.getConnection(url, username, password);
-        return new VariableDbConnection(database, username, password, connection, System.currentTimeMillis());
+        var connection = DriverManager.getConnection(database.getUrl());
+        return new VariableDbConnection(database, connection, System.currentTimeMillis());
     }
 
     public void close() throws SQLException

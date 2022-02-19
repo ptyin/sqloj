@@ -27,23 +27,7 @@ public class SqlOjConfigurationProperties
          * Max size of threads in thread pool.
          */
         private int maxThreads;
-        /**
-         * Period between 2 consecutive database connection recycling task.
-         * Default 1 minute.
-         */
-        private long connectionRecyclePeriod = 1000L * 60L;
-        /**
-         * Max live duration for an arbitrary database connection.
-         * Default 1 hour.
-         */
-        private long connectionMaxLiveDuration = 1000L * 60L * 60L;
 
-        private String mysqlDefaultUsername = "root";
-        private String mysqlDefaultPassword = "mysql@sqloj";
-
-
-        private String postgresqlDefaultUsername = "postgres";
-        private String postgresqlDefaultPassword = "postgres@sqloj";
-
+        private String urlToDb = ":resource:db/";
     }
 }
