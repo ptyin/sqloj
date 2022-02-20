@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 
 @Log4j2
-class SqlExecutorTest
+class SqlExecutionUtilsTest
 {
     static Connection connection;
 
@@ -34,11 +34,13 @@ class SqlExecutorTest
                 select Title as name from Albums;
                 End block comment;
                 */
-                select Title as name from Albums where AlbumId = 1;
+                select Title from Albums where AlbumId = 1;
                 
                 """;
-        var result = SqlExecutor.execute(connection, sql);
-        log.debug(result.toJson());
-        Assertions.assertEquals("haha;--", result.getRows().get(0).get(0));
+        var results = SqlExecutionUtils.execute(connection, sql);
+        log.debug(results.get(0).toJson());
+        log.debug(results.get(1).toJson());
+        Assertions.assertEquals("haha;--", results.get(0).getRows().get(0).get(0));
+        Assertions.assertEquals("Title", results.get(1).getMetadata().getColumnMetadata(0).getColumnLabel());
     }
 }

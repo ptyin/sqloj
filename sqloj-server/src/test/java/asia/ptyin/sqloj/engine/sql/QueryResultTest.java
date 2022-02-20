@@ -34,12 +34,12 @@ class QueryResultTest
     void toJson() throws SQLException, JsonProcessingException
     {
         connection.setAutoCommit(false);
-        var result = SqlExecutor.execute(connection, """
+        var results = SqlExecutionUtils.execute(connection, """
                 select * from albums where AlbumId < 10;
                 """);
         connection.rollback();
         connection.close();
-        var json = result.toJson();
+        var json = results.get(0).toJson();
         log.info("Generated json: %s".formatted(json));
         var node = mapper.readTree(json);
         // assert on rows
@@ -49,8 +49,8 @@ class QueryResultTest
         assertEquals("INTEGER", node.get("metadata").get("columnMetadataList").get(0).get("columnTypeName").asText());
         assertTrue(node.get("metadata").get("columnMetadataList").get(0).get("autoIncrement").asBoolean());
         var deserializedResult = mapper.readValue(json, QueryResult.class);
-        assertEquals(result.getRows().get(0).get(0), deserializedResult.getRows().get(0).get(0));
-        assertEquals(result.getMetadata().getColumnCount(), deserializedResult.getMetadata().getColumnCount());
-        assertEquals(result.getMetadata().getColumnMetadata(0).getColumnName(), result.getMetadata().getColumnMetadata(0).getColumnName());
+        assertEquals(results.get(0).getRows().get(0).get(0), deserializedResult.getRows().get(0).get(0));
+        assertEquals(results.get(0).getMetadata().getColumnCount(), deserializedResult.getMetadata().getColumnCount());
+        assertEquals(results.get(0).getMetadata().getColumnMetadata(0).getColumnName(), results.get(0).getMetadata().getColumnMetadata(0).getColumnName());
     }
 }

@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author PTYin
  * @since 0.1.0
  */
-class JudgeWorkerTest
+class JudgeTaskTest
 {
     @Test
     void testMultiThread()

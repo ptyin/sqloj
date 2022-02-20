@@ -1,4 +1,4 @@
-package asia.ptyin.sqloj.engine.judge.comparator;
+package asia.ptyin.sqloj.engine.comparator;
 
 import asia.ptyin.sqloj.engine.sql.QueryResult;
 

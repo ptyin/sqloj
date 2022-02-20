@@ -1,14 +1,13 @@
-package asia.ptyin.sqloj.engine.judge;
+package asia.ptyin.sqloj.engine;
 
-import asia.ptyin.sqloj.engine.judge.comparator.*;
-import asia.ptyin.sqloj.engine.judge.comparator.Comparator;
+import asia.ptyin.sqloj.engine.comparator.*;
+import asia.ptyin.sqloj.engine.comparator.Comparator;
 import asia.ptyin.sqloj.engine.sql.QueryResult;
+import asia.ptyin.sqloj.engine.task.Task;
 import lombok.Getter;
 
-import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
 import java.util.*;
-import java.util.concurrent.Callable;
 
 /***
  * Multi-functional judge worker.
@@ -16,7 +15,7 @@ import java.util.concurrent.Callable;
  * @author PTYin
  * @since 0.1.0
  */
-public class JudgeWorker implements Callable<Map<String, Object>>
+public class JudgeTask extends Task<Map<String, Object>>
 {
     private final List<? extends Comparator> comparators;
     private final QueryResult submit, criterion;
@@ -36,13 +35,14 @@ public class JudgeWorker implements Callable<Map<String, Object>>
     }
     private static final JudgeOption[] DEFAULT_OPTIONS = {JudgeOption.COLUMN_LABEL, JudgeOption.ROW};
 
-    public JudgeWorker(QueryResult submit, QueryResult criterion)
+    public JudgeTask(UUID uuid, QueryResult submit, QueryResult criterion)
     {
-        this(submit, criterion, DEFAULT_OPTIONS);
+        this(uuid, submit, criterion, DEFAULT_OPTIONS);
     }
 
-    public JudgeWorker(QueryResult submit, QueryResult criterion, JudgeOption[] options)
+    public JudgeTask(UUID uuid, QueryResult submit, QueryResult criterion, JudgeOption[] options)
     {
+        super(uuid);
         this.submit = submit;
         this.criterion = criterion;
 
@@ -61,7 +61,7 @@ public class JudgeWorker implements Callable<Map<String, Object>>
     }
 
     @Override
-    public Map<String, Object> call() throws Exception
+    public Map<String, Object> run() throws Exception
     {
         var comments = new HashMap<String, Object>();
         var start = System.currentTimeMillis();

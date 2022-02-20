@@ -1,7 +1,10 @@
 package asia.ptyin.sqloj.engine.sql;
 
+import asia.ptyin.sqloj.engine.sql.QueryResult;
+import asia.ptyin.sqloj.engine.sql.SqlStatementFailedException;
+import asia.ptyin.sqloj.engine.sql.SqlStatementsParseException;
+import asia.ptyin.sqloj.engine.task.Task;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.sql.Connection;
@@ -10,13 +13,13 @@ import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Executor for multiple SQL statements based on JDBC.
  */
 @Log4j2
-@Service
-public class SqlExecutor
+public class SqlExecutionUtils
 {
     /**
      * Default statement delimiter: {@code ";"}.
@@ -211,7 +214,7 @@ public class SqlExecutor
         return false;
     }
 
-    public static QueryResult execute(Connection connection, String source, String delimiter,
+    public static List<QueryResult> execute(Connection connection, String source, String delimiter,
                                       String[] commentPrefixes, String blockCommentStartDelimiter,
                                       String blockCommentEndDelimiter) throws SQLException
     {
@@ -231,7 +234,7 @@ public class SqlExecutor
 
         int stmtNumber = 0;
         Statement stmt = connection.createStatement();
-        QueryResult result = null;
+        var results = new ArrayList<QueryResult>();
         try
         {
             for (String statement : statements)
@@ -244,7 +247,9 @@ public class SqlExecutor
                     // true if the first result is a ResultSet object;
                     // false if it is an update count or there are no results.
                     if (stmt.execute(statement))
-                        result = result == null ? new QueryResult(stmt.getResultSet()) : result;
+                        do
+                            results.add(new QueryResult(stmt.getResultSet()));
+                        while (stmt.getMoreResults());  // If stmt has more results.
                     else
                     {
                         int rowsAffected = stmt.getUpdateCount();
@@ -282,18 +287,18 @@ public class SqlExecutor
         {
             log.debug("Executed SQL source from " + source + " in " + elapsedTime + " ms.");
         }
-        return result;
+        return results;
     }
 
     /**
-     * Execute SQL source code in the connection and get the first query result.
+     * Execute SQL source code in the connection and get all query results.
      * @param connection Database connection.
      * @param source Source SQL code.
      * @return The first query result in the execution of {@code source}.
      * @throws SQLException Throw if SQLException during manipulating JDBC.
      * @see QueryResult
      */
-    public static QueryResult execute(Connection connection, String source) throws SQLException
+    public static List<QueryResult> execute(Connection connection, String source) throws SQLException
     {
         return execute(connection, source, DEFAULT_STATEMENT_DELIMITER, DEFAULT_COMMENT_PREFIXES,
                 DEFAULT_BLOCK_COMMENT_START_DELIMITER, DEFAULT_BLOCK_COMMENT_END_DELIMITER);

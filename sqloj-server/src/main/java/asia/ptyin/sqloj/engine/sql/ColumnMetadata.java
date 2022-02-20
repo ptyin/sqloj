@@ -3,9 +3,7 @@ package asia.ptyin.sqloj.engine.sql;
 import lombok.*;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 
 /***
  * Column metadata records.
@@ -23,7 +21,8 @@ public class ColumnMetadata implements Serializable
     private String catalogName;
     private int columnDisplaySize;
     private String columnLabel;
-    private String columnName;
+    @Getter(onMethod_ = @Deprecated)
+    private String columnName;  // same as columnLabel due to the implementation of sqlite jdbc.
     private String columnTypeName;
 
     private int precision;

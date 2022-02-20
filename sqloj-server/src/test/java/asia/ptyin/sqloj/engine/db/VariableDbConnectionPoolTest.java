@@ -1,18 +1,15 @@
 package asia.ptyin.sqloj.engine.db;
 
-import asia.ptyin.sqloj.engine.sql.SqlExecutor;
+import asia.ptyin.sqloj.engine.sql.SqlExecutionUtils;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.time.Duration;
 import java.util.Collections;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -38,7 +35,7 @@ class VariableDbConnectionPoolTest
         // Creat several test database on MySQL DBMS
         try (var connection = DriverManager.getConnection("jdbc:sqlite:target/%s.db".formatted(TEST_UUID)))
         {
-            SqlExecutor.execute(connection, """
+            SqlExecutionUtils.execute(connection, """
                     create table if not exists test(test int);
                     """);
         } catch (Throwable e)
@@ -62,7 +59,7 @@ class VariableDbConnectionPoolTest
         var service = Executors.newFixedThreadPool(THREAD_COUNT);
         var tasks = Collections.nCopies(THREAD_COUNT, (Callable<Object>) () ->
         {
-            SqlExecutor.execute(pool.getConnection(new DatabaseImpl(TEST_UUID)).getConnection(),
+            SqlExecutionUtils.execute(pool.getConnection(new DatabaseImpl(TEST_UUID)).getConnection(),
                     """
                             insert into test values(0);
                             """);

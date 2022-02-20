@@ -1,13 +1,11 @@
-package asia.ptyin.sqloj.engine.judge.comparator;
+package asia.ptyin.sqloj.engine.comparator;
 
-import asia.ptyin.sqloj.engine.judge.JudgeResult;
 import asia.ptyin.sqloj.engine.sql.QueryResult;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /***
- * Comparator compares two {@link QueryResult} and returns a {@link JudgeResult}.
+ * Comparator compares two {@link QueryResult} to get comparison result and comments.
  * @version 0.1.0
  * @author PTYin
  * @since 0.1.0
