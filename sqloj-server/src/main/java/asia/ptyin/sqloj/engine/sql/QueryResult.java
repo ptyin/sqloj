@@ -12,6 +12,14 @@ import java.sql.SQLException;
 import java.util.*;
 
 
+/**
+ * In-memory stored query result, which not only contains the value retrieved
+ * but the metadata (column type, nullable, writable, etc.) as well.
+ * @version 0.1.0
+ * @author PTYin
+ * @since 0.1.0
+ * @see QueryMetadata Check the metadata info.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

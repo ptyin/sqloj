@@ -15,10 +15,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /***
- * Metadata for query result.
+ * Metadata for query result contains the metadata list of each column.
  * @version 0.1.0
  * @author PTYin
  * @since 0.1.0
+ * @see ColumnMetadata Check the metadata for each column.
  */
 @NoArgsConstructor
 @Getter

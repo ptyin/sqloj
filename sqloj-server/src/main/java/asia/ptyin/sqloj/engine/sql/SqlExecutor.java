@@ -237,6 +237,8 @@ public class SqlExecutor
             for (String statement : statements)
             {
                 stmtNumber++;
+                if(log.isDebugEnabled())
+                    log.debug("Statement [%d]: %s".formatted(stmtNumber, statement));
                 try
                 {
                     // true if the first result is a ResultSet object;
@@ -283,6 +285,14 @@ public class SqlExecutor
         return result;
     }
 
+    /**
+     * Execute SQL source code in the connection and get the first query result.
+     * @param connection Database connection.
+     * @param source Source SQL code.
+     * @return The first query result in the execution of {@code source}.
+     * @throws SQLException Throw if SQLException during manipulating JDBC.
+     * @see QueryResult
+     */
     public static QueryResult execute(Connection connection, String source) throws SQLException
     {
         return execute(connection, source, DEFAULT_STATEMENT_DELIMITER, DEFAULT_COMMENT_PREFIXES,

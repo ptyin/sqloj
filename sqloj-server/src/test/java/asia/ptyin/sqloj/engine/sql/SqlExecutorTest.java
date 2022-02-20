@@ -1,54 +1,44 @@
 package asia.ptyin.sqloj.engine.sql;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.extern.log4j.Log4j2;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-
+@Log4j2
 class SqlExecutorTest
 {
-    String url = "db/chinook.db";
+    static Connection connection;
 
-    @Test
-    void dbExists()
+    @BeforeAll
+    static void setup() throws SQLException
     {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("db/chinook.db").getFile());
-        String absolutePath = file.getAbsolutePath();
-
-        System.out.println(absolutePath);
-
-        assertTrue(absolutePath.endsWith("/chinook.db"));
+        connection = DriverManager.getConnection("jdbc:sqlite::resource:db/Chinook.db");
     }
 
     @Test
-    void execute() throws SQLException
+    void execute() throws SQLException, JsonProcessingException
     {
-        Connection conn = DriverManager.getConnection("jdbc:sqlite::resource:db/chinook.db");
-//        var statement = conn.prepareStatement("delete from albums where AlbumId=1; delete from albums where AlbumId=2; insert into albums values (1, 'test', 1);");
-        var statement = conn.createStatement();
-
-        statement.executeBatch();
-        var result = statement.executeQuery("select * from albums order by AlbumId");
-        var metadata = result.getMetaData();
-        int columnCount = metadata.getColumnCount();
-        for (int i = 1; i <= columnCount; i++)
-        {
-            System.out.println(metadata.getColumnName(i) + ", ");
-        }
-        System.out.println();
-        while (result.next()) {
-            String row = "";
-            for (int i = 1; i <= columnCount; i++) {
-                row += result.getString(i) + ", ";
-            }
-            System.out.println();
-            System.out.println(row);
-        }
+        @SuppressWarnings("SqlDialectInspection")
+        var sql = """
+                -- In line comment; --
+                select 'haha;--' as haha, Title from Albums where AlbumId = 1;
+                /*
+                Start block comment;
+                select Title as name from Albums;
+                End block comment;
+                */
+                select Title as name from Albums where AlbumId = 1;
+                
+                """;
+        var result = SqlExecutor.execute(connection, sql);
+        log.debug(result.toJson());
+        Assertions.assertEquals("haha;--", result.getRows().get(0).get(0));
     }
 }
