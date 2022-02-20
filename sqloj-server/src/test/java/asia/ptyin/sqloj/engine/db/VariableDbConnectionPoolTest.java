@@ -102,12 +102,6 @@ class VariableDbConnectionPoolTest
         }
 
         @Override
-        public String getName()
-        {
-            return uuid.toString();
-        }
-
-        @Override
         public String getUrl()
         {
             return "jdbc:sqlite:target/%s.db".formatted(uuid);

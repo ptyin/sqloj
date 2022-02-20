@@ -15,8 +15,16 @@ public class ColumnLabelComparator implements Comparator
 {
 
     @Override
-    public void compare(QueryResult x, QueryResult criterion, Map<String, Object> comments)
+    public boolean compare(QueryResult x, QueryResult criterion, Map<String, Object> comments)
     {
-
+        var labelSetX = x.getMetadata().getColumnLabels();
+        var labelSetCriterion = criterion.getMetadata().getColumnLabels();
+        // Size matches and x contains criterion and criterion contains x.
+        boolean match = labelSetX.size() == labelSetCriterion.size() &&
+                labelSetX.containsAll(labelSetCriterion) &&
+                labelSetCriterion.containsAll(labelSetX);
+        if (!match)
+            comments.put("column label", "(submitted:%s, criterion:%s)".formatted(labelSetX, labelSetCriterion));
+        return match;
     }
 }

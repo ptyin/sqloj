@@ -1,22 +1,49 @@
 package asia.ptyin.sqloj.engine.task;
 
 
-public abstract class Task implements Runnable
+import lombok.Getter;
+
+import java.lang.management.ManagementFactory;
+import java.time.Duration;
+import java.util.UUID;
+import java.util.concurrent.Callable;
+
+public abstract class Task<T> implements Callable<T>
 {
-    TaskState state = TaskState.VIRGIN;
+    @Getter
+    private final UUID uuid;
     /**
-     * A lock object in order to control the access to the internal of task.
+     * Elapsed thread CPU time of execution of the task.
      */
-    final Object lock = new Object();
+    @Getter
+    private Duration elapsedTime = Duration.ZERO;
 
-    public abstract void run();
-
-    public void terminate()
+    public enum TaskState
     {
-        synchronized (lock)
-        {
-            state = TaskState.TERMINATED;
-        }
+        PENDING,
+        RUNNING,
+        FINISHED;
+    }
+
+    @Getter
+    private TaskState taskState = TaskState.PENDING;
+
+    public Task(UUID uuid)
+    {
+        this.uuid = uuid;
+    }
+
+    public abstract T run() throws Exception;
+
+    @Override
+    public T call() throws Exception
+    {
+        taskState = TaskState.RUNNING;
+        long start = ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime();
+        var result = run();
+        elapsedTime = Duration.ofNanos(ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime() - start);
+        taskState = TaskState.FINISHED;
+        return result;
     }
 
 }

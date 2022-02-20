@@ -18,7 +18,7 @@ import static asia.ptyin.sqloj.engine.sql.QueryResult.rows2map;
 public class RowComparator implements Comparator
 {
     @Override
-    public void compare(QueryResult x, QueryResult criterion, @NonNull Map<String, Object> comments)
+    public boolean compare(QueryResult x, QueryResult criterion, @NonNull Map<String, Object> comments)
     {
         var mapX = rows2map(x.getLabeledRows());
         var mapCriterion = rows2map(criterion.getLabeledRows());
@@ -26,14 +26,17 @@ public class RowComparator implements Comparator
         for (var row : mapX.keySet())
         {
             // Result x has rows more than criterion.
-            redundantRows += mapX.get(row) - mapCriterion.getOrDefault(row, 0);
+            redundantRows += Math.max(0, mapX.get(row) - mapCriterion.getOrDefault(row, 0));
 
         }
         for (var row : mapCriterion.keySet())
             // Result x has rows less than criterion.
-            lackRows += mapCriterion.get(row) - mapX.getOrDefault(row, 0);
-        comments.put("redundant rows", redundantRows);
-        comments.put("lack rows", lackRows);
+            lackRows += Math.max(0, mapCriterion.get(row) - mapX.getOrDefault(row, 0));
+        if(redundantRows > 0)
+            comments.put("redundant rows", redundantRows);
+        if(lackRows > 0)
+            comments.put("lack rows", lackRows);
+        return redundantRows + lackRows == 0;
     }
 
 }

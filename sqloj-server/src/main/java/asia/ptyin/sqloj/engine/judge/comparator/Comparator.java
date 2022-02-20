@@ -19,6 +19,7 @@ public interface Comparator
      * @param x The one that is used to be compared with criterion.
      * @param criterion The criterion query result.
      * @param comments The result container, and several entries after each compare.
+     * @return {@code true} if x equals to criterion, otherwise {@code false}.
      */
-    void compare(QueryResult x, QueryResult criterion, Map<String, Object> comments);
+    boolean compare(QueryResult x, QueryResult criterion, Map<String, Object> comments);
 }

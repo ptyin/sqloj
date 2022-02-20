@@ -6,7 +6,11 @@ import org.springframework.stereotype.Service;
 import java.sql.SQLException;
 import java.util.*;
 
-
+/**
+ * Thread safe cached database connection pool for variable database.
+ * Note that it should be registered as a singleton bean in the context.
+ * @see VariableDbConnection
+ */
 public class VariableDbConnectionPool
 {
     /**

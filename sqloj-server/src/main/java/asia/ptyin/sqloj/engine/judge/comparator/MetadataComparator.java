@@ -13,8 +13,8 @@ import java.util.Map;
 public class MetadataComparator implements Comparator
 {
     @Override
-    public void compare(QueryResult x, QueryResult criterion, Map<String, Object> comments)
+    public boolean compare(QueryResult x, QueryResult criterion, Map<String, Object> comments)
     {
-
+        return false;
     }
 }

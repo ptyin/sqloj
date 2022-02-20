@@ -9,6 +9,5 @@ import java.util.UUID;
 public interface Database
 {
     UUID getUuid();
-    String getName();
     String getUrl();
 }
