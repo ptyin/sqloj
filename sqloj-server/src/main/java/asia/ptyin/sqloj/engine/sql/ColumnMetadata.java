@@ -2,6 +2,7 @@ package asia.ptyin.sqloj.engine.sql;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.io.Serializable;
@@ -15,9 +16,12 @@ import java.sql.SQLException;
  * @author PTYin
  * @since 0.1.0
  */
+@RequiredArgsConstructor
 @Getter
 public class ColumnMetadata implements Serializable
 {
+    private final int columnIndex;
+
     private final String catalogName;
     private final int columnDisplaySize;
     private final String columnLabel;
@@ -40,6 +44,8 @@ public class ColumnMetadata implements Serializable
     @SneakyThrows
     public ColumnMetadata(ResultSetMetaData resultSetMetaData, int column)
     {
+        columnIndex = column++;  // columnIndex is zero-started.
+
         catalogName = resultSetMetaData.getCatalogName(column);
         columnDisplaySize = resultSetMetaData.getColumnDisplaySize(column);
         columnLabel = resultSetMetaData.getColumnLabel(column);

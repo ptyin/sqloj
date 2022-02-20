@@ -283,9 +283,9 @@ public class SqlExecutor
         return result;
     }
 
-    public static void execute(Connection connection, String source) throws SQLException
+    public static QueryResult execute(Connection connection, String source) throws SQLException
     {
-        execute(connection, source, DEFAULT_STATEMENT_DELIMITER, DEFAULT_COMMENT_PREFIXES,
+        return execute(connection, source, DEFAULT_STATEMENT_DELIMITER, DEFAULT_COMMENT_PREFIXES,
                 DEFAULT_BLOCK_COMMENT_START_DELIMITER, DEFAULT_BLOCK_COMMENT_END_DELIMITER);
     }
 }

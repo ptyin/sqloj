@@ -1,19 +1,22 @@
 package asia.ptyin.sqloj.engine.sql;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
-public class QueryResult
+public class QueryResult implements Serializable
 {
     /**
-     * The first index of rows indicates row index, while the second index indicates the index of that row.
+     * The first index of rows indicates row index,
+     * while the second index indicates the index of that row.
      */
+    @Getter
     private final List<? extends List<Object>> rows;
     /**
      * Column metadata for result.
@@ -29,7 +32,7 @@ public class QueryResult
         var list = new ArrayList<ArrayList<Object>>();
         while (resultSet.next())
         {
-            var row = new ArrayList<Object>();
+            var row = new ArrayList<>();
             for(int i = 1; i <= columnCount; i++)
                 row.add(resultSet.getObject(i));
             list.add(row);
@@ -37,9 +40,10 @@ public class QueryResult
         rows = list;
     }
 
-    public List<List<Object>> getRows()
+    public String toJson() throws JsonProcessingException
     {
-        return Collections.unmodifiableList(rows);
+        var mapper = new ObjectMapper();
+        return mapper.writeValueAsString(this);
     }
 
     public static boolean equalsRow(List<Object> rowA, List<Object> rowB)
@@ -47,8 +51,20 @@ public class QueryResult
         if(rowA.size() != rowB.size())
             return false;
         for(int i = 0; i < rowA.size(); i++)
-            if(rowA.get(i) != rowB.get(i))
+            if(!rowA.get(i).equals(rowB.get(i)))
                 return false;
         return true;
+    }
+
+    public static boolean equalsRow(List<Object> rowA, List<Object> rowB,
+                                    QueryMetadata metadataA, QueryMetadata metadataB,
+                                    String columnLabel)
+    {
+        int indexA = metadataA.getColumnIndex(columnLabel), indexB = metadataB.getColumnIndex(columnLabel);
+        // either a or b does not have corresponding columnLabel.
+        if(indexA == -1 || indexB == -1)
+            return false;
+        // assert indexA < rowA.size() && indexB < rowB.size();
+        return rowA.get(indexA).equals(rowB.get(indexB));
     }
 }
