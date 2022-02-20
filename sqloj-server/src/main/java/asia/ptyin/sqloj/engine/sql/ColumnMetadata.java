@@ -1,9 +1,6 @@
 package asia.ptyin.sqloj.engine.sql;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import lombok.*;
 
 import java.io.Serializable;
 import java.sql.ResultSet;
@@ -16,30 +13,31 @@ import java.sql.SQLException;
  * @author PTYin
  * @since 0.1.0
  */
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Getter
+@Setter
 public class ColumnMetadata implements Serializable
 {
-    private final int columnIndex;
+    private int columnIndex;
 
-    private final String catalogName;
-    private final int columnDisplaySize;
-    private final String columnLabel;
-    private final String columnName;
-    private final String columnTypeName;
+    private String catalogName;
+    private int columnDisplaySize;
+    private String columnLabel;
+    private String columnName;
+    private String columnTypeName;
 
-    private final int precision;
-    private final boolean autoIncrement;
-    private final boolean caseSensitive;
+    private int precision;
+    private boolean autoIncrement;
+    private boolean caseSensitive;
     /**
      * the nullability status of the given column;
      * one of columnNoNulls, columnNullable or columnNullableUnknown
      */
-    private final int nullable;
-    private final boolean readOnly;
-    private final boolean searchable;
-    private final boolean signed;
-    private final boolean writable;
+    private int nullable;
+    private boolean readOnly;
+    private boolean searchable;
+    private boolean signed;
+    private boolean writable;
 
     @SneakyThrows
     public ColumnMetadata(ResultSetMetaData resultSetMetaData, int column)

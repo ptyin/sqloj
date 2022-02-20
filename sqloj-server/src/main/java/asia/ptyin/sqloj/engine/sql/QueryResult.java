@@ -3,6 +3,8 @@ package asia.ptyin.sqloj.engine.sql;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.sql.ResultSet;
@@ -10,19 +12,20 @@ import java.sql.SQLException;
 import java.util.*;
 
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class QueryResult implements Serializable
 {
     /**
      * The first index of rows indicates row index,
      * while the second index indicates the index of that row.
      */
-    @Getter
-    private final List<? extends List<Object>> rows;
+    private List<? extends List<Object>> rows;
     /**
      * Column metadata for result.
      */
-    @Getter
-    private final QueryMetadata metadata;
+    private QueryMetadata metadata;
 
     public QueryResult(ResultSet resultSet) throws SQLException
     {

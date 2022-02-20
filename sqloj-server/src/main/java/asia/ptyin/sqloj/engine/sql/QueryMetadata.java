@@ -1,7 +1,10 @@
 package asia.ptyin.sqloj.engine.sql;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -17,16 +20,16 @@ import java.util.stream.IntStream;
  * @author PTYin
  * @since 0.1.0
  */
-@RequiredArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class QueryMetadata
 {
     // The index of list is the column index,
     // which starts from 0 to columnCount - 1.
-    @Getter
-    final private List<ColumnMetadata> columnMetadataList;
+    private List<ColumnMetadata> columnMetadataList;
     // The key is the column label, the value is index of columnMetadataList.
-    @Getter
-    final private Map<String, Integer> columnLabel2Index;
+    private Map<String, Integer> columnLabel2Index;
 
     public QueryMetadata(ResultSetMetaData resultSetMetaData) throws SQLException
     {
@@ -38,6 +41,7 @@ public class QueryMetadata
                 .collect(Collectors.toMap(ColumnMetadata::getColumnLabel, ColumnMetadata::getColumnIndex));
     }
 
+    @JsonIgnore
     public int getColumnCount()
     {
         return columnMetadataList.size();
@@ -77,6 +81,7 @@ public class QueryMetadata
         return columnLabel2Index.getOrDefault(columnLabel, -1);
     }
 
+    @JsonIgnore
     public Set<String> getColumnLabels()
     {
         return columnLabel2Index.keySet();
