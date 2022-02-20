@@ -29,7 +29,12 @@ public class QueryResult implements Serializable
      * The first index of rows indicates row index,
      * while the second index indicates the index of that row.
      */
-    private List<? extends List<Object>> rows;
+    private List<List<Object>> rows;
+    /**
+     * The list index indicates row index, the key of map indicates column label,
+     * and the value of map indicates actual value.
+     */
+    private List<Map<String, Object>> labeledRows;
     /**
      * Column metadata for result.
      */
@@ -39,17 +44,32 @@ public class QueryResult implements Serializable
     {
         var resultSetMetaData = resultSet.getMetaData();
         metadata = new QueryMetadata(resultSetMetaData);
-        int columnCount = metadata.getColumnCount();
-        var list = new ArrayList<ArrayList<Object>>();
+        int columnCount = resultSetMetaData.getColumnCount();
+        rows = new ArrayList<>();
+        labeledRows = new ArrayList<>();
         while (resultSet.next())
         {
             var row = new ArrayList<>();
+            var labeledRow = new HashMap<String, Object>();
             for(int i = 1; i <= columnCount; i++)
-                row.add(resultSet.getObject(i));
-            list.add(row);
+            {
+                var value = resultSet.getObject(i);
+                row.add(value);
+                labeledRow.put(resultSetMetaData.getColumnLabel(i), value);
+            }
+            rows.add(row);
+            labeledRows.add(labeledRow);
         }
-        rows = list;
     }
+
+//    @JsonIgnore
+//    public List<List<Object>> getOriginalRows()
+//    {
+//        return labeledRows.stream().map(row ->
+//        {
+//            return row.entrySet().stream().sorted(Comparator.comparingInt(a -> metadata.getColumnIndex(a.getKey()))).map(Map.Entry::getValue).toList();
+//        }).toList();
+//    }
 
     public String toJson() throws JsonProcessingException
     {
@@ -77,5 +97,23 @@ public class QueryResult implements Serializable
             return false;
         // assert indexA < rowA.size() && indexB < rowB.size();
         return rowA.get(indexA).equals(rowB.get(indexB));
+    }
+
+    /**
+     * Convert the list of rows to a map from row to duplicate times.
+     * @param rows The list of every row.
+     * @return A map of which the key is row and the value is duplicate times.
+     */
+    public static <R> Map<R, Integer> rows2map(List<R> rows)
+    {
+        var map = new HashMap<R, Integer>();
+        for (var row : rows)
+        {
+            if (map.containsKey(row))
+                map.put(row, map.get(row) + 1);
+            else
+                map.put(row, 1);
+        }
+        return map;
     }
 }
