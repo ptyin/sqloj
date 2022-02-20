@@ -211,9 +211,9 @@ public class SqlExecutor
         return false;
     }
 
-    public static void execute(Connection connection, String source, String delimiter,
-                               String[] commentPrefixes, String blockCommentStartDelimiter,
-                               String blockCommentEndDelimiter) throws SQLException
+    public static QueryResult execute(Connection connection, String source, String delimiter,
+                                      String[] commentPrefixes, String blockCommentStartDelimiter,
+                                      String blockCommentEndDelimiter) throws SQLException
     {
         long startTime = System.currentTimeMillis();
 
@@ -231,6 +231,7 @@ public class SqlExecutor
 
         int stmtNumber = 0;
         Statement stmt = connection.createStatement();
+        QueryResult result = null;
         try
         {
             for (String statement : statements)
@@ -238,18 +239,24 @@ public class SqlExecutor
                 stmtNumber++;
                 try
                 {
-                    stmt.execute(statement);
-                    int rowsAffected = stmt.getUpdateCount();
-                    if (log.isDebugEnabled())
+                    // true if the first result is a ResultSet object;
+                    // false if it is an update count or there are no results.
+                    if (stmt.execute(statement))
+                        result = result == null ? new QueryResult(stmt.getResultSet()) : result;
+                    else
                     {
-                        log.debug(rowsAffected + " returned as update count for SQL: " + statement);
-                        SQLWarning warningToLog = stmt.getWarnings();
-                        while (warningToLog != null)
+                        int rowsAffected = stmt.getUpdateCount();
+                        if (log.isDebugEnabled())
                         {
-                            log.debug("SQLWarning ignored: SQL state '" + warningToLog.getSQLState() +
-                                    "', error code '" + warningToLog.getErrorCode() +
-                                    "', message [" + warningToLog.getMessage() + "]");
-                            warningToLog = warningToLog.getNextWarning();
+                            log.debug(rowsAffected + " returned as update count for SQL: " + statement);
+                            SQLWarning warningToLog = stmt.getWarnings();
+                            while (warningToLog != null)
+                            {
+                                log.debug("SQLWarning ignored: SQL state '" + warningToLog.getSQLState() +
+                                        "', error code '" + warningToLog.getErrorCode() +
+                                        "', message [" + warningToLog.getMessage() + "]");
+                                warningToLog = warningToLog.getNextWarning();
+                            }
                         }
                     }
                 } catch (SQLException ex)
@@ -273,6 +280,7 @@ public class SqlExecutor
         {
             log.debug("Executed SQL source from " + source + " in " + elapsedTime + " ms.");
         }
+        return result;
     }
 
     public static void execute(Connection connection, String source) throws SQLException
