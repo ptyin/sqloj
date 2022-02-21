@@ -1,8 +1,10 @@
-package asia.ptyin.sqloj.engine.sql;
+package asia.ptyin.sqloj.engine.result;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.SneakyThrows;
 
-import java.io.Serializable;
 import java.sql.ResultSetMetaData;
 
 /***
@@ -14,7 +16,7 @@ import java.sql.ResultSetMetaData;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ColumnMetadata implements Serializable
+public class ColumnMetadata
 {
     private int columnIndex;
 

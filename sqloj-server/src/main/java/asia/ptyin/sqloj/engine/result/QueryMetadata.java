@@ -1,4 +1,4 @@
-package asia.ptyin.sqloj.engine.sql;
+package asia.ptyin.sqloj.engine.result;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;

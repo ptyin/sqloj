@@ -2,10 +2,12 @@ package asia.ptyin.sqloj.engine;
 
 import asia.ptyin.sqloj.engine.comparator.*;
 import asia.ptyin.sqloj.engine.comparator.Comparator;
-import asia.ptyin.sqloj.engine.sql.QueryResult;
+import asia.ptyin.sqloj.engine.result.JudgeResult;
+import asia.ptyin.sqloj.engine.result.QueryResult;
 import asia.ptyin.sqloj.engine.task.Task;
 import lombok.Getter;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
 import java.util.*;
 
@@ -15,10 +17,11 @@ import java.util.*;
  * @author PTYin
  * @since 0.1.0
  */
-public class JudgeTask extends Task<Map<String, Object>>
+public class JudgeTask extends Task<JudgeResult>
 {
-    private final List<? extends Comparator> comparators;
+//    private final List<? extends Comparator> comparators;
     private final QueryResult submit, criterion;
+    private Duration timeLimit;  // TODO add time limit support.
 
     public enum JudgeOption
     {
@@ -33,6 +36,8 @@ public class JudgeTask extends Task<Map<String, Object>>
             this.comparator = comparator;
         }
     }
+    private final JudgeOption[] options;
+
     private static final JudgeOption[] DEFAULT_OPTIONS = {JudgeOption.COLUMN_LABEL, JudgeOption.ROW};
 
     public JudgeTask(UUID uuid, QueryResult submit, QueryResult criterion)
@@ -45,30 +50,34 @@ public class JudgeTask extends Task<Map<String, Object>>
         super(uuid);
         this.submit = submit;
         this.criterion = criterion;
-
-        this.comparators = Arrays.stream(options)
-                .map(option ->
-                {
-                    try
-                    {
-                        return option.getComparator().getDeclaredConstructor().newInstance();
-                    } catch (Throwable e)
-                    {
-                        e.printStackTrace();
-                        return null;
-                    }
-                }).toList();
+        this.options = options;
     }
 
     @Override
-    public Map<String, Object> run() throws Exception
+    public JudgeResult run() throws InterruptedException
     {
-        var comments = new HashMap<String, Object>();
+        var result = new JudgeResult();
+        var comments = result.getComments();
         var start = System.currentTimeMillis();
-        for (var comparator : comparators)
-            comparator.compare(submit, criterion, comments);
-        comments.put("judge costs", Duration.ofMillis(System.currentTimeMillis() - start));
-        return comments;
+        boolean pass = false;
+        for (var option : options)
+        {
+            if(Thread.currentThread().isInterrupted())
+                throw new InterruptedException("Interruption before comparison option [%s]".formatted(option));
+            try
+            {
+                var comparator = option.getComparator().getDeclaredConstructor().newInstance();
+                pass = comparator.compare(submit, criterion, comments);
+                if(!pass)
+                    break;
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        result.setPass(pass);
+        result.setTime(Duration.ofMillis(System.currentTimeMillis() - start));
+        return result;
     }
 
 }

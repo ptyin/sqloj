@@ -1,5 +1,8 @@
 package asia.ptyin.sqloj.engine.task;
 
+import asia.ptyin.sqloj.engine.result.Result;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -14,11 +17,11 @@ import java.util.concurrent.*;
  * @since 0.1.0
  */
 @Component
-public class TaskRunner<T>
+public class TaskRunner
 {
-    private Task<T> task;
-    private T result;
     private Map<UUID, Task<?>> container;
+    @Setter(onMethod_ = @Autowired)
+    private TaskRepository repository;
     private final ExecutorService threadPool;
 
     public TaskRunner()
@@ -32,22 +35,22 @@ public class TaskRunner<T>
      * @param task The task to submit.
      * @return the future result that the task produces.
      */
-    public Future<?> submit(Task<?> task)
+    public <T extends Result> Future<T> submit(Task<T> task)
     {
         var future = threadPool.submit(task);
         threadPool.submit(() ->
         {
             try
             {
-                future.get(30, TimeUnit.MINUTES);
+                T result = future.get(30, TimeUnit.MINUTES);  // TODO make timeout a property
 
-            } catch (InterruptedException e)
+
+            } catch (TimeoutException e)  // If the waited time exceeds timeout.
             {
+                future.cancel(true);
+                System.out.println();
                 e.printStackTrace();
-            } catch (ExecutionException e)
-            {
-                e.printStackTrace();
-            } catch (TimeoutException e)
+            } catch (InterruptedException | ExecutionException e)
             {
                 e.printStackTrace();
             }

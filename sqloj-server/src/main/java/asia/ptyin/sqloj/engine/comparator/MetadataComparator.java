@@ -1,6 +1,6 @@
 package asia.ptyin.sqloj.engine.comparator;
 
-import asia.ptyin.sqloj.engine.sql.QueryResult;
+import asia.ptyin.sqloj.engine.result.QueryResult;
 
 import java.util.Map;
 

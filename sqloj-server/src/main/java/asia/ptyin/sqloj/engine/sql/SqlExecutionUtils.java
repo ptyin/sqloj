@@ -1,9 +1,6 @@
 package asia.ptyin.sqloj.engine.sql;
 
-import asia.ptyin.sqloj.engine.sql.QueryResult;
-import asia.ptyin.sqloj.engine.sql.SqlStatementFailedException;
-import asia.ptyin.sqloj.engine.sql.SqlStatementsParseException;
-import asia.ptyin.sqloj.engine.task.Task;
+import asia.ptyin.sqloj.engine.result.QueryResult;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.util.StringUtils;
 
@@ -13,7 +10,6 @@ import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Executor for multiple SQL statements based on JDBC.
@@ -215,8 +211,8 @@ public class SqlExecutionUtils
     }
 
     public static List<QueryResult> execute(Connection connection, String source, String delimiter,
-                                      String[] commentPrefixes, String blockCommentStartDelimiter,
-                                      String blockCommentEndDelimiter) throws SQLException
+                                            String[] commentPrefixes, String blockCommentStartDelimiter,
+                                            String blockCommentEndDelimiter) throws SQLException, InterruptedException
     {
         long startTime = System.currentTimeMillis();
 
@@ -240,6 +236,10 @@ public class SqlExecutionUtils
             for (String statement : statements)
             {
                 stmtNumber++;
+                if(Thread.currentThread().isInterrupted())
+                {
+                    throw new InterruptedException("Interruption before statement [%d]: %s".formatted(stmtNumber, stmt));
+                }
                 if(log.isDebugEnabled())
                     log.debug("Statement [%d]: %s".formatted(stmtNumber, statement));
                 try
@@ -296,9 +296,10 @@ public class SqlExecutionUtils
      * @param source Source SQL code.
      * @return The first query result in the execution of {@code source}.
      * @throws SQLException Throw if SQLException during manipulating JDBC.
+     * @throws InterruptedException Throw if interrupted during execution of statements.
      * @see QueryResult
      */
-    public static List<QueryResult> execute(Connection connection, String source) throws SQLException
+    public static List<QueryResult> execute(Connection connection, String source) throws SQLException, InterruptedException
     {
         return execute(connection, source, DEFAULT_STATEMENT_DELIMITER, DEFAULT_COMMENT_PREFIXES,
                 DEFAULT_BLOCK_COMMENT_START_DELIMITER, DEFAULT_BLOCK_COMMENT_END_DELIMITER);

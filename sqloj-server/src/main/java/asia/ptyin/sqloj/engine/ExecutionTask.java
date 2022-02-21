@@ -1,6 +1,6 @@
 package asia.ptyin.sqloj.engine;
 
-import asia.ptyin.sqloj.engine.sql.QueryResult;
+import asia.ptyin.sqloj.engine.result.QueryResult;
 import asia.ptyin.sqloj.engine.sql.SqlExecutionUtils;
 import asia.ptyin.sqloj.engine.task.Task;
 
@@ -27,9 +27,17 @@ public class ExecutionTask extends Task<QueryResult>
     }
 
     @Override
-    public QueryResult run() throws Exception
+    public QueryResult run() throws InterruptedException
     {
-        var queryResults = SqlExecutionUtils.execute(connection, source);
-        return queryResults.get(queryResults.size() - 1);
+        QueryResult queryResult = null;
+        try
+        {
+            queryResult = SqlExecutionUtils.execute(connection, source).get(0);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return queryResult;
     }
 }

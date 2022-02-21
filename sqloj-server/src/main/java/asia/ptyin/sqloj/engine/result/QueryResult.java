@@ -1,4 +1,4 @@
-package asia.ptyin.sqloj.engine.sql;
+package asia.ptyin.sqloj.engine.result;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -20,10 +19,11 @@ import java.util.*;
  * @since 0.1.0
  * @see QueryMetadata Check the metadata info.
  */
+// TODO ANNOTATED WITH @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class QueryResult implements Serializable
+public class QueryResult implements Result
 {
     /**
      * The first index of rows indicates row index,
@@ -71,10 +71,19 @@ public class QueryResult implements Serializable
 //        }).toList();
 //    }
 
-    public String toJson() throws JsonProcessingException
+    @Override
+    public String serialize()
     {
         var mapper = new ObjectMapper();
-        return mapper.writeValueAsString(this);
+        String value = null;
+        try
+        {
+            value = mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e)
+        {
+            e.printStackTrace();
+        }
+        return value;
     }
 
     public static boolean equalsRow(List<Object> rowA, List<Object> rowB)

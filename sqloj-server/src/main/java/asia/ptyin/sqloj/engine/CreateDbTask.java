@@ -1,5 +1,6 @@
 package asia.ptyin.sqloj.engine;
 
+import asia.ptyin.sqloj.engine.result.Result;
 import asia.ptyin.sqloj.engine.task.Task;
 
 import java.util.UUID;
@@ -10,7 +11,7 @@ import java.util.UUID;
  * @author PTYin
  * @since 0.1.0
  */
-public class CreateDbTask extends Task<String>
+public class CreateDbTask extends Task<Result>
 {
     public CreateDbTask(UUID uuid)
     {
@@ -18,7 +19,7 @@ public class CreateDbTask extends Task<String>
     }
 
     @Override
-    public String run() throws Exception
+    public Result run() throws InterruptedException
     {
         return null;
     }

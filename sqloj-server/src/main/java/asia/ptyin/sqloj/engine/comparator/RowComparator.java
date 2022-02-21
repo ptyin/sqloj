@@ -1,11 +1,11 @@
 package asia.ptyin.sqloj.engine.comparator;
 
-import asia.ptyin.sqloj.engine.sql.QueryResult;
+import asia.ptyin.sqloj.engine.result.QueryResult;
 import lombok.NonNull;
 
 import java.util.Map;
 
-import static asia.ptyin.sqloj.engine.sql.QueryResult.rows2map;
+import static asia.ptyin.sqloj.engine.result.QueryResult.rows2map;
 
 /***
  * Compare the query result regarding key-value.

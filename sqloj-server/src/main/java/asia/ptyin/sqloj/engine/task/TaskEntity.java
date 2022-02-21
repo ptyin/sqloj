@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.UUID;
 
 /***
- * Entity class for task.
+ * Entity class for task. Store the information of the task.
  * @version 0.1.0
  * @author PTYin
  * @since 0.1.0
@@ -28,4 +28,6 @@ public class TaskEntity
 
     @CreatedDate
     private Date createdAt;
+
+    private Object result;
 }

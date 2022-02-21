@@ -1,6 +1,6 @@
 package asia.ptyin.sqloj.engine.sql;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import asia.ptyin.sqloj.engine.result.QueryResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,7 +31,7 @@ class QueryResultTest
     }
 
     @Test
-    void toJson() throws SQLException, JsonProcessingException
+    void toJson() throws Exception
     {
         connection.setAutoCommit(false);
         var results = SqlExecutionUtils.execute(connection, """
@@ -39,7 +39,7 @@ class QueryResultTest
                 """);
         connection.rollback();
         connection.close();
-        var json = results.get(0).toJson();
+        var json = results.get(0).serialize();
         log.info("Generated json: %s".formatted(json));
         var node = mapper.readTree(json);
         // assert on rows
