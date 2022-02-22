@@ -24,7 +24,7 @@ public class ColumnLabelComparator implements Comparator
                 labelSetX.containsAll(labelSetCriterion) &&
                 labelSetCriterion.containsAll(labelSetX);
         if (!match)
-            comments.put("column label", "(submitted:%s, criterion:%s)".formatted(labelSetX, labelSetCriterion));
+            comments.put("column label", "submitted:%s, criterion:%s".formatted(labelSetX, labelSetCriterion));
         return match;
     }
 }

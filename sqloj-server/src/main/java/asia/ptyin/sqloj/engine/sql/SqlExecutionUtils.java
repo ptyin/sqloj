@@ -41,71 +41,6 @@ public class SqlExecutionUtils
      */
     public static final String DEFAULT_BLOCK_COMMENT_END_DELIMITER = "*/";
 
-    public static boolean containsStatementDelimiter(String source, String delimiter, String[] commentPrefixes,
-                                                     String blockCommentStartDelimiter,
-                                                     String blockCommentEndDelimiter)
-    {
-        boolean inSingleQuote = false;
-        boolean inDoubleQuote = false;
-        boolean inEscape = false;
-
-        for (int i = 0; i < source.length(); i++)
-        {
-            char c = source.charAt(i);
-            if (inEscape)
-            {
-                inEscape = false;
-                continue;
-            }
-            // MySQL style escapes
-            if (c == '\\')
-            {
-                inEscape = true;
-                continue;
-            }
-            if (!inDoubleQuote && (c == '\''))
-            {
-                inSingleQuote = !inSingleQuote;
-            } else if (!inSingleQuote && (c == '"'))
-            {
-                inDoubleQuote = !inDoubleQuote;
-            }
-            if (!inSingleQuote && !inDoubleQuote)
-            {
-                if (source.startsWith(delimiter, i))
-                {
-                    return true;
-                } else if (startsWithAny(source, commentPrefixes, i))
-                {
-                    // Skip over any content from the start of the comment to the EOL
-                    int indexOfNextNewline = source.indexOf('\n', i);
-                    if (indexOfNextNewline > i)
-                    {
-                        i = indexOfNextNewline;
-                    } else
-                    {
-                        // If there's no EOL, we must be at the end of the source, so stop here.
-                        break;
-                    }
-                } else if (source.startsWith(blockCommentStartDelimiter, i))
-                {
-                    // Skip over any block comments
-                    int indexOfCommentEnd = source.indexOf(blockCommentEndDelimiter, i);
-                    if (indexOfCommentEnd > i)
-                    {
-                        i = indexOfCommentEnd + blockCommentEndDelimiter.length() - 1;
-                    } else
-                    {
-                        throw new SqlStatementsParseException(
-                                "Missing block comment end delimiter: " + blockCommentEndDelimiter, source);
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
     public static void split(String source, String delimiter, String[] commentPrefixes,
                              String blockCommentStartDelimiter, String blockCommentEndDelimiter,
                              List<String> statements)
@@ -220,9 +155,6 @@ public class SqlExecutionUtils
         if (delimiter == null)
             delimiter = DEFAULT_STATEMENT_DELIMITER;
 
-        if (!containsStatementDelimiter(source, delimiter, commentPrefixes,
-                blockCommentStartDelimiter, blockCommentEndDelimiter))
-            delimiter = FALLBACK_STATEMENT_DELIMITER;
 
         List<String> statements = new ArrayList<>();
         split(source, delimiter, commentPrefixes, blockCommentStartDelimiter,
