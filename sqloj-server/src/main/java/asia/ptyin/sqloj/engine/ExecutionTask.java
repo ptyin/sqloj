@@ -5,6 +5,7 @@ import asia.ptyin.sqloj.engine.sql.SqlExecutionUtils;
 import asia.ptyin.sqloj.engine.task.Task;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.UUID;
 
 /***
@@ -33,7 +34,7 @@ public class ExecutionTask extends Task<QueryResult>
         try
         {
             queryResult = SqlExecutionUtils.execute(connection, source).get(0);
-        } catch (Exception e)
+        } catch (SQLException e)
         {
             e.printStackTrace();
         }

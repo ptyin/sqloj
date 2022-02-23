@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.util.*;
 
 
@@ -19,7 +20,6 @@ import java.util.*;
  * @since 0.1.0
  * @see QueryMetadata Check the metadata info.
  */
-// TODO ANNOTATED WITH @Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -39,6 +39,9 @@ public class QueryResult implements Result
      * Column metadata for result.
      */
     private QueryMetadata metadata;
+
+    @Getter(onMethod_ = @Override)
+    private Duration time;
 
     public QueryResult(ResultSet resultSet) throws SQLException
     {
@@ -61,15 +64,6 @@ public class QueryResult implements Result
             labeledRows.add(labeledRow);
         }
     }
-
-//    @JsonIgnore
-//    public List<List<Object>> getOriginalRows()
-//    {
-//        return labeledRows.stream().map(row ->
-//        {
-//            return row.entrySet().stream().sorted(Comparator.comparingInt(a -> metadata.getColumnIndex(a.getKey()))).map(Map.Entry::getValue).toList();
-//        }).toList();
-//    }
 
     @Override
     public String serialize()

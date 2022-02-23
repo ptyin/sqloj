@@ -6,6 +6,7 @@ import asia.ptyin.sqloj.engine.result.JudgeResult;
 import asia.ptyin.sqloj.engine.result.QueryResult;
 import asia.ptyin.sqloj.engine.task.Task;
 import lombok.Getter;
+import org.springframework.lang.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
@@ -21,10 +22,11 @@ public class JudgeTask extends Task<JudgeResult>
 {
 //    private final List<? extends Comparator> comparators;
     private final QueryResult submit, criterion;
-    private Duration timeLimit;  // TODO add time limit support.
+    private final Duration timeLimit;  // TODO add time limit support.
 
     public enum JudgeOption
     {
+        TIME_LIMIT(TimeComparator.class),
         COLUMN_LABEL(ColumnLabelComparator.class),
         ROW(RowComparator.class),
         METADATA(MetadataComparator.class),
@@ -42,14 +44,15 @@ public class JudgeTask extends Task<JudgeResult>
 
     public JudgeTask(UUID uuid, QueryResult submit, QueryResult criterion)
     {
-        this(uuid, submit, criterion, DEFAULT_OPTIONS);
+        this(uuid, submit, criterion, null, DEFAULT_OPTIONS);
     }
 
-    public JudgeTask(UUID uuid, QueryResult submit, QueryResult criterion, JudgeOption[] options)
+    public JudgeTask(UUID uuid, QueryResult submit, QueryResult criterion, @Nullable Duration timeLimit, JudgeOption[] options)
     {
         super(uuid);
         this.submit = submit;
         this.criterion = criterion;
+        this.timeLimit = timeLimit;
         this.options = options;
     }
 
