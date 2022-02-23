@@ -21,4 +21,10 @@ public class DatabaseInfo implements Result
     {
         return null;
     }
+
+    @Override
+    public void setTime(Duration time)
+    {
+
+    }
 }

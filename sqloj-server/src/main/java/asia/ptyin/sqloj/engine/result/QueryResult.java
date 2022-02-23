@@ -40,7 +40,6 @@ public class QueryResult implements Result
      */
     private QueryMetadata metadata;
 
-    @Getter(onMethod_ = @Override)
     private Duration time;
 
     public QueryResult(ResultSet resultSet) throws SQLException
@@ -63,21 +62,6 @@ public class QueryResult implements Result
             rows.add(row);
             labeledRows.add(labeledRow);
         }
-    }
-
-    @Override
-    public String serialize()
-    {
-        var mapper = new ObjectMapper();
-        String value = null;
-        try
-        {
-            value = mapper.writeValueAsString(this);
-        } catch (JsonProcessingException e)
-        {
-            e.printStackTrace();
-        }
-        return value;
     }
 
     public static boolean equalsRow(List<Object> rowA, List<Object> rowB)

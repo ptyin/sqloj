@@ -1,13 +1,16 @@
 package asia.ptyin.sqloj.engine.sql;
 
+import asia.ptyin.sqloj.engine.result.ExecutionResult;
 import asia.ptyin.sqloj.engine.result.QueryResult;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.util.StringUtils;
 
+import java.lang.management.ManagementFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -145,10 +148,11 @@ public class SqlExecutionUtils
         return false;
     }
 
-    public static List<QueryResult> execute(Connection connection, String source, String delimiter,
-                                            String[] commentPrefixes, String blockCommentStartDelimiter,
-                                            String blockCommentEndDelimiter) throws SQLException, InterruptedException
+    public static ExecutionResult execute(Connection connection, String source, String delimiter,
+                                          String[] commentPrefixes, String blockCommentStartDelimiter,
+                                          String blockCommentEndDelimiter) throws SQLException, InterruptedException
     {
+        var executionResult = new ExecutionResult();
         long startTime = System.currentTimeMillis();
 
 
@@ -162,7 +166,7 @@ public class SqlExecutionUtils
 
         int stmtNumber = 0;
         Statement stmt = connection.createStatement();
-        var results = new ArrayList<QueryResult>();
+//        var results = new ArrayList<QueryResult>();
         try
         {
             for (String statement : statements)
@@ -176,12 +180,21 @@ public class SqlExecutionUtils
                     log.debug("Statement [%d]: %s".formatted(stmtNumber, statement));
                 try
                 {
+                    var statementStart = ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime();
                     // true if the first result is a ResultSet object;
                     // false if it is an update count or there are no results.
                     if (stmt.execute(statement))
+                    {
+                        Duration elapsedTime = Duration.ofNanos(ManagementFactory.getThreadMXBean()
+                                .getCurrentThreadCpuTime() - statementStart);
                         do
-                            results.add(new QueryResult(stmt.getResultSet()));
+                        {
+                            var queryResult = new QueryResult(stmt.getResultSet());
+                            queryResult.setTime(elapsedTime);
+                            executionResult.add(queryResult);
+                        }
                         while (stmt.getMoreResults());  // If stmt has more results.
+                    }
                     else
                     {
                         int rowsAffected = stmt.getUpdateCount();
@@ -219,7 +232,7 @@ public class SqlExecutionUtils
         {
             log.debug("Executed SQL source from " + source + " in " + elapsedTime + " ms.");
         }
-        return results;
+        return executionResult;
     }
 
     /**
@@ -231,7 +244,7 @@ public class SqlExecutionUtils
      * @throws InterruptedException Throw if interrupted during execution of statements.
      * @see QueryResult
      */
-    public static List<QueryResult> execute(Connection connection, String source) throws SQLException, InterruptedException
+    public static ExecutionResult execute(Connection connection, String source) throws SQLException, InterruptedException
     {
         return execute(connection, source, DEFAULT_STATEMENT_DELIMITER, DEFAULT_COMMENT_PREFIXES,
                 DEFAULT_BLOCK_COMMENT_START_DELIMITER, DEFAULT_BLOCK_COMMENT_END_DELIMITER);

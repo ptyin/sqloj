@@ -37,24 +37,24 @@ class RowComparatorTest
                 select distinct title
                 from albums natural join tracks
                 where mediatypeid not in (select mediatypeid from media_types where name = 'MPEG audio file')
-                """).get(0);
+                """).getLastQueryResult();
         var a = SqlExecutionUtils.execute(connection, """
                 select title
                 from albums natural join tracks
                 where mediatypeid not in (select mediatypeid from media_types where name = 'MPEG audio file')
-                """).get(0);
+                """).getLastQueryResult();
         var b = SqlExecutionUtils.execute(connection, """
                 select distinct title
                 from albums natural join tracks
                 where mediatypeid not in (select mediatypeid from media_types where name = 'MPEG audio file')
                 order by title
-                """).get(0);
+                """).getLastQueryResult();
         var c = SqlExecutionUtils.execute(connection, """
                 select distinct title
                 from albums natural join tracks
                 where mediatypeid not in (select mediatypeid from media_types where name = 'MPEG audio file')
                 order by albumid
-                """).get(0);
+                """).getLastQueryResult();
         log.debug(a.getRows());
         log.debug(b.getRows());
         log.debug(c.getRows());

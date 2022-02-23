@@ -15,12 +15,6 @@ public abstract class Task<T extends Result> implements Callable<T>
 {
     @Getter
     private final UUID uuid;
-    /**
-     * Elapsed thread CPU time of execution of the task.
-     */
-    private Duration elapsedTime = Duration.ZERO;
-
-    private T result;
 
     public enum TaskState
     {
@@ -37,7 +31,7 @@ public abstract class Task<T extends Result> implements Callable<T>
         this.uuid = uuid;
     }
 
-    public abstract T run() throws InterruptedException;
+    protected abstract T run() throws InterruptedException;
 
     @Override
     public T call() throws Exception
@@ -48,7 +42,8 @@ public abstract class Task<T extends Result> implements Callable<T>
             taskState = TaskState.RUNNING;  // Reference assignment is atomic.
             long start = ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime();
             result = run();  // Throw InterruptedException.
-            elapsedTime = Duration.ofNanos(ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime() - start);
+            Duration elapsedTime = Duration.ofNanos(ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime() - start);
+            result.setTime(elapsedTime);
             taskState = TaskState.FINISHED;
         } catch (InterruptedException e)
         {

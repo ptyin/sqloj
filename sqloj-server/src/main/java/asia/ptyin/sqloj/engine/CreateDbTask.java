@@ -19,7 +19,7 @@ public class CreateDbTask extends Task<Result>
     }
 
     @Override
-    public Result run() throws InterruptedException
+    protected Result run() throws InterruptedException
     {
         return null;
     }

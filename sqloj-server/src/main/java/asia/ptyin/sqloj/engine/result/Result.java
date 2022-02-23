@@ -1,5 +1,9 @@
 package asia.ptyin.sqloj.engine.result;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import java.time.Duration;
 
 /***
@@ -10,6 +14,20 @@ import java.time.Duration;
  */
 public interface Result
 {
-    String serialize();
+    default String serialize()
+    {
+        var mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        String value = null;
+        try
+        {
+            value = mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e)
+        {
+            e.printStackTrace();
+        }
+        return value;
+    }
     Duration getTime();
+    void setTime(Duration time);
 }

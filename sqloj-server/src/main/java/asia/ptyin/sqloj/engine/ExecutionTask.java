@@ -1,5 +1,6 @@
 package asia.ptyin.sqloj.engine;
 
+import asia.ptyin.sqloj.engine.result.ExecutionResult;
 import asia.ptyin.sqloj.engine.result.QueryResult;
 import asia.ptyin.sqloj.engine.sql.SqlExecutionUtils;
 import asia.ptyin.sqloj.engine.task.Task;
@@ -14,7 +15,7 @@ import java.util.UUID;
  * @author PTYin
  * @since 0.1.0
  */
-public class ExecutionTask extends Task<QueryResult>
+public class ExecutionTask extends Task<ExecutionResult>
 {
 
     private final Connection connection;
@@ -28,17 +29,16 @@ public class ExecutionTask extends Task<QueryResult>
     }
 
     @Override
-    public QueryResult run() throws InterruptedException
+    protected ExecutionResult run() throws InterruptedException
     {
-        QueryResult queryResult = null;
+        ExecutionResult executionResult = null;
         try
         {
-            queryResult = SqlExecutionUtils.execute(connection, source).get(0);
+            executionResult = SqlExecutionUtils.execute(connection, source);
         } catch (SQLException e)
         {
             e.printStackTrace();
         }
-
-        return queryResult;
+        return executionResult;
     }
 }

@@ -2,6 +2,7 @@ package asia.ptyin.sqloj.engine.sql;
 
 import asia.ptyin.sqloj.engine.result.QueryResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,16 +23,18 @@ import static org.junit.jupiter.api.Assertions.*;
 class QueryResultTest
 {
     static Connection connection;
-    static ObjectMapper mapper = new ObjectMapper();
+    static ObjectMapper mapper;
 
     @BeforeAll
     static void setup() throws SQLException
     {
         connection = DriverManager.getConnection("jdbc:sqlite::resource:db/Chinook.db");
+        mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
     }
 
     @Test
-    void toJson() throws Exception
+    void serialize() throws Exception
     {
         connection.setAutoCommit(false);
         var results = SqlExecutionUtils.execute(connection, """
@@ -39,7 +42,7 @@ class QueryResultTest
                 """);
         connection.rollback();
         connection.close();
-        var json = results.get(0).serialize();
+        var json = results.getLastQueryResult().serialize();
         log.info("Generated json: %s".formatted(json));
         var node = mapper.readTree(json);
         // assert on rows
@@ -49,8 +52,8 @@ class QueryResultTest
         assertEquals("INTEGER", node.get("metadata").get("columnMetadataList").get(0).get("columnTypeName").asText());
         assertTrue(node.get("metadata").get("columnMetadataList").get(0).get("autoIncrement").asBoolean());
         var deserializedResult = mapper.readValue(json, QueryResult.class);
-        assertEquals(results.get(0).getRows().get(0).get(0), deserializedResult.getRows().get(0).get(0));
-        assertEquals(results.get(0).getMetadata().getColumnCount(), deserializedResult.getMetadata().getColumnCount());
-        assertEquals(results.get(0).getMetadata().getColumnMetadata(0).getColumnName(), results.get(0).getMetadata().getColumnMetadata(0).getColumnName());
+        assertEquals(results.getLastQueryResult().getRows().get(0).get(0), deserializedResult.getRows().get(0).get(0));
+        assertEquals(results.getLastQueryResult().getMetadata().getColumnCount(), deserializedResult.getMetadata().getColumnCount());
+        assertEquals(results.getLastQueryResult().getMetadata().getColumnMetadata(0).getColumnLabel(), results.getLastQueryResult().getMetadata().getColumnMetadata(0).getColumnLabel());
     }
 }

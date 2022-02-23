@@ -22,18 +22,4 @@ public class JudgeResult implements Result
     private Map<String, Object> comments = new HashMap<>();
     private Duration time;
     private boolean pass = false;
-    @Override
-    public String serialize()
-    {
-        var mapper = new ObjectMapper();
-        String value = null;
-        try
-        {
-            value = mapper.writeValueAsString(this);
-        } catch (JsonProcessingException e)
-        {
-            e.printStackTrace();
-        }
-        return value;
-    }
 }

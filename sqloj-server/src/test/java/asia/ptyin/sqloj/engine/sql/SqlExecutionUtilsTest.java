@@ -24,7 +24,6 @@ class SqlExecutionUtilsTest
     @Test
     void execute() throws Exception
     {
-        @SuppressWarnings("SqlDialectInspection")
         var sql = """
                 -- In line comment; --
                 select 'haha;--' as haha, Title from Albums where AlbumId = 1;
@@ -37,9 +36,9 @@ class SqlExecutionUtilsTest
                 
                 """;
         var results = SqlExecutionUtils.execute(connection, sql);
-        log.debug(results.get(0).serialize());
-        log.debug(results.get(1).serialize());
-        Assertions.assertEquals("haha;--", results.get(0).getRows().get(0).get(0));
-        Assertions.assertEquals("Title", results.get(1).getMetadata().getColumnMetadata(0).getColumnLabel());
+        log.debug(results.getQueryResult(0).serialize());
+        log.debug(results.getQueryResult(1).serialize());
+        Assertions.assertEquals("haha;--", results.getQueryResult(0).getRows().get(0).get(0));
+        Assertions.assertEquals("Title", results.getQueryResult(1).getMetadata().getColumnMetadata(0).getColumnLabel());
     }
 }
