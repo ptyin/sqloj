@@ -1,5 +1,6 @@
 package asia.ptyin.sqloj.engine.comparator;
 
+import asia.ptyin.sqloj.engine.result.ExecutionResult;
 import asia.ptyin.sqloj.engine.result.QueryResult;
 
 import java.util.Map;
@@ -11,7 +12,7 @@ import java.util.Map;
  * @author PTYin
  * @since 0.1.0
  */
-public class ColumnLabelComparator implements Comparator
+public class ColumnLabelComparator implements LastQueryResultComparator
 {
 
     @Override
@@ -24,7 +25,7 @@ public class ColumnLabelComparator implements Comparator
                 labelSetX.containsAll(labelSetCriterion) &&
                 labelSetCriterion.containsAll(labelSetX);
         if (!match)
-            comments.put("column label", "submitted:%s, criterion:%s".formatted(labelSetX, labelSetCriterion));
+            comments.put("column label", "submitted: %s, criterion: %s".formatted(labelSetX, labelSetCriterion));
         return match;
     }
 }

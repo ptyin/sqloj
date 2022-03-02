@@ -1,22 +1,29 @@
 package asia.ptyin.sqloj.user.security;
 
 import asia.ptyin.sqloj.user.UserRepository;
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.lang.NonNullApi;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
+import java.util.UUID;
 
 /***
  * Configuration related to security.
@@ -52,6 +59,24 @@ public class SecurityConfiguration
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
+    }
+
+    @Configuration
+    public static class SecurityAuditorAware implements AuditorAware<UUID>
+    {
+        @NonNull
+        @Override
+        public Optional<UUID> getCurrentAuditor()
+        {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !authentication.isAuthenticated())
+            {
+                return Optional.empty();
+            }
+            if(! (authentication.getPrincipal() instanceof UserDetailsAdapter))
+                throw new InappropriatePrincipalException("Cannot cast principal to %s".formatted(UserDetailsAdapter.class));
+            return Optional.of(((UserDetailsAdapter) authentication.getPrincipal()).getUser().getUuid());
+        }
     }
 
     @Configuration

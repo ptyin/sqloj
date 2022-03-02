@@ -1,4 +1,4 @@
-package asia.ptyin.sqloj.engine;
+package asia.ptyin.sqloj.engine.task.impl;
 
 import asia.ptyin.sqloj.engine.result.Result;
 import asia.ptyin.sqloj.engine.task.Task;
@@ -11,11 +11,11 @@ import java.util.UUID;
  * @author PTYin
  * @since 0.1.0
  */
-public class CreateDbTask extends Task<Result>
+public class CreateDatabaseTask extends Task<Result>
 {
-    public CreateDbTask(UUID uuid)
+    public CreateDatabaseTask()
     {
-        super(uuid);
+
     }
 
     @Override

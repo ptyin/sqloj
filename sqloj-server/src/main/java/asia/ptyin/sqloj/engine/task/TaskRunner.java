@@ -20,8 +20,10 @@ import java.util.concurrent.*;
 public class TaskRunner
 {
     private Map<UUID, Task<?>> container;
+
     @Setter(onMethod_ = @Autowired)
     private TaskRepository repository;
+
     private final ExecutorService threadPool;
 
     public TaskRunner()
@@ -33,28 +35,34 @@ public class TaskRunner
      * Submit a task to the cached thread pool and run the task until timeout.
      * If reaches timeout which means the thread runs too long, then terminates it.
      * @param task The task to submit.
-     * @return the future result that the task produces.
+     * @return the uuid of the task.
      */
-    public <T extends Result> Future<T> submit(Task<T> task)
+    public <T extends Result> UUID submit(Task<T> task)
     {
+        TaskEntity taskEntity = new TaskEntity();
+        taskEntity.setResultJson(null);
+        taskEntity = repository.save(taskEntity);
+        var savedTaskEntity = taskEntity;
+
+        task.setUuid(savedTaskEntity.getUuid());
         var future = threadPool.submit(task);
         threadPool.submit(() ->
         {
             try
             {
                 T result = future.get(30, TimeUnit.MINUTES);  // TODO make timeout a property
-
+                savedTaskEntity.setResultJson(result.serialize());
+                repository.save(savedTaskEntity);
 
             } catch (TimeoutException e)  // If the waited time exceeds timeout.
             {
                 future.cancel(true);
-                System.out.println();
                 e.printStackTrace();
             } catch (InterruptedException | ExecutionException e)
             {
                 e.printStackTrace();
             }
         });
-        return null;
+        return savedTaskEntity.getUuid();
     }
 }

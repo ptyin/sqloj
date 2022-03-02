@@ -37,27 +37,24 @@ class RowComparatorTest
                 select distinct title
                 from albums natural join tracks
                 where mediatypeid not in (select mediatypeid from media_types where name = 'MPEG audio file')
-                """).getLastQueryResult();
+                """);
         var a = SqlExecutionUtils.execute(connection, """
                 select title
                 from albums natural join tracks
                 where mediatypeid not in (select mediatypeid from media_types where name = 'MPEG audio file')
-                """).getLastQueryResult();
+                """);
         var b = SqlExecutionUtils.execute(connection, """
                 select distinct title
                 from albums natural join tracks
                 where mediatypeid not in (select mediatypeid from media_types where name = 'MPEG audio file')
                 order by title
-                """).getLastQueryResult();
+                """);
         var c = SqlExecutionUtils.execute(connection, """
                 select distinct title
                 from albums natural join tracks
                 where mediatypeid not in (select mediatypeid from media_types where name = 'MPEG audio file')
                 order by albumid
-                """).getLastQueryResult();
-        log.debug(a.getRows());
-        log.debug(b.getRows());
-        log.debug(c.getRows());
+                """);
         var comparator = new RowComparator();
         var resultA = new HashMap<String, Object>();
         assertFalse(comparator.compare(a, criterion, resultA));

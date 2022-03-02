@@ -14,14 +14,18 @@ import java.time.Duration;
  */
 public interface Result
 {
+
+    /**
+     * A shared ObjectMapper.
+     */
+    ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
     default String serialize()
     {
-        var mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
         String value = null;
         try
         {
-            value = mapper.writeValueAsString(this);
+            value = objectMapper.writeValueAsString(this);
         } catch (JsonProcessingException e)
         {
             e.printStackTrace();

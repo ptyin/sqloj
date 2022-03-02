@@ -1,4 +1,4 @@
-package asia.ptyin.sqloj.engine;
+package asia.ptyin.sqloj.engine.task.impl;
 
 import asia.ptyin.sqloj.engine.comparator.*;
 import asia.ptyin.sqloj.engine.comparator.Comparator;
@@ -29,7 +29,6 @@ public class JudgeTask extends Task<JudgeResult>
     private final Connection connection;
     private final String sql;
     private final ExecutionResult criterion;
-    private final Duration timeLimit;  // TODO add time limit support.
 
     public enum JudgeOption
     {
@@ -49,18 +48,18 @@ public class JudgeTask extends Task<JudgeResult>
 
     private static final JudgeOption[] DEFAULT_OPTIONS = {JudgeOption.COLUMN_LABEL, JudgeOption.ROW};
 
-    public JudgeTask(UUID uuid, Connection connection, String sql, ExecutionResult criterion)
+    public JudgeTask(Connection connection, String sql, ExecutionResult criterion)
     {
-        this(uuid, connection, sql, criterion, null, DEFAULT_OPTIONS);
+        this(connection, sql, criterion, null, DEFAULT_OPTIONS);
     }
 
-    public JudgeTask(UUID uuid, Connection connection, String sql, ExecutionResult criterion, @Nullable Duration timeLimit, JudgeOption[] options)
+    public JudgeTask(Connection connection, String sql, ExecutionResult criterion, @Nullable Duration timeLimit, JudgeOption[] options)
     {
-        super(uuid);
         this.connection = connection;
         this.sql = sql;
         this.criterion = criterion;
-        this.timeLimit = timeLimit;
+        if (timeLimit != null)
+            criterion.setTime(criterion.getTime().plus(timeLimit));
         this.options = options;
     }
 
@@ -68,11 +67,12 @@ public class JudgeTask extends Task<JudgeResult>
     protected JudgeResult run() throws InterruptedException
     {
         long executionStart = ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime();
-        QueryResult lastQueryResult = null;
+        ExecutionResult executionResult = null;
         try
         {
-            var executionResult = SqlExecutionUtils.execute(connection, sql);
-            lastQueryResult = executionResult.getLastQueryResult();
+            executionResult = SqlExecutionUtils.execute(connection, sql);
+            Duration elapsedTime = Duration.ofNanos(ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime() - executionStart);
+            executionResult.setTime(elapsedTime);
         } catch (SQLException e)
         {
             e.printStackTrace();
@@ -89,7 +89,7 @@ public class JudgeTask extends Task<JudgeResult>
             try
             {
                 var comparator = option.getComparator().getDeclaredConstructor().newInstance();
-                pass = comparator.compare(lastQueryResult, criterion.getLastQueryResult(), comments);
+                pass = comparator.compare(executionResult, criterion, comments);
                 if(!pass)
                     break;
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e)

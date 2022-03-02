@@ -1,8 +1,8 @@
 package asia.ptyin.sqloj.engine.task;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -26,8 +26,14 @@ public class TaskEntity
     @GeneratedValue
     private UUID uuid;
 
+    @CreatedBy
+    private UUID createdBy;
+
     @CreatedDate
     private Date createdAt;
 
-    private Object result;
+    /**
+     * Serialized string of Result.
+     */
+    private String resultJson;
 }

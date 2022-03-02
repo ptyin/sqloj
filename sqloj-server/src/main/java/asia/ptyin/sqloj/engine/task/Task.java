@@ -3,6 +3,7 @@ package asia.ptyin.sqloj.engine.task;
 
 import asia.ptyin.sqloj.engine.result.Result;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 import java.lang.management.ManagementFactory;
@@ -13,8 +14,11 @@ import java.util.concurrent.Callable;
 @Log4j2
 public abstract class Task<T extends Result> implements Callable<T>
 {
-    @Getter
-    private final UUID uuid;
+    /**
+     * UUID can be retrieved if and only if the task has been submitted.
+     */
+    @Getter @Setter
+    private UUID uuid;
 
     public enum TaskState
     {
@@ -26,11 +30,11 @@ public abstract class Task<T extends Result> implements Callable<T>
     @Getter
     private TaskState taskState = TaskState.PENDING;
 
-    public Task(UUID uuid)
-    {
-        this.uuid = uuid;
-    }
-
+    /**
+     * Run the task, no need to record the duration.
+     * @return The task result.
+     * @throws InterruptedException Throw if the task is cancelled.
+     */
     protected abstract T run() throws InterruptedException;
 
     @Override

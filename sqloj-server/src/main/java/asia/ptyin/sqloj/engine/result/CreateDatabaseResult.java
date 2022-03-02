@@ -8,7 +8,7 @@ import java.time.Duration;
  * @author PTYin
  * @since 0.1.0
  */
-public class DatabaseInfo implements Result
+public class CreateDatabaseResult implements Result
 {
     @Override
     public String serialize()

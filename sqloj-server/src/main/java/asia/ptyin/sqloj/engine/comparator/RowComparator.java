@@ -1,5 +1,6 @@
 package asia.ptyin.sqloj.engine.comparator;
 
+import asia.ptyin.sqloj.engine.result.ExecutionResult;
 import asia.ptyin.sqloj.engine.result.QueryResult;
 import lombok.NonNull;
 
@@ -15,7 +16,7 @@ import static asia.ptyin.sqloj.engine.result.QueryResult.rows2map;
  * @since 0.1.0
  * @see Comparator
  */
-public class RowComparator implements Comparator
+public class RowComparator implements LastQueryResultComparator
 {
     @Override
     public boolean compare(QueryResult x, QueryResult criterion, @NonNull Map<String, Object> comments)

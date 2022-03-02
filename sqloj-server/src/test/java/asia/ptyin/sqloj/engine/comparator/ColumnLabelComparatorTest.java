@@ -38,16 +38,16 @@ class ColumnLabelComparatorTest
 
         var criterion = SqlExecutionUtils.execute(connection, """
                 select title, albumid, artistid from albums;
-                """).getLastQueryResult();
+                """);
         var a = SqlExecutionUtils.execute(connection, """
                 select albumid, artistid, title from albums;
-                """).getLastQueryResult();
+                """);
         var b = SqlExecutionUtils.execute(connection, """
                 select artistid, title from albums;
-                """).getLastQueryResult();
+                """);
         var c = SqlExecutionUtils.execute(connection, """
                 select * from albums;
-                """).getLastQueryResult();
+                """);
         assertTrue(comparator.compare(a, criterion, new HashMap<>()));
         var resultB = new HashMap<String, Object>();
         assertFalse(comparator.compare(b, criterion, resultB));

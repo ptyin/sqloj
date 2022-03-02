@@ -1,11 +1,12 @@
 package asia.ptyin.sqloj.engine.comparator;
 
+import asia.ptyin.sqloj.engine.result.ExecutionResult;
 import asia.ptyin.sqloj.engine.result.QueryResult;
 
 import java.util.Map;
 
 /***
- * Comparator compares two {@link QueryResult} to get comparison result and comments.
+ * Comparator compares two {@link ExecutionResult} to get comparison result and comments.
  * @version 0.1.0
  * @author PTYin
  * @since 0.1.0
@@ -19,5 +20,5 @@ public interface Comparator
      * @param comments The result container, and several entries after each compare.
      * @return {@code true} if x equals to criterion, otherwise {@code false}.
      */
-    boolean compare(QueryResult x, QueryResult criterion, Map<String, Object> comments);
+    boolean compare(ExecutionResult x, ExecutionResult criterion, Map<String, Object> comments);
 }
