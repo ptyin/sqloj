@@ -1,6 +1,9 @@
-package asia.ptyin.sqloj.engine.task;
+package asia.ptyin.sqloj.engine;
 
 import asia.ptyin.sqloj.engine.result.Result;
+import asia.ptyin.sqloj.engine.task.Task;
+import asia.ptyin.sqloj.engine.task.TaskEntity;
+import asia.ptyin.sqloj.engine.task.TaskRepository;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,8 @@
-package asia.ptyin.sqloj.engine.task;
+package asia.ptyin.sqloj.engine;
 
+import asia.ptyin.sqloj.engine.TaskRunner;
 import asia.ptyin.sqloj.engine.result.Result;
+import asia.ptyin.sqloj.engine.task.Task;
 import asia.ptyin.sqloj.engine.task.service.TaskService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.Getter;
@@ -68,7 +70,8 @@ class TaskRunnerTest
         Thread.sleep(1000);
         var entity = taskService.getTask(task.getUuid());
         var deserializedValue = TaskService.getResult(entity.getResultJson(), TestResult.class);
-        Assertions.assertEquals(deserializedValue.getTime(), Duration.ZERO);
+        Assertions.assertNotEquals(Duration.ZERO, deserializedValue.getTime());
+        log.debug(deserializedValue.getTime().toNanos());
         Assertions.assertFalse(deserializedValue.isSuccess());
         taskService.deleteTask(task.getUuid());
         Assertions.assertNull(taskService.getTask(task.getUuid()));
