@@ -69,12 +69,11 @@ public class SecurityConfiguration
         public Optional<UUID> getCurrentAuditor()
         {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication == null || !authentication.isAuthenticated())
+            if (authentication == null || !authentication.isAuthenticated() ||
+                    !(authentication.getPrincipal() instanceof UserDetailsAdapter))  // If in test, return empty.
             {
                 return Optional.empty();
             }
-            if(! (authentication.getPrincipal() instanceof UserDetailsAdapter))
-                throw new InappropriatePrincipalException("Cannot cast principal to %s".formatted(UserDetailsAdapter.class));
             return Optional.of(((UserDetailsAdapter) authentication.getPrincipal()).getUser().getUuid());
         }
     }

@@ -17,7 +17,7 @@ public interface CourseService
     CourseEntity findCourseEagerly(UUID courseUuid) throws CourseNotFoundException;
     CourseEntity openCourse(CourseDto courseDto, List<UserEntity> participatorList);
     CourseEntity updateCourse(CourseEntity entity, CourseDto courseDto, List<UserEntity> participatorList);
-    void saveCourse(CourseEntity course);
+
     void deleteCourse(CourseEntity course);
     void deleteCourse(UUID courseUuid);
 }

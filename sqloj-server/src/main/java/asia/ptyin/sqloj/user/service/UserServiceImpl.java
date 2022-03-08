@@ -58,13 +58,6 @@ public class UserServiceImpl implements UserService
         repository.delete(user);
     }
 
-    @Override
-    public List<CourseEntity> getUserParticipatedCourseList(UserEntity user)
-    {
-
-        return null;
-    }
-
     @Autowired
     public void setRepository(UserRepository repository)
     {

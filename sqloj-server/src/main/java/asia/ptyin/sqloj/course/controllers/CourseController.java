@@ -4,7 +4,9 @@ import asia.ptyin.sqloj.course.CourseDto;
 import asia.ptyin.sqloj.course.CourseEntity;
 import asia.ptyin.sqloj.course.service.CourseService;
 import asia.ptyin.sqloj.user.UserEntity;
+import asia.ptyin.sqloj.user.security.service.AuthenticationService;
 import asia.ptyin.sqloj.user.service.UserService;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -17,13 +19,24 @@ import java.util.Map;
 import java.util.UUID;
 
 
-@RequestMapping("/course")
+@RequestMapping("/courses")
 @RestController
+@Setter(onMethod_ = @Autowired)
 public class CourseController
 {
 
     private UserService userService;
     private CourseService courseService;
+
+    private AuthenticationService authenticationService;
+
+    @PreAuthorize("hasAnyAuthority('STUDENT', 'TEACHER')")
+    @GetMapping
+    public List<?> getCourseList(Authentication authentication)
+    {
+        var userUuid = authenticationService.getUserUuid(authentication);
+        return courseService.getUserParticipatedCourseList(userUuid);
+    }
 
     @PreAuthorize("hasAnyAuthority('STUDENT', 'TEACHER')")
     @GetMapping("/{courseUuid}")
@@ -70,17 +83,5 @@ public class CourseController
         courseService.deleteCourse(courseUuid);
         result.put("success", true);
         return result;
-    }
-
-    @Autowired
-    public void setUserService(UserService userService)
-    {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setCourseService(CourseService courseService)
-    {
-        this.courseService = courseService;
     }
 }

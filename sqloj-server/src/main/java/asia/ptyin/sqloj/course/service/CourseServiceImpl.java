@@ -77,12 +77,6 @@ public class CourseServiceImpl implements CourseService
     }
 
     @Override
-    public void saveCourse(CourseEntity course)
-    {
-        repository.save(course);
-    }
-
-    @Override
     public void deleteCourse(CourseEntity course)
     {
         repository.delete(course);

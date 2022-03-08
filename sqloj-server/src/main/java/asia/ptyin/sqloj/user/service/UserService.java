@@ -16,7 +16,4 @@ public interface UserService
     UserEntity findUser(String username) throws UserNotFoundException;
     List<UserEntity> findAllUser(Iterable<UUID> uuid);
     void deleteUser(UserEntity user);
-
-    List<CourseEntity> getUserParticipatedCourseList(UserEntity user);
-
 }

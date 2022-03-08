@@ -1,8 +1,10 @@
 package asia.ptyin.sqloj.course;
 
+import asia.ptyin.sqloj.course.assignment.AssignmentEntity;
 import asia.ptyin.sqloj.user.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -33,6 +35,9 @@ public class CourseEntity
 
     private boolean enabled = true;
 
+    @CreatedBy
+    private UUID createdBy;
+
     @CreatedDate
     private Date createdAt;
 
@@ -40,4 +45,11 @@ public class CourseEntity
     @JoinTable(name = "plt_r_participates")
     private List<UserEntity> participatorList;
 
+    @OneToMany(
+            targetEntity = AssignmentEntity.class,
+            cascade = CascadeType.ALL,
+            mappedBy = "course",
+            fetch = FetchType.LAZY
+    )
+    private List<AssignmentEntity> assignmentList;
 }

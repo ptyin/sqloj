@@ -7,6 +7,7 @@ import asia.ptyin.sqloj.course.service.CourseService;
 import asia.ptyin.sqloj.user.UserDto;
 import asia.ptyin.sqloj.user.UserEntity;
 import asia.ptyin.sqloj.user.service.UserService;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,13 +75,27 @@ class CourseControllerTest
         userService.deleteUser(testUser3);
     }
 
+    @WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
+    @Test
+    void getCourseList() throws Exception
+    {
+        var courseDto = new CourseDto("2021-2022数据库原理1班", "", new Date(), new Date(), testUserList);
+        testCourse = courseService.openCourse(courseDto, userService.findAllUser(testUserList));
+        var result = mockMvc.perform(MockMvcRequestBuilders.get("/courses"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+        var resultCourseDtoList = mapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<CourseDto>>(){});
+        assertEquals(resultCourseDtoList.size(), 0);
+    }
+
     @WithMockUser(authorities = "STUDENT")
     @Test
     void get() throws Exception
     {
         var courseDto = new CourseDto("2021-2022数据库原理1班", "", new Date(), new Date(), testUserList);
         testCourse = courseService.openCourse(courseDto, userService.findAllUser(testUserList));
-        var result = mockMvc.perform(MockMvcRequestBuilders.get("/course/{courseUuid}", testCourse.getUuid()))
+        var result = mockMvc.perform(MockMvcRequestBuilders.get("/courses/{courseUuid}", testCourse.getUuid()))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andReturn();
@@ -95,7 +110,7 @@ class CourseControllerTest
     {
         var courseDto = new CourseDto("2021-2022数据库原理1班", "", new Date(), new Date(), testUserList);
         var body = mapper.writeValueAsString(courseDto);
-        mockMvc.perform(post("/course").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/courses").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true));
 
@@ -110,7 +125,7 @@ class CourseControllerTest
         var courseDto = new CourseDto("2021-2022数据库原理1班", "", new Date(), new Date(), testUserList);
         var body = mapper.writeValueAsString(courseDto);
 
-        mockMvc.perform(post("/course").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/courses").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
 
@@ -123,7 +138,7 @@ class CourseControllerTest
         assertEquals(testCourse.getName(), "2021-2022数据库原理1班");
         var updatedCourseDto = new CourseDto("2019-2020数据库原理1班", "", new Date(), new Date(), testUserList);
         var body = mapper.writeValueAsString(updatedCourseDto);
-        mockMvc.perform(put("/course/{courseUuid}", testCourse.getUuid()).content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(put("/courses/{courseUuid}", testCourse.getUuid()).content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true));
         testCourse = courseService.findCourse(testCourse.getUuid());
@@ -137,7 +152,7 @@ class CourseControllerTest
         var courseDto = new CourseDto("2021-2022数据库原理1班", "", new Date(), new Date(), testUserList);
         testCourse = courseService.openCourse(courseDto, userService.findAllUser(testUserList));
         assertNotNull(courseService.findCourse(testCourse.getUuid()));
-        mockMvc.perform(MockMvcRequestBuilders.delete("/course/{courseUuid}", testCourse.getUuid()))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/courses/{courseUuid}", testCourse.getUuid()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true));
         assertThrows(CourseNotFoundException.class, () -> courseService.findCourse(testCourse.getUuid()));
