@@ -8,7 +8,7 @@ export default function DataTable(props)
             rowKey={"uuid"}
             columns={props.columns}
             dataSource={props.data}
-            pagination={{pageSize: 5}}
+            pagination={{pageSize: props.pageSize || 5}}
         />
     )
 }

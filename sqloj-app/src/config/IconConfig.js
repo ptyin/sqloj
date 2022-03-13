@@ -1,8 +1,19 @@
-import {BookOutlined, CalendarOutlined, OrderedListOutlined} from "@ant-design/icons";
+import {
+    BookOutlined,
+    DatabaseOutlined,
+    OrderedListOutlined,
+    QuestionCircleOutlined,
+    SettingOutlined, ToolOutlined,
+    UserOutlined
+} from "@ant-design/icons";
 import React from "react";
 
 export const GuideIconMap = {
     courses: <BookOutlined />,
     records: <OrderedListOutlined />,
-    assignments: <CalendarOutlined/>,
+
+    questions: <QuestionCircleOutlined />,
+    databases: <DatabaseOutlined />,
+    manage: <ToolOutlined />,
+        students: <UserOutlined />
 }

@@ -7,18 +7,21 @@
     position: relative;
 }
 
-/*.combined-wrapper .anime*/
-/*{*/
-/*    text-align: center;*/
-/*}*/
+.combined-wrapper
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .frame {
-    left: 35%;
-    width: 30%;
-    top: 200px;
-    height: 400px;
+    min-width: 350px;
+    min-height: 200px;
+    max-width: 450px;
+    max-height: 400px;
     vertical-align: middle;
     background: white;
-    position: absolute;
+    /*position: absolute;*/
     box-shadow: 10px 10px 5px #224379;
     border-radius: 25px;
     -moz-border-radius: 25px;

@@ -1,7 +1,7 @@
-import {Badge, Button, Descriptions, message, PageHeader} from "antd";
+import {Badge, Button, Descriptions, message, PageHeader, Space, Tabs} from "antd";
 import AssignmentList from "./assignment/AssignmentList";
 import React, {useEffect, useState} from "react";
-import {LikeOutlined} from "@ant-design/icons";
+import {EditOutlined, LikeOutlined} from "@ant-design/icons";
 import {Link, Route, Switch, useRouteMatch} from "react-router-dom";
 
 export default function Course(props)
@@ -30,23 +30,37 @@ export default function Course(props)
                     onBack={() => window.history.back()}
                     title={match.params.courseUuid}
                     subTitle={course?.name}
-                    extra={[
-                        <Badge key="like" count={0}>
-                            <Button onClick={() => message.warn("not developed yet.")}>
-                                <LikeOutlined />
-                            </Button>
-                        </Badge>
-                    ]}
+                    extra={
+                        <Space>
+                            <Route path={`/dashboard/teacher`}>
+                                <Button onClick={() => message.warn("not developed yet.")}>
+                                    <EditOutlined /> Edit
+                                </Button>
+                            </Route>
+                            <Badge key="like" count={0}>
+                                <Button onClick={() => message.warn("not developed yet.")}>
+                                    <LikeOutlined />
+                                </Button>
+                            </Badge>
+                        </Space>
+                    }
+                    footer={
+                        <Tabs defaultActiveKey="assignments">
+                            <Tabs.TabPane tab="assignments" key="assignments">
+                                <AssignmentList />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab="description" key="description" />
+                            <Tabs.TabPane tab="participators" key="participators" />
+                            <Tabs.TabPane tab="teachers" key="teachers" />
+                        </Tabs>
+                    }
                 >
                     <Descriptions size="small" column={3}>
                         <Descriptions.Item key="createdAt" label="created at">{course?.createdAt}</Descriptions.Item>
                         <Descriptions.Item key="startedAt" label="started at">{course?.startedAt}</Descriptions.Item>
                         <Descriptions.Item key="endedAt" label="ended at">{course?.endedAt}</Descriptions.Item>
-                        <Descriptions.Item key="description" label="description">{course?.description}</Descriptions.Item>
-                        <Descriptions.Item key="assignments" label="assignments"><Link to={`${match.url}/assignments`}>assignments</Link></Descriptions.Item>
                     </Descriptions>
                 </PageHeader>
-                <AssignmentList/>
             </Route>
         </Switch>
     )

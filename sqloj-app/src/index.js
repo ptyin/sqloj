@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Entry from "./views/entry";
 import axios from 'axios'
 import {message} from "antd";
-import IRouter from "./router";
+import App from "./App";
 
 function setup(axios)
 {
@@ -31,4 +30,4 @@ axios.defaults.crossDomain = true;
 axios.defaults.withCredentials = true
 setup(axios)
 // ReactDOM.render(<Router/>, document.body);
-ReactDOM.render(<Entry/>, document.getElementById('root'));
+ReactDOM.render(<App/>, document.getElementById('root'));

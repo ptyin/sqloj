@@ -7,6 +7,7 @@ import '../../components/anim/HomepageAnim.css'
 import '../../common/css/font.css'
 import EaseAnim from "../../components/anim/EaseAnim";
 import {login} from "../../feed/authentication";
+import {LockOutlined, UserOutlined} from "@ant-design/icons";
 
 const FormItem = Form.Item;
 axios.defaults.withCredentials = true
@@ -55,7 +56,8 @@ export default function LoginPanel()
                         <p className="form_title">login</p>
                     </FormItem>
                     <FormItem {...doubleLayout} label="username">
-                        <Input placeholder="Please enter the user name"
+                        <Input prefix={<UserOutlined className="site-form-item-icon" />}
+                               placeholder="Please enter the user name"
                                maxLength={10}
                                defaultValue={username}
                                onChange={(event) =>
@@ -64,7 +66,8 @@ export default function LoginPanel()
                                }}/>
                     </FormItem>
                     <FormItem  {...doubleLayout} label="password">
-                        <Input placeholder="Please enter your password."
+                        <Input prefix={<LockOutlined className="site-form-item-icon" />}
+                               placeholder="Please enter your password."
                                defaultValue={password}
                                maxLength={30} type={"password"}
                                onChange={(event) =>

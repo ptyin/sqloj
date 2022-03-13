@@ -60,7 +60,7 @@ export default function AssignmentList(props)
         <Switch>
             <Route path={`${match.path}/:assignmentUuid`} component={Assignment}/>
             <Route>
-                <DataTable columns={columns} data={data}/>
+                <DataTable columns={columns} data={data} pageSize={props.pageSize}/>
             </Route>
         </Switch>
     )
