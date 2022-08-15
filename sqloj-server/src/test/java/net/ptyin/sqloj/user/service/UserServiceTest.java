@@ -1,0 +1,48 @@
+package net.ptyin.sqloj.user.service;
+
+import net.ptyin.sqloj.user.UserDto;
+import net.ptyin.sqloj.user.UserEntity;
+import net.ptyin.sqloj.user.UserNotFoundException;
+import net.ptyin.sqloj.user.security.UserDetailsAdapter;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithUserDetails;
+
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+
+@SpringBootTest
+class UserServiceTest
+{
+
+    @Autowired
+    UserService userService;
+
+    @Test
+    void findNotExistedUser()
+    {
+        assertThrows(UserNotFoundException.class, () -> userService.findUser(UUID.randomUUID()));
+    }
+
+    @Test
+    void deleteNotExistedUser()
+    {
+        userService.deleteUser(new UserEntity());
+    }
+
+    @WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
+    @Test
+    void registerUser()
+    {
+        UserDto userDto = new UserDto("user-service-test", "user-service-test@123");
+        var userDetails = (UserDetailsAdapter) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity user = userService.registerUser(userDto, userDetails.getUser());
+        assertNotNull(user);
+        userService.deleteUser(user);
+    }
+}
