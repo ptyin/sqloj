@@ -1,3 +1,8 @@
 {
-  "question-bank": "Question Bank"
+  "menu-question-bank": "Question Bank",
+  "menu-databases": "Databases",
+  "menu-quizzes": "Quizzes",
+  "menu-settings": "Settings",
+  "submenu-student": "Student",
+  "submenu-teacher": "Teacher"
 }

@@ -2,17 +2,25 @@ import {Menu} from 'antd';
 import {useTranslation} from 'react-i18next';
 
 export default function () {
-  const {t} = useTranslation();
-  // const items = [
-  //   { label: '菜单项一', key: 'question-bank' },
-  //   { label: '菜单项二', key: 'item-2' },
-  //   {
-  //     label: '子菜单',
-  //     key: 'submenu',
-  //     children: [{ label: '子菜单项', key: 'submenu-item-1' }],
-  //   },
-  // ];
-  const items = ['question-bank', 'databases', 'quizzes', 'settings'].map(item => ({ key: item, label: t(item)}));
+  const { t } = useTranslation();
+  const items = [
+    { key: 'menu-question-bank' },
+    { key: 'menu-databases' },
+    {
+      key: 'menu-quizzes',
+      children: [
+        { key: 'submenu-student' },
+        { key: 'submenu-teacher' }
+      ]
+    },
+    { key: 'menu-settings' },
+  ];
+  const addLabel = items => items.forEach(item => {
+      item.label = t(item.key);
+      item.children && addLabel(item.children);
+    });
+  addLabel(items);
+
   return (
     <div>
       <div className='absolute w-screen h-24 bg-cardboard bg-contain bg-repeat'>

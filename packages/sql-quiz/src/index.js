@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import i18n from 'i18next';
 import {initReactI18next} from 'react-i18next';
-import 'antd/dist/antd.css';
+import Backend from 'i18next-http-backend';
+// import 'antd/dist/antd.css';
 import './assets/index.css';
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
+  .use(Backend)
   .init({
     ns: ['common', 'validation'],
     backend: {
