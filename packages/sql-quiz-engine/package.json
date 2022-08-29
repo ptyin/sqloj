@@ -1,0 +1,19 @@
+{
+  "name": "sql-quiz-engine",
+  "sideEffects": false,
+  "version": "0.1.0",
+  "description": "Engine module for automatic SQL question judge.",
+  "keywords": [
+    "sql",
+    "oj"
+  ],
+  "license": "BSD-2-Clause",
+  "author": "PTYin",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.0.1"
+  }
+}

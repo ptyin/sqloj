@@ -1,0 +1,60 @@
+{
+  "name": "sql-quiz",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A frontend-only yet powerful app for SQL question completion and auto judge.",
+  "keywords": [
+    "sql",
+    "oj"
+  ],
+  "license": "BSD-2-Clause",
+  "author": "PTYin",
+  "scripts": {
+    "start": "webpack-cli serve --mode development",
+    "build": "webpack-cli build --mode production",
+    "test": "jest",
+    "lint": "eslint"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "dependencies": {
+    "antd": "^4.22.8",
+    "i18next": "^21.9.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^11.18.5",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "eslint": "^8.23.0",
+    "eslint-plugin-react": "^7.31.1",
+    "eslint-webpack-plugin": "^3.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.6.1",
+    "tailwindcss": "^3.1.8",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  }
+}

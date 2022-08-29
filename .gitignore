@@ -1,9 +1,8 @@
+# SYS
 **/.DS_Store
-/nginx
-/README.md.bak
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
+# IDE
+.idea/
+
+# NODE
+node_modules/

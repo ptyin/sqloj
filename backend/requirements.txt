@@ -1,9 +1,0 @@
-DateTime
-docker
-Flask
-Flask-Login
-Flask-PyMongo
-flask-restx
-pandas
-Werkzeug
-bcrypt

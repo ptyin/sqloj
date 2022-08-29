@@ -1,2 +1,0 @@
-
-folder = "/var/tmp/sqloj/"
