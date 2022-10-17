@@ -1,7 +1,7 @@
-import Navigation from '../components/Navigation';
+import Menu from '../components/menu/Menu';
 
 export default function () {
   return (
-    <Navigation />
+    <Menu />
   );
 }

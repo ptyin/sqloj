@@ -4,7 +4,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = () => {
+module.exports = (env, options) => {
   const outputPath = path.resolve(__dirname, 'build');
   return {
     entry: './src/index.js',
@@ -14,6 +14,12 @@ module.exports = () => {
     },
     module: {
       rules: [
+        {
+          enforce: 'pre',
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'source-map-loader',
+        },
         {
           test: /\.js$/,
           use: [
@@ -53,6 +59,7 @@ module.exports = () => {
         favicon: './src/assets/favicon.ico'
       })
     ],
+    devtool: options.mode === 'development' ? 'source-map' : 'source-map',
     devServer: {
       port: 9000,
       open: '/',
